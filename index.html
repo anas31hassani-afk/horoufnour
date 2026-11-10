@@ -407,6 +407,15 @@ canvas.wave{width:100%;height:64px;display:block;margin-top:8px}
 }
 @media (prefers-reduced-motion:reduce){.marquee .track,.launch::after{animation:none}.js-motion .rv,.js-motion .hero h1 .w{opacity:1;transform:none;filter:none}}
 
+.upbar{height:6px;border-radius:9px;background:rgba(21,94,90,.12);overflow:hidden;display:none}
+.upbar.show{display:block}
+.upbar i{display:block;height:100%;width:var(--p,0%);background:linear-gradient(90deg,var(--teal),var(--sand));border-radius:inherit;transition:width .3s ease}
+.up-t{margin-top:-4px;color:var(--teal);min-height:1em}
+#sendBtn.busy{opacity:.75;cursor:progress}
+#sendBtn:disabled{pointer-events:none}
+.summary h4{font-family:var(--kufi);font-size:14px;color:var(--teal);margin:14px 0 4px;grid-column:1/-1}
+.summary h4:first-child{margin-top:0}
+
 </style>
 </head>
 <body>
@@ -564,27 +573,27 @@ canvas.wave{width:100%;height:64px;display:block;margin-top:8px}
       <div class="plan tilt rv"><span class="shine"></span>
         <span class="who">للصغار والمبتدئين</span>
         <h3>البداية</h3><div class="sub">حصتان في الأسبوع · 8 حصص شهرياً</div>
-        <div class="price"><span class="v" data-usd="29" data-eur="27">29</span><span class="c">$</span><span class="old"></span></div>
+        <div class="price"><span class="v" data-usd="19" data-eur="18">19</span><span class="c">$</span><span class="old"></span></div>
         <div class="total"></div>
-        <div class="each">سعر الحصة <span class="pe" data-n="8">3.6$</span></div>
+        <div class="each">سعر الحصة <span class="pe" data-n="8">2.4$</span></div>
         <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>خطة حفظ فردية بعد تقييم المستوى</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>تقرير أسبوعي لولي الأمر على الواتساب</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>اختبار شهري لتثبيت الحفظ</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>شهادة تحفيزية عند إتمام كل سورة طويلة</li></ul>
         <a href="#book" class="btn" data-plan="البداية">ابدأ بحصة مجانية</a></div>
 
       <div class="plan pop tilt rv"><span class="shine"></span><span class="badge">الأكثر اختياراً</span>
         <span class="who">الأنسب للأطفال 6 – 14 سنة</span>
         <h3>المثابرة</h3><div class="sub">3 حصص في الأسبوع · 12 حصة شهرياً</div>
-        <div class="price"><span class="v" data-usd="39" data-eur="36">39</span><span class="c">$</span><span class="old"></span></div>
+        <div class="price"><span class="v" data-usd="27" data-eur="25">27</span><span class="c">$</span><span class="old"></span></div>
         <div class="total"></div>
-        <div class="each">سعر الحصة <span class="pe" data-n="12">3.25$</span></div>
+        <div class="each">سعر الحصة <span class="pe" data-n="12">2.25$</span></div>
         <ul><li class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>كل مزايا البداية، وأيضاً:</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>تسجيل صوتي للمقرّر للمراجعة في البيت</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>شهادة عند إتمام كل جزء</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>حلقة جماعية شهرية: مسابقات وقصص الأنبياء</li></ul>
         <a href="#book" class="btn" data-plan="المثابرة">ابدأ بحصة مجانية</a></div>
 
       <div class="plan tilt rv"><span class="shine"></span>
         <span class="who">للحفظ المكثّف والكبار</span>
         <h3>الحافظ</h3><div class="sub">5 حصص في الأسبوع · 20 حصة شهرياً</div>
-        <div class="price"><span class="v" data-usd="59" data-eur="55">59</span><span class="c">$</span><span class="old"></span></div>
+        <div class="price"><span class="v" data-usd="39" data-eur="36">39</span><span class="c">$</span><span class="old"></span></div>
         <div class="total"></div>
-        <div class="each">سعر الحصة <span class="pe" data-n="20">2.95$</span></div>
+        <div class="each">سعر الحصة <span class="pe" data-n="20">1.95$</span></div>
         <ul><li class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>كل مزايا المثابرة، وأيضاً:</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>خطة حفظ مكثّفة مع مراجعة يومية</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>أولوية في اختيار المعلّم والمواعيد</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>متابعة يومية على الواتساب وتهيئة للإجازة</li></ul>
         <a href="#book" class="btn" data-plan="الحافظ">ابدأ بحصة مجانية</a></div>
     </div>
@@ -788,14 +797,16 @@ canvas.wave{width:100%;height:64px;display:block;margin-top:8px}
         </div>
 
         <div class="wz-page" data-t="المراجعة والإرسال">
-          <h3>راجع طلبك ثم أرسله</h3><p class="hint">سيصلنا ملخّص إجاباتك مع تسجيل التلاوة على واتساب الأكاديمية.</p>
+          <h3>راجع طلبك ثم أرسله</h3><p class="hint">بضغطة واحدة تصلنا إجاباتك مرتّبة مع تسجيل تلاوتك على واتساب الأكاديمية.</p>
           <div class="summary" id="sum"></div>
           <div class="send-box">
-            <button type="button" class="btn btn-sand" id="shareBtn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> إرسال الطلب والتلاوة على واتساب</button>
+            <button type="button" class="btn btn-sand" id="sendBtn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> <span class="lbl">إرسال الطلب على واتساب</span></button>
+            <div class="upbar" id="upBar"><i></i></div><p class="fnote up-t" id="upTxt"></p>
             <div class="send-steps" id="sendSteps">
+              <p class="fnote" style="opacity:.85">طريقة بديلة من خطوتين:</p>
               <a class="btn btn-teal" id="dlBtn" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"/></svg> <span class="n">1</span> تنزيل ملف التلاوة</a>
-              <a class="btn btn-sand" id="waBtn" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> <span class="n">2</span> فتح واتساب وإرسال الإجابات</a>
-              <p class="fnote" style="opacity:.8">في محادثة واتساب: أرفق ملف التلاوة الذي تم تنزيله (📎) ثم اضغط إرسال.</p>
+              <a class="btn btn-line" id="waBtn" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> <span class="n">2</span> فتح واتساب وإرسال الإجابات</a>
+              <p class="fnote" style="opacity:.8">بعد إرسال الإجابات، أرفق ملف التلاوة في نفس المحادثة من زر المرفقات.</p>
             </div>
           </div>
         </div>
@@ -962,11 +973,13 @@ $('#bookForm').addEventListener('submit',e=>{
   [f.name,f.phone].forEach(i=>i.style.borderColor=i.value.trim()?'':'#B5452F');
   if(!name||!phone){(name?f.phone:f.name).focus();return}
   const plan=f.plan?f.plan.value:chosenPlan;
-  const lines=['السلام عليكم، أريد حجز حصة تجريبية مجانية في حروف من نور','الاسم: '+name,'الواتساب: '+phone,'الحصة لـ: '+f.who.value,
-    f.age.value?'العمر: '+f.age.value:'','البرنامج: '+f.program.value,'الرواية: '+f.riwaya.value,'الوقت المفضّل: '+f.time.value,'المعلّم: '+f.teacher.value,
-    plan&&plan!=='لم أقرّر بعد'?'الباقة: '+plan+' ('+(bill==='q'?'كل 3 أشهر':'شهري')+' · '+(cur==='usd'?'دولار':'يورو')+')':'',
-    f.msg.value.trim()?'ملاحظة: '+f.msg.value.trim():''].filter(Boolean);
-  $('#waSend').href='https://wa.me/'+WA+'?text='+encodeURIComponent(lines.join('\n'));
+  const row=(l,v)=>v?'• '+l+': '+v:'';
+  const lines=['*طلب حصة تجريبية مجانية | حروف من نور*','','السلام عليكم ورحمة الله وبركاته،','أرغب في حجز حصة تجريبية مجانية، وهذه بياناتي:','',
+    '*بيانات الطالب*',row('الاسم',name),row('الواتساب',phone),row('الحصة لـ',f.who.value),row('العمر',f.age.value),'',
+    '*البرنامج المطلوب*',row('البرنامج',f.program.value),row('الرواية',f.riwaya.value),row('الوقت المفضّل',f.time.value),row('المعلّم',f.teacher.value),
+    plan&&plan!=='لم أقرّر بعد'?row('الباقة',plan+' ('+(bill==='q'?'كل 3 أشهر':'شهري')+'، '+(cur==='usd'?'بالدولار':'باليورو')+')'):'',
+    f.msg.value.trim()?'\n*ملاحظة*\n'+f.msg.value.trim():'','','جزاكم الله خيراً.'].filter((x,i,arr)=>x!==''||(arr[i-1]!==''&&i>0));
+$('#waSend').href='https://wa.me/'+WA+'?text='+encodeURIComponent(lines.join('\n'));
   $('#formBody').style.display='none';$('#done').style.display='block';
 });
 
@@ -1027,22 +1040,53 @@ $('#recFile').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>16*1
   $('#recFileName').textContent=f.name;setAudio(f,'تم رفع الملف ✓')};
 
 /* summary + send */
-const Q=[['الصفة','gender'],['الاسم','t_name'],['الواتساب','t_phone'],['البلد','t_country'],['العمر','t_age'],['البريد','t_mail'],['الحفظ','t_hifz'],['الروايات','riwaya'],['الإجازة','ijaza'],['الشيخ / الجهة','t_sheikh'],['الخبرة','t_exp'],['التدريس أونلاين','t_online'],['يُدرّس','aud'],['اللغات','lang'],['الساعات أسبوعياً','t_hours'],['المنطقة الزمنية','t_tz'],['الأوقات','slots'],['التجهيزات','gear'],['سبب الانضمام','t_why']];
+const SEC=[['المعلومات الشخصية',[['الصفة','gender'],['الاسم','t_name'],['الواتساب','t_phone'],['البلد والمدينة','t_country'],['العمر','t_age'],['البريد','t_mail']]],
+ ['المؤهلات',[['مقدار الحفظ','t_hifz'],['الروايات','riwaya'],['الإجازة','ijaza'],['الشيخ / الجهة','t_sheikh'],['سنوات الخبرة','t_exp'],['التدريس أونلاين','t_online'],['يُدرّس','aud'],['اللغات','lang']]],
+ ['التوفّر والتجهيزات',[['الساعات أسبوعياً','t_hours'],['المنطقة الزمنية','t_tz'],['الأوقات المتاحة','slots'],['التجهيزات','gear']]],
+ ['سبب الانضمام',[['','t_why']]]];
+const Q=SEC.flatMap(([,f])=>f).map(([l,n])=>[l||'سبب الانضمام',n]);
 function answers(){return Q.map(([l,n])=>[l,val(n)]).filter(([,v])=>v)}
-function message(){return['السلام عليكم، طلب انضمام معلّم إلى أكاديمية حروف من نور','',...answers().map(([l,v])=>`▪️ ${l}: ${v}`),'','🎙️ تسجيل التلاوة مرفق مع هذه الرسالة.'].join('\n')}
+/* WhatsApp-safe text: no emoji (desktop WhatsApp breaks them in links) */
+const UP={cloud:'ia1tz0e9',preset:'hn_teachers'};const UPON=!!(UP.cloud&&UP.preset&&!UP.cloud.includes('{'));
+let audioURL='',upState='idle',upFor=null,upXhr=null;
+function message(mode){
+  const L=['*طلب انضمام معلّم | أكاديمية حروف من نور*','','السلام عليكم ورحمة الله وبركاته،','أرغب في الانضمام إلى فريق المعلّمين، وهذه بيانات طلبي:'];
+  SEC.forEach(([t,f])=>{const rows=f.map(([l,n])=>[l,val(n)]).filter(([,v])=>v);if(!rows.length)return;L.push('','*'+t+'*');rows.forEach(([l,v])=>L.push(l?'• '+l+': '+v:v))});
+  L.push('','*تسجيل التلاوة*');
+  if(mode==='link'&&audioURL)L.push('استمع للتلاوة من هنا:',audioURL);else if(mode==='file')L.push('ملف التلاوة مرفق مع هذه الرسالة.');else L.push('سأرسل ملف التلاوة في الرسالة التالية.');
+  L.push('','جزاكم الله خيراً.');return L.join('\n')}
 function fileExt(t){return t.includes('mp4')||t.includes('m4a')?'m4a':t.includes('mpeg')||t.includes('mp3')?'mp3':t.includes('ogg')?'ogg':t.includes('wav')?'wav':'webm'}
 function audioFile(){const t=audioBlob.type||'audio/webm';const nm=(val('t_name')||'معلم').replace(/\s+/g,'-');return new File([audioBlob],`تلاوة-${nm}.${audioBlob.name?audioBlob.name.split('.').pop():fileExt(t)}`,{type:t})}
-function buildSummary(){
-  $('#sum').innerHTML=answers().map(([l,v])=>`<div><span>${l}</span><span>${v.replace(/</g,'&lt;')}</span></div>`).join('')+`<div><span>التلاوة</span><span>${audioBlob?'مرفقة ✓':'—'}</span></div>`;
-  $('#waBtn').href='https://wa.me/'+WA+'?text='+encodeURIComponent(message());
-  const f=audioFile();$('#dlBtn').href=URL.createObjectURL(f);$('#dlBtn').setAttribute('download',f.name);
-  const canFiles=!!(navigator.canShare&&navigator.canShare({files:[f]}));
-  $('#shareBtn').style.display=canFiles?'':'none';$('#sendSteps').classList.toggle('show',!canFiles);
+const waURL=m=>'https://wa.me/'+WA+'?text='+encodeURIComponent(message(m));
+const sendBtn=$('#sendBtn'),upBar=$('#upBar'),upTxt=$('#upTxt');
+function setSend(state,pct){
+  upState=state;sendBtn.disabled=state==='up';sendBtn.classList.toggle('busy',state==='up');
+  $('.lbl',sendBtn).textContent=state==='up'?'جارٍ تجهيز التلاوة… '+(pct||0)+'%':'إرسال الطلب على واتساب';
+  upBar.style.setProperty('--p',(state==='ok'?100:pct||0)+'%');upBar.classList.toggle('show',state==='up'||state==='ok');
+  upTxt.textContent=state==='ok'?'تم تجهيز التلاوة ✓ ستصل مع رسالتك كرابط استماع مباشر.':state==='up'?'نرفع تسجيلك بأمان، لحظات فقط…':'';
 }
-$('#shareBtn').onclick=async()=>{
-  const f=audioFile();
-  try{await navigator.share({files:[f],text:message()});show(5)}
-  catch(e){if(e&&e.name==='AbortError')return;$('#shareBtn').style.display='none';$('#sendSteps').classList.add('show')}
+function upload(){
+  if(!UPON||!audioBlob)return;if(upFor===audioBlob&&(upState==='up'||upState==='ok'))return;
+  upXhr&&upXhr.abort();upFor=audioBlob;audioURL='';setSend('up',0);
+  const fd=new FormData();fd.append('file',audioFile());fd.append('upload_preset',UP.preset);fd.append('folder','horoufnour/teachers');
+  fd.append('context','name='+(val('t_name')||'').replace(/[|=]/g,' ')+'|phone='+(val('t_phone')||'').replace(/[|=]/g,' '));
+  const x=upXhr=new XMLHttpRequest();x.open('POST',`https://api.cloudinary.com/v1_1/${UP.cloud}/video/upload`);
+  x.upload.onprogress=e=>{if(e.lengthComputable)setSend('up',Math.round(e.loaded/e.total*100))};
+  x.onload=()=>{try{const j=JSON.parse(x.responseText);if(j.secure_url){audioURL=j.secure_url.replace(/\.[a-z0-9]+$/i,'.mp3');setSend('ok');return}}catch(e){}setSend('fail')};
+  x.onerror=()=>setSend('fail');x.send(fd);
+}
+function buildSummary(){
+  $('#sum').innerHTML=SEC.map(([t,f])=>{const rows=f.map(([l,n])=>[l||t,val(n)]).filter(([,v])=>v);return rows.length?`<h4>${t}</h4>`+rows.map(([l,v])=>`<div><span>${l}</span><span>${v.replace(/</g,'&lt;')}</span></div>`).join(''):''}).join('')+`<h4>التلاوة</h4><div><span>التسجيل</span><span>${audioBlob?'جاهز ✓':'—'}</span></div>`;
+  const f=audioFile();$('#dlBtn').href=URL.createObjectURL(f);$('#dlBtn').setAttribute('download',f.name);
+  $('#sendSteps').classList.remove('show');setSend(upFor===audioBlob&&upState==='ok'?'ok':'idle');upload();
+}
+const canFiles=()=>{try{return!!(navigator.canShare&&navigator.canShare({files:[audioFile()]}))}catch(e){return false}};
+function fallback(){$('#waBtn').href=waURL('next');$('#sendSteps').classList.add('show');$('#sendSteps').scrollIntoView({block:'center',behavior:'smooth'})}
+sendBtn.onclick=async()=>{
+  if(upState==='ok'&&audioURL){const u=waURL('link');if(/Android|iPhone|iPad/i.test(navigator.userAgent))location.href=u;else open(u,'_blank','noopener');setTimeout(()=>show(5),900);return}
+  if(canFiles()){try{try{await navigator.clipboard.writeText(message('file'))}catch(e){}await navigator.share({files:[audioFile()],text:message('file')});show(5);return}catch(e){if(e&&e.name==='AbortError')return}}
+  if(UPON&&upState==='fail'){upFor=null;upload();upTxt.textContent='تعذّر الرفع، نعيد المحاولة… أو استعمل الطريقة اليدوية بالأسفل.';fallback();return}
+  fallback();
 };
 $('#waBtn').addEventListener('click',()=>setTimeout(()=>show(5),800));
 
