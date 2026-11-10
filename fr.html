@@ -484,12 +484,17 @@ body{overflow-x:hidden}
 .lng{display:flex;gap:2px;background:rgba(251,246,236,.1);border-radius:999px;padding:3px;margin-inline:14px 0}.lng a{color:var(--cream);font-family:var(--latin);font-size:12.5px;font-weight:700;line-height:1;padding:7px 9px;border-radius:999px;opacity:.75;transition:.2s}.lng a:hover{opacity:1}.lng a.on{background:var(--sand);color:var(--deep);opacity:1}
 @media (max-width:1000px){.nav .wrap>.lng{display:none}.nav.open .links .lng-m{display:flex;align-self:flex-start;margin-top:6px}.lng-m a{font-size:14px;padding:8px 12px}}
 .links .lng-m{display:none}
+.links a,.nav .btn,.brand b,.brand small{white-space:nowrap}.links{gap:24px}
+@media (max-width:1320px) and (min-width:1001px){.links{gap:16px;font-size:15.5px}.links a[href="#book"],.brand small{display:none}.nav .btn{padding:0 16px}}
+.nav .wrap{max-width:1320px}.links a[href="#book"]{display:none}
+@media (max-width:1440px){.links{gap:18px}.brand small{display:none}}
+@media (max-width:1180px) and (min-width:1001px){.links{gap:12px;font-size:14.5px}.lng{margin-inline-start:8px}.lng a{padding:6px 7px}.nav .btn{padding:0 12px;font-size:14px}.brand b{font-size:17px}}
 
 html[dir=ltr]{--kufi:'Montserrat',system-ui,sans-serif}
 html[dir=ltr] h1,html[dir=ltr] h2,html[dir=ltr] h3{letter-spacing:-.01em;line-height:1.25}
 html[dir=ltr] .hero h1{line-height:1.15}
 html[dir=ltr] .ayah p{direction:rtl}
-html[dir=ltr] .links{gap:20px;font-size:15.5px}html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-space:nowrap}
+html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-space:nowrap}
 @media (max-width:1000px){html[dir=ltr] .brand b{font-size:17px}}html[dir=ltr] .nav .btn{margin-inline-start:16px}
 @media (max-width:1240px) and (min-width:1001px){html[dir=ltr] .links a[href="#book"]{display:none}}
 </style>
