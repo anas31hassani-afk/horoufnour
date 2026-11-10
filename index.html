@@ -627,6 +627,7 @@ canvas.wave{width:100%;height:64px;display:block;margin-top:8px}
     </div>
     <form id="bookForm" class="rv" novalidate>
       <div id="formBody">
+        <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <div class="field"><label>الحصة لـ</label><div class="seg">
           <label><input type="radio" name="who" value="طفل" checked><span>طفل</span></label>
           <label><input type="radio" name="who" value="بالغ (رجل)"><span>بالغ · رجل</span></label>
@@ -836,7 +837,7 @@ canvas.wave{width:100%;height:64px;display:block;margin-top:8px}
           <a href="https://x.com/horoufnour" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20" /></svg></a>
           <a href="https://snapchat.com/add/horoufnour" target="_blank" rel="noopener" aria-label="Snapchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c3 0 5 2.2 5 5.2v2.3l1.8-.6c.6 0 .9.6.4 1l-2 1.1c.6 1.9 2 3.2 3.8 3.7-.3.8-1.6 1-2.6 1.1l-.4 1.3c-1.3-.2-2.4.1-3.6 1-.8.6-1.6.9-2.4.9s-1.6-.3-2.4-.9c-1.2-.9-2.3-1.2-3.6-1l-.4-1.3c-1-.1-2.3-.3-2.6-1.1 1.8-.5 3.2-1.8 3.8-3.7l-2-1.1c-.5-.4-.2-1 .4-1l1.8.6V8.2C7 5.2 9 3 12 3z"/></svg></a>
         </div></div>
-      <div><h4>الأكاديمية</h4><ul><li><a href="#why">لماذا نحن</a></li><li><a href="#teachers">المعلّمون</a></li><li><a href="#how">كيف نبدأ</a></li><li><a href="#faq">الأسئلة الشائعة</a></li></ul></div>
+      <div><h4>الأكاديمية</h4><ul><li><a href="#why">لماذا نحن</a></li><li><a href="#teachers">المعلّمون</a></li><li><a href="#how">كيف نبدأ</a></li><li><a href="#faq">الأسئلة الشائعة</a></li><li><a href="app.html">تطبيق المتابعة</a></li></ul></div>
       <div><h4>البرامج</h4><ul><li><a href="#programs">التأسيس والنورانية</a></li><li><a href="#programs">تحفيظ الأطفال</a></li><li><a href="#programs">تحفيظ الكبار</a></li><li><a href="#programs">التجويد</a></li></ul></div>
       <div><h4>تواصل</h4><ul><li><a href="https://wa.me/201156684979?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AD%D8%AC%D8%B2%20%D8%AD%D8%B5%D8%A9%20%D8%AA%D8%AC%D8%B1%D9%8A%D8%A8%D9%8A%D8%A9%20%D9%85%D8%AC%D8%A7%D9%86%D9%8A%D8%A9%20%D9%81%D9%8A%20%D8%AD%D8%B1%D9%88%D9%81%20%D9%85%D9%86%20%D9%86%D9%88%D8%B1" target="_blank" rel="noopener" class="latin" dir="ltr">+20 11 5668 4979</a></li><li class="latin" dir="ltr">contact@horoufnour.com</li><li class="latin" dir="ltr">@horoufnour</li><li><a href="#book">احجز حصة مجانية</a></li></ul></div>
     </div>
@@ -964,6 +965,9 @@ $$('#curT button').forEach(b=>b.onclick=()=>{cur=b.dataset.cur;$$('#curT button'
 $$('#billT button').forEach(b=>b.onclick=()=>{bill=b.dataset.bill;$$('#billT button').forEach(x=>x.classList.toggle('on',x===b));renderPrices()});
 renderPrices();
 
+/* ---------- send copies to the academy app (Google Sheets) ---------- */
+const HN_API='https://script.google.com/macros/s/AKfycbwmrTi4-rMKQkpn8iN4Q-C7CGLztpgK6UGMtxQMFU8tpcMlnRXdcC9CQw_94zi59JUgwA/exec';
+function hnPost(action,data){if(!HN_API||HN_API.indexOf('http')!==0)return;const body=JSON.stringify({action,data});try{if(navigator.sendBeacon&&navigator.sendBeacon(HN_API,new Blob([body],{type:'text/plain;charset=utf-8'})))return}catch(e){}try{fetch(HN_API,{method:'POST',mode:'no-cors',keepalive:true,body})}catch(e){}}
 /* ---------- booking form ---------- */
 let chosenPlan='';
 $$('[data-plan]').forEach(a=>a.addEventListener('click',()=>{chosenPlan=a.dataset.plan;const s=$('#fplan');if(s)s.value=chosenPlan}));
@@ -980,6 +984,7 @@ $('#bookForm').addEventListener('submit',e=>{
     plan&&plan!=='لم أقرّر بعد'?row('الباقة',plan+' ('+(bill==='q'?'كل 3 أشهر':'شهري')+'، '+(cur==='usd'?'بالدولار':'باليورو')+')'):'',
     f.msg.value.trim()?'\n*ملاحظة*\n'+f.msg.value.trim():'','','جزاكم الله خيراً.'].filter((x,i,arr)=>x!==''||(arr[i-1]!==''&&i>0));
 $('#waSend').href='https://wa.me/'+WA+'?text='+encodeURIComponent(lines.join('\n'));
+  hnPost('lead',{name,phone,who:f.who.value,age:f.age.value,program:f.program.value,riwaya:f.riwaya.value,time:f.time.value,teacher:f.teacher?f.teacher.value:'',plan:plan&&plan!=='لم أقرّر بعد'?plan+' ('+(bill==='q'?'كل 3 أشهر':'شهري')+'، '+(cur==='usd'?'دولار':'يورو')+')':'',msg:f.msg.value.trim(),hp:f.website?f.website.value:''});
   $('#formBody').style.display='none';$('#done').style.display='block';
 });
 
@@ -1082,13 +1087,16 @@ function buildSummary(){
 }
 const canFiles=()=>{try{return!!(navigator.canShare&&navigator.canShare({files:[audioFile()]}))}catch(e){return false}};
 function fallback(){$('#waBtn').href=waURL('next');$('#sendSteps').classList.add('show');$('#sendSteps').scrollIntoView({block:'center',behavior:'smooth'})}
+let appSent=null;
+function sendApp(){if(appSent===audioBlob&&(audioURL||!UPON))return;appSent=audioBlob;hnPost('teacherApp',{name:val('t_name'),phone:val('t_phone'),country:val('t_country'),audioUrl:audioURL,answers:answers()})}
 sendBtn.onclick=async()=>{
+  sendApp();
   if(upState==='ok'&&audioURL){const u=waURL('link');if(/Android|iPhone|iPad/i.test(navigator.userAgent))location.href=u;else open(u,'_blank','noopener');setTimeout(()=>show(5),900);return}
   if(canFiles()){try{try{await navigator.clipboard.writeText(message('file'))}catch(e){}await navigator.share({files:[audioFile()],text:message('file')});show(5);return}catch(e){if(e&&e.name==='AbortError')return}}
   if(UPON&&upState==='fail'){upFor=null;upload();upTxt.textContent='تعذّر الرفع، نعيد المحاولة… أو استعمل الطريقة اليدوية بالأسفل.';fallback();return}
   fallback();
 };
-$('#waBtn').addEventListener('click',()=>setTimeout(()=>show(5),800));
+$('#waBtn').addEventListener('click',()=>{sendApp();setTimeout(()=>show(5),800)});
 
 </script>
 </body>
