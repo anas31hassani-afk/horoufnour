@@ -481,6 +481,12 @@ body{overflow-x:hidden}
 @media (max-width:380px){.lng a{padding:5px 5px;font-size:11.5px}}
 .next-steps li{text-align:start}
 
+/* regional price country picker */
+.cty{white-space:nowrap;display:inline-flex;align-items:center;gap:8px;background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 14px;font-weight:700;font-size:15px}
+html[dir=ltr] .cty{padding:5px 14px 5px 6px}
+.cty select{border:0;background:var(--teal);color:var(--cream);font-family:var(--body);font-weight:700;font-size:15px;border-radius:999px;padding:8px 14px;cursor:pointer;max-width:190px}
+.price .c{font-size:.55em;margin-inline-start:2px}
+
 .lng{display:flex;gap:2px;background:rgba(251,246,236,.1);border-radius:999px;padding:3px;margin-inline:14px 0}.lng a{color:var(--cream);font-family:var(--latin);font-size:12.5px;font-weight:700;line-height:1;padding:7px 9px;border-radius:999px;opacity:.75;transition:.2s}.lng a:hover{opacity:1}.lng a.on{background:var(--sand);color:var(--deep);opacity:1}
 @media (max-width:1000px){.nav .wrap>.lng{display:none}.nav.open .links .lng-m{display:flex;align-self:flex-start;margin-top:6px}.lng-m a{font-size:14px;padding:8px 12px}}
 .links .lng-m{display:none}
@@ -489,6 +495,13 @@ body{overflow-x:hidden}
 .nav .wrap{max-width:1320px}.links a[href="#book"]{display:none}
 @media (max-width:1440px){.links{gap:18px}.brand small{display:none}}
 @media (max-width:1180px) and (min-width:1001px){.links{gap:12px;font-size:14.5px}.lng{margin-inline-start:8px}.lng a{padding:6px 7px}.nav .btn{padding:0 12px;font-size:14px}.brand b{font-size:17px}}
+.nav-in{display:inline-flex;align-items:center;gap:7px;color:var(--cream);border:1.5px solid rgba(251,246,236,.32);border-radius:999px;padding:0 15px;height:44px;font-weight:700;font-size:14.5px;white-space:nowrap;margin-inline-end:10px;transition:.2s}.nav-in:hover{background:rgba(251,246,236,.1);border-color:var(--sand)}.nav-in svg{width:18px;height:18px}
+.links .in-m{display:none}.nav-in .s{display:none}
+@media (max-width:1180px) and (min-width:1001px){.nav-in span{display:none}.nav-in{width:44px;padding:0;justify-content:center}}
+@media (max-width:1440px){html[dir=ltr] .nav-in span{display:none}html[dir=ltr] .nav-in{width:44px;padding:0;justify-content:center}}
+@media (max-width:1000px){.nav-in{width:auto;height:40px;padding:0 12px;font-size:13.5px;margin-inline:auto 8px}.nav-in .l{display:none}.nav-in .s{display:inline}html[dir=ltr] .nav-in{width:40px;padding:0}html[dir=ltr] .nav-in .s{display:none}}
+@media (max-width:340px){.nav-in .s{display:none}.nav-in{width:40px;padding:0;justify-content:center}}
+@media (max-width:1000px){.nav.open .links .in-m{display:flex;align-items:center;gap:8px;color:var(--sand)}.in-m svg{width:18px;height:18px}}
 
 html[dir=ltr]{--kufi:'Montserrat',system-ui,sans-serif}
 html[dir=ltr] h1,html[dir=ltr] h2,html[dir=ltr] h3{letter-spacing:-.01em;line-height:1.25}
@@ -513,7 +526,8 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
     <a href="#top" class="brand" aria-label="Horouf Min Nour"><svg class="ic" role="img" aria-label="" viewBox="-0.9 -0.9 61.0 47.8" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.19 -2.19) scale(0.05476)"><defs><clipPath id="ic2"><rect x="0" y="0" width="1159" height="880"/></clipPath></defs><g clip-path="url(#ic2)"><path d="M69.04 1150.75 L39.94 1119.50 L40.30 974.00 C40.61 848.63 40.89 825.80 42.33 809.00 C48.60 735.72 63.28 680.68 91.66 624.00 C108.60 590.16 134.11 551.81 150.44 535.61 C160.08 526.05 200.98 488.38 239.00 454.06 C257.26 437.57 265.73 430.70 277.00 423.25 C312.12 400.04 338.20 384.89 372.81 367.59 C398.65 354.67 416.68 344.27 431.00 334.03 C457.21 315.29 505.54 271.35 517.69 255.20 C525.14 245.30 533.31 232.18 544.14 212.71 C557.19 189.24 561.90 185.06 576.27 184.20 C585.04 183.68 590.09 185.11 596.91 190.05 C601.90 193.66 604.64 197.99 608.93 209.00 C613.88 221.68 618.70 230.43 626.57 241.00 C643.53 263.77 669.01 288.71 703.56 316.37 C737.30 343.37 745.04 348.07 799.00 374.41 C825.74 387.45 855.00 404.20 878.70 420.02 C889.58 427.28 901.21 437.34 966.50 495.93 C1000.98 526.88 1011.63 537.78 1025.22 556.00 C1072.21 619.04 1101.58 687.74 1112.42 760.00 C1113.63 768.06 1119.00 850.51 1119.00 861.02 C1119.00 862.97 1118.19 863.00 1072.67 863.00 L1026.34 863.00 L1025.13 840.75 C1018.10 711.26 987.02 632.00 915.03 559.95 C890.27 535.17 867.75 516.90 835.00 495.02 C813.21 480.47 796.27 470.69 756.55 449.76 C701.15 420.55 685.50 411.49 661.90 394.93 C629.90 372.47 599.10 344.63 580.34 321.21 L578.50 318.91 L572.00 326.67 C556.06 345.69 528.46 370.95 506.26 386.82 C489.74 398.64 479.01 404.79 420.80 435.83 C355.26 470.78 335.89 482.55 301.50 508.32 C209.44 577.30 156.71 657.25 140.13 753.00 C133.81 789.47 133.05 811.79 133.02 960.31 L133.00 1082.12 L137.25 1087.50 L141.50 1092.89 L183.25 1092.94 L225.00 1093.00 L225.04 1071.75 L225.09 1050.50 L253.63 1018.75 L282.17 987.00 L326.33 987.01 L370.50 987.03 L399.70 1018.76 L428.90 1050.50 L428.95 1084.21 L429.00 1117.92 L399.87 1149.96 L370.73 1182.00 L234.44 1182.00 L98.14 1182.00 L69.04 1150.75Z M336.00 1085.00 L336.00 1077.00 L327.00 1077.00 L318.00 1077.00 L318.00 1085.00 L318.00 1093.00 L327.00 1093.00 L336.00 1093.00 L336.00 1085.00Z M211.57 848.25 C213.86 781.95 222.93 738.04 243.69 692.67 C271.40 632.11 315.85 581.48 378.50 539.09 C398.44 525.61 415.74 515.58 461.50 491.04 C481.30 480.42 501.91 468.98 507.30 465.62 C522.57 456.09 540.87 441.99 553.74 429.83 C568.00 416.35 572.32 414.02 583.00 414.02 C592.96 414.02 598.56 416.68 608.85 426.30 C638.89 454.39 658.38 467.71 714.03 498.20 C760.36 523.58 775.86 533.31 803.22 554.19 C886.01 617.39 935.06 701.57 944.99 797.50 C945.55 803.00 946.31 819.99 946.67 835.25 L947.32 863.00 L904.16 863.00 L861.00 863.00 L860.99 834.75 C860.98 803.94 860.04 789.07 856.91 770.19 C852.98 746.47 845.90 726.12 834.88 706.87 C819.36 679.75 794.76 654.42 758.00 627.69 C737.76 612.98 722.14 603.16 690.41 585.19 C673.96 575.88 658.17 566.88 655.32 565.19 C636.55 554.10 611.09 536.57 594.08 523.02 L583.99 514.98 L576.32 521.08 C553.85 538.93 534.87 548.83 484.13 569.12 C452.12 581.93 430.74 591.99 412.79 602.70 C344.17 643.64 306.46 702.54 295.42 786.00 C294.32 794.35 293.60 809.20 293.27 830.75 L292.76 863.00 L251.91 863.00 L211.06 863.00 L211.57 848.25Z" fill="#FBF6EC" fill-rule="evenodd"/><path d="M569.39 161.17 C554.81 157.45 540.41 148.82 530.57 137.87 C513.50 118.88 507.20 90.08 514.61 64.90 C516.37 58.89 522.91 45.86 526.09 42.00 L528.15 39.50 L527.55 42.50 C526.13 49.62 525.79 66.96 526.94 73.57 C528.42 82.08 532.75 93.14 537.55 100.65 C552.73 124.37 581.85 138.55 608.50 135.19 C626.56 132.92 641.35 125.79 653.88 113.31 C660.99 106.23 661.23 106.09 660.64 109.23 C660.31 111.03 657.90 116.78 655.29 122.00 C646.77 139.08 630.28 153.24 611.50 159.59 C600.79 163.22 580.44 163.98 569.39 161.17Z" fill="#E6BC6A"/></g><path d="M580 600 L640 680 L580 760 L520 680 Z" fill="#E6BC6A"/></g></svg><span><b>Horouf Min Nour</b><small>Academia de memorización del Corán</small></span></a>
     <nav class="links" id="links">
       <a href="#programs">Programas</a><a href="#how">Cómo empezar</a><a href="#teachers">Profesores</a><a href="#pricing">Precios</a><a href="#faq">Preguntas</a><a href="#book">Contacto</a><a href="./#teach" style="color:var(--sand)">Ser profesor</a>
-    <div class="lng lng-m"><a href="./" hreflang="ar" lang="ar" data-l="ar">ع</a><a href="fr.html" hreflang="fr" lang="fr" data-l="fr">FR</a><a href="en.html" hreflang="en" lang="en" data-l="en">EN</a><a href="es.html" hreflang="es" lang="es" data-l="es" class="on" aria-current="page">ES</a></div></nav>
+    <div class="lng lng-m"><a href="./" hreflang="ar" lang="ar" data-l="ar">ع</a><a href="fr.html" hreflang="fr" lang="fr" data-l="fr">FR</a><a href="en.html" hreflang="en" lang="en" data-l="en">EN</a><a href="es.html" hreflang="es" lang="es" data-l="es" class="on" aria-current="page">ES</a></div><a href="app.html" class="in-m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Acceso alumnos y profesores</span></a></nav>
+    <a href="app.html" class="nav-in" aria-label="Acceder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="l">Acceder</span><span class="s">Acceder</span></a>
     <a href="#book" class="btn btn-sand">Clase gratis</a>
     <div class="lng" id="lng"><a href="./" hreflang="ar" lang="ar" data-l="ar">ع</a><a href="fr.html" hreflang="fr" lang="fr" data-l="fr">FR</a><a href="en.html" hreflang="en" lang="en" data-l="en">EN</a><a href="es.html" hreflang="es" lang="es" data-l="es" class="on" aria-current="page">ES</a></div>
     <button class="burger" id="burger" aria-label="Menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
@@ -648,7 +662,7 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
         <p class="lead" style="margin-top:10px">Todas las clases son individuales, en directo, de 30 minutos, y siempre empiezan con una clase de prueba gratis para evaluar el nivel.</p></div>
       <div class="price-controls">
         <div class="toggle" id="billT"><button class="on" data-bill="m">Mensual</button><button data-bill="q">Cada 3 meses<span class="save">-10%</span></button></div>
-        <div class="toggle" id="curT"><button data-cur="usd">$ Dólar</button><button class="on" data-cur="eur">€ Euro</button></div>
+        <label class="cty"><span>Precios para</span><select id="pcountry" aria-label="País de los precios"></select></label>
       </div>
     </div>
 
@@ -936,30 +950,29 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!reduce){
     $$('.float',art).forEach((f,i)=>{f.style.translate=`${x*(i?-18:22)}px ${y*(i?-14:16)}px`})});
 }
 
-/* ---------- pricing ---------- */
-let cur='eur',bill='m';
-const SYM={usd:'$',eur:'€'};
+/* ---------- pricing (regional, see prices.js) ---------- */
+let bill='m',pcIso='MA';
 const fmt=n=>Number.isInteger(n)?String(n):n.toFixed(n<10?2:1).replace(/\.?0+$/,'');
 function animNum(el,to){
-  const from=parseFloat(el.textContent)||to;if(reduce||from===to){el.textContent=fmt(to);return}
-  const t0=performance.now(),d=550;
-  const step=t=>{const k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);el.textContent=fmt(Math.round(from+(to-from)*e));if(k<1)requestAnimationFrame(step)};
+  const from=parseFloat(String(el.textContent).replace(/,/g,''))||to;if(reduce||from===to){el.textContent=fmtP(to);return}
+  const t0=performance.now(),d=550,dec=!Number.isInteger(to);
+  const step=t=>{const k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3),v=from+(to-from)*e;el.textContent=k<1?fmtP(dec?Math.round(v*2)/2:Math.round(v)):fmtP(to);if(k<1)requestAnimationFrame(step)};
   requestAnimationFrame(step);
 }
+function curSym(code){const c=CUR[code]||CUR.USD;return (document.documentElement.lang||'ar')==='ar'?c[0]:c[1]}
 function renderPrices(){
-  $$('#pricing .plan').forEach(p=>{
-    const v=$('.v',p),base=+v.dataset[cur],n=+$('.pe',p).dataset.n;
-    const monthly=bill==='q'?Math.round(base*.9):base;
+  const P=prOf(pcIso),sym=curSym(P[0]),sp=sym.length>1?' ':'';
+  $$('#pricing .plan').forEach((p,i)=>{
+    const v=$('.v',p),base=P[i+1],n=+$('.pe',p).dataset.n;
+    const monthly=bill==='q'?niceP(base*.9):base;
     animNum(v,monthly);
-    $('.c',p).textContent=SYM[cur];
-    const old=$('.old',p);old.textContent=base+SYM[cur];old.classList.toggle('show',bill==='q');
-    $('.total',p).textContent=bill==='q'?`Pagas ${monthly*3}${SYM[cur]} cada 3 meses en lugar de ${base*3}${SYM[cur]}`:'Pago mensual · cancela cuando quieras';
-    $('.pe',p).textContent=fmt(Math.round(monthly/n*100)/100)+SYM[cur];
+    $('.c',p).textContent=sp+sym;
+    const old=$('.old',p);old.textContent=fmtP(base)+sp+sym;old.classList.toggle('show',bill==='q');
+    $('.total',p).textContent=bill==='q'?`Pagas ${fmtP(niceP(monthly*3))}${sp}${sym} cada 3 meses en lugar de ${fmtP(base*3)}${sp}${sym}`:'Pago mensual · cancela cuando quieras';
+    const per=monthly/n;$('.pe',p).textContent=fmtP(per>=20?Math.round(per):Math.round(per*100)/100)+sp+sym;
   });
 }
-$$('#curT button').forEach(b=>b.onclick=()=>{cur=b.dataset.cur;$$('#curT button').forEach(x=>x.classList.toggle('on',x===b));renderPrices()});
 $$('#billT button').forEach(b=>b.onclick=()=>{bill=b.dataset.bill;$$('#billT button').forEach(x=>x.classList.toggle('on',x===b));renderPrices()});
-renderPrices();
 
 /* ---------- countries + phone with country code ---------- */
 // [رمز، الاسم، مفتاح الاتصال، أقل عدد أرقام، أكثر عدد أرقام] — الأرقام بدون الصفر الأول
@@ -971,6 +984,25 @@ const CC=[['MA','Marruecos','212',9,9],['DZ','Argelia','213',9,9],['TN','Túnez'
 const TZC={Casablanca:'MA',Algiers:'DZ',Tunis:'TN',Tripoli:'LY',Cairo:'EG',Nouakchott:'MR',Khartoum:'SD',Riyadh:'SA',Dubai:'AE',Qatar:'QA',Kuwait:'KW',Bahrain:'BH',Muscat:'OM',Amman:'JO',Gaza:'PS',Hebron:'PS',Beirut:'LB',Damascus:'SY',Baghdad:'IQ',Aden:'YE',Paris:'FR',Brussels:'BE',Amsterdam:'NL',Berlin:'DE',Madrid:'ES',Ceuta:'ES',Rome:'IT',London:'GB',Dublin:'IE',Zurich:'CH',Vienna:'AT',Luxembourg:'LU',Lisbon:'PT',Stockholm:'SE',Oslo:'NO',Copenhagen:'DK',Helsinki:'FI',Toronto:'CA',Vancouver:'CA',Montreal:'CA',Edmonton:'CA',Winnipeg:'CA',Halifax:'CA',Istanbul:'TR',Kuala_Lumpur:'MY',Jakarta:'ID',Karachi:'PK',Kolkata:'IN',Dakar:'SN',Bamako:'ML',Abidjan:'CI',Lagos:'NG',Johannesburg:'ZA',Moscow:'RU'};
 const ccOf=iso=>CC.find(c=>c[0]===iso)||CC[CC.length-1];
 const guessCC=(()=>{try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';const city=tz.split('/').pop();if(TZC[city])return TZC[city];if(/^America\//.test(tz))return 'US';if(/^Australia\//.test(tz))return 'AU'}catch(e){}return 'MA'})();
+
+/* ---------- regional prices: one table for the site and the app ----------
+   CUR: [رمز العملة بالعربية, رمز العملة اللاتيني, قيمة الوحدة بالdólar تقريباً (لحساب أجر المعلم)]
+   PR:  دولة → [العملة, باقة 8 حصص, باقة 12, باقة 20, الفئة] — الفئة A: أفريقيا والدول العربية غير الخليجية، G: الخليج، E: أوروبا وباقي العالم */
+const CUR={MAD:['درهم','MAD',0.1],DZD:['دج','DZD',0.0074],TND:['د.ت','TND',0.32],LYD:['د.ل','LYD',0.2],EGP:['جنيه','EGP',0.0205],MRU:['أوقية','MRU',0.025],JOD:['دينار','JOD',1.41],IQD:['د.ع','IQD',0.00076],
+SAR:['ريال','SAR',0.2667],AED:['درهم','AED',0.2723],QAR:['ريال','QAR',0.2747],KWD:['د.ك','KWD',3.25],BHD:['د.ب','BHD',2.66],OMR:['ر.ع','OMR',2.6],
+EUR:['€','€',1.08],GBP:['£','£',1.27],CHF:['CHF','CHF',1.13],SEK:['kr','SEK',0.095],NOK:['kr','NOK',0.093],DKK:['kr','DKK',0.145],USD:['$','$',1],CAD:['CA$','CA$',0.73],AUD:['A$','A$',0.65]};
+const PLOW=['USD',10,15,22,'A'],PREST=['USD',19,27,39,'E'];
+const PR={MA:['MAD',100,150,220,'A'],DZ:['DZD',1400,2000,3000,'A'],TN:['TND',30,45,70,'A'],LY:['LYD',50,75,110,'A'],EG:['EGP',500,750,1100,'A'],MR:['MRU',400,600,900,'A'],SD:PLOW,
+JO:['JOD',7,11,16,'A'],IQ:['IQD',13000,20000,29000,'A'],PS:PLOW,LB:PLOW,SY:PLOW,YE:PLOW,SN:PLOW,ML:PLOW,CI:PLOW,NG:PLOW,ZA:PLOW,TR:PLOW,MY:PLOW,ID:PLOW,PK:PLOW,IN:PLOW,
+SA:['SAR',55,85,120,'G'],AE:['AED',55,80,120,'G'],QA:['QAR',55,80,115,'G'],KW:['KWD',4.5,7,10,'G'],BH:['BHD',6,8.5,12,'G'],OM:['OMR',6,8.5,12,'G'],
+FR:['EUR',18,25,36,'E'],BE:['EUR',18,25,36,'E'],NL:['EUR',18,25,36,'E'],DE:['EUR',18,25,36,'E'],ES:['EUR',18,25,36,'E'],IT:['EUR',18,25,36,'E'],IE:['EUR',18,25,36,'E'],AT:['EUR',18,25,36,'E'],LU:['EUR',18,25,36,'E'],PT:['EUR',18,25,36,'E'],FI:['EUR',18,25,36,'E'],
+GB:['GBP',15,22,32,'E'],CH:['CHF',18,25,36,'E'],SE:['SEK',200,280,400,'E'],NO:['NOK',200,280,400,'E'],DK:['DKK',135,190,270,'E'],US:['USD',19,27,39,'E'],CA:['CAD',26,37,54,'E'],AU:['AUD',29,41,59,'E'],RU:PREST,XX:PREST};
+const prOf=iso=>PR[iso]||PREST;
+const PLAN_IDX={start:1,steady:2,hafiz:3};
+/* سعر مرتّب: خصم 10% للدفع cada 3 meses مع تقريب مناسب لكل عملة */
+const niceP=v=>v>=1000?Math.round(v/50)*50:v>=100?Math.round(v/5)*5:v>=20?Math.round(v):Math.round(v*2)/2;
+const fmtP=v=>Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(1).replace(/\.0$/,'');
+
 const ccOpts=(sel,dial)=>CC.map(([iso,n,d])=>`<option value="${iso}" ${iso===sel?'selected':''}>${dial?(d?'+'+d+' ':'')+n:n}</option>`).join('');
 function phonePicker(w){
   const sel=$('.tel-cc',w),inp=$('.tel-n',w),hint=w.parentElement.querySelector('.tel-hint');
@@ -1001,7 +1033,11 @@ function hnPost(action,data){if(!HN_API||HN_API.indexOf('http')!==0)return;const
 const bk=$('#bookForm'),bkPages=$$('.bk-page',bk),bkBars=$$('.bk-bar i',bk);let bkStep=0,bkSent=false;
 const fc=$('#fcountry');fc.innerHTML=ccOpts(guessCC,0);
 const bkTel=$('[data-phone]',bk);
-fc.addEventListener('change',()=>bkTel.setCountry(fc.value));
+const pcs=$('#pcountry');
+function setPC(iso,from){pcIso=PR[iso]?iso:(CC.some(c=>c[0]===iso)?iso:'XX');if(pcs&&from!=='p')pcs.value=iso;if(from!=='b'&&fc.value!==iso){fc.value=iso;bkTel.setCountry(iso)}renderPrices()}
+if(pcs){pcs.innerHTML=ccOpts(guessCC,0);pcs.addEventListener('change',()=>setPC(pcs.value,'p'))}
+fc.addEventListener('change',()=>{bkTel.setCountry(fc.value);setPC(fc.value,'b')});
+setPC(guessCC,'init');
 const pick=n=>$$(`.opts[data-name="${n}"] button.on`,bk).map(b=>b.dataset.v);
 const LG=document.documentElement.lang||'ar';
 const lab=n=>LG==='ar'?pick(n):$$(`.opts[data-name="${n}"] button.on`,bk).map(b=>(b.querySelector('b')||b).textContent.trim());
@@ -1041,7 +1077,8 @@ bk.addEventListener('submit',e=>{
   if(!ph.ok){$('.tel-n',bkTel).focus();return}
   bkSent=true;const btn=$('#bkSend');btn.disabled=true;
   const country=ccOf(fc.value)[1],who=pick('who')[0]||'',age=pick('age')[0]||'',program=pick('program')[0]||'',riwaya=pick('riwaya')[0]||'',times=pick('time').join(', '),teacher=pick('teacher')[0]||'';
-  const plan=f.plan.value&&f.plan.value!=='Aún no lo sé'?f.plan.value+' ('+(bill==='q'?'cada 3 meses':'mensual')+', '+(cur==='usd'?'dólar':'euro')+')':'';
+  const pi=f.plan.selectedIndex,PP=prOf(pcIso),pAmt=pi>0?(bill==='q'?niceP(PP[pi]*.9):PP[pi]):0;
+  const plan=pi>0?f.plan.value+' — '+fmtP(pAmt)+' '+(CUR[PP[0]]||CUR.USD)[1]+' '+(bill==='q'?'cada 3 meses (al mes)':'al mes'):'';
   const msg=f.msg.value.trim(),timeTxt=(times||'cualquier hora')+' · '+country;
   hnPost('lead',{name,phone,who,age,program,riwaya,time:timeTxt,teacher,plan,msg:(LG!=='ar'?'[لغة الموقع: '+LG.toUpperCase()+'] ':'')+msg,hp:f.website?f.website.value:''});
   const row=(l,v)=>v?'• '+l+': '+v:'';
