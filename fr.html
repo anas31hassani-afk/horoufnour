@@ -529,7 +529,7 @@ h2{font-size:clamp(30px,4vw,50px);line-height:1.35}
 .hero-art .orbit i:nth-child(2){top:auto;bottom:-11px}.hero-art .orbit i:nth-child(3){top:50%;left:-11px;margin:-11px 0 0}
 .arch .c3d{position:absolute;left:50%;top:1%;width:118%;height:58%;transform:translateX(-50%);z-index:2;pointer-events:none;opacity:0;transition:opacity 1s ease}
 .arch.on3d .c3d{opacity:1}
-.arch.on3d .lg{clip-path:inset(45.5% 0 0 0)}
+.arch .lg{transition:opacity .5s ease}.arch.on3d .lg{opacity:0}
 .arch{overflow:visible}
 .arch::after{content:"";position:absolute;left:10%;right:10%;bottom:-1px;height:1px}
 /* ---------- why: bento بأشكال مختلفة ---------- */
@@ -695,6 +695,9 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
 .plans-hint i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .3s,width .3s}
 .plans-hint i.on{width:20px;border-radius:99px;background:var(--teal)}
 @media(max-width:1000px){.burger{width:44px;height:44px;display:grid;place-items:center}}
+/* الشعار في الواجهة أكبر قليلاً ليملأ القوس */
+.arch .lg{height:384px;margin-top:6px}
+@media(max-width:1000px){.arch .lg{height:300px}}
 
 
 html[dir=ltr]{--kufi:'Montserrat',system-ui,sans-serif}
@@ -1385,7 +1388,12 @@ const ask=$('#ask');if(ask)ask.addEventListener('submit',e=>{e.preventDefault();
 /* 3D logo: loaded lazily, only when WebGL is there */
 function start3d(){
   const cv=$('#c3d');if(!cv||!window.HN3D)return;
-  h3d=HN3D.mount(cv,{reduce,pointerHost:hero,motes:innerWidth<700?12:26});if(h3d){$('#arch').classList.add('on3d');onS()}}
+  /* اللوحة تُوضع فوق الشعار المسطّح تماماً وبالمقاس نفسه، ثم يُخفى المسطّح: الشعار المجسّم كامل ومتصل */
+  const ar=$('#arch'),lg=$('.lg',ar),FIT=1.22;
+  const place=()=>{if(!lg)return;const A=ar.getBoundingClientRect(),R=(lg.querySelector('g')||lg).getBoundingClientRect();if(!R.height)return;const h=R.height*FIT,w=Math.max(R.width*1.9,h*.8);
+    Object.assign(cv.style,{left:(R.left-A.left+R.width/2-w/2)+'px',top:(R.top-A.top+R.height/2-h/2)+'px',width:w+'px',height:h+'px',transform:'none'})};
+  place();
+  h3d=HN3D.mount(cv,{reduce,pointerHost:hero,motes:innerWidth<700?12:26,fit:FIT});if(h3d){ar.classList.add('on3d');onS();addEventListener('resize',place,{passive:true})}}
 function load3d(){
   try{const t=document.createElement('canvas');if(!(t.getContext('webgl2')||t.getContext('webgl')))return}catch(e){return}
   if(navigator.connection&&navigator.connection.saveData)return;
