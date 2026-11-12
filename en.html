@@ -502,6 +502,184 @@ html[dir=ltr] .cty{padding:5px 14px 5px 6px}
 @media (max-width:1000px){.nav-in{width:auto;height:40px;padding:0 12px;font-size:13.5px;margin-inline:auto 8px}.nav-in .l{display:none}.nav-in .s{display:inline}html[dir=ltr] .nav-in{width:40px;padding:0}html[dir=ltr] .nav-in .s{display:none}}
 @media (max-width:340px){.nav-in .s{display:none}.nav-in{width:40px;padding:0;justify-content:center}}
 @media (max-width:1000px){.nav.open .links .in-m{display:flex;align-items:center;gap:8px;color:var(--sand)}.in-m svg{width:18px;height:18px}}
+/* ================= v2: حركة + أشكال متنوعة + حاسبة ================= */
+:root{--night:#072B29;--glow:#F6DDA0;--star8:polygon(50% 0,64.6% 14.6%,85.4% 14.6%,85.4% 35.4%,100% 50%,85.4% 64.6%,85.4% 85.4%,64.6% 85.4%,50% 100%,35.4% 85.4%,14.6% 85.4%,14.6% 64.6%,0 50%,14.6% 35.4%,14.6% 14.6%,35.4% 14.6%)}
+h2{font-size:clamp(30px,4vw,50px);line-height:1.35}
+.sec-head .lead{max-width:460px}
+/* reveal system (works without GSAP) */
+.v2js .mv{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform 1.1s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--i,0)*90ms)}
+.v2js .mv[data-mv=scale]{transform:scale(.88)}
+.v2js .mv[data-mv=side]{transform:translateX(-70px)}
+.v2js .mv[data-mv=side2]{transform:translateX(70px)}
+.v2js .mv.in{opacity:1;transform:none}
+.sw{display:inline-block;overflow:hidden;vertical-align:bottom;padding-block:.22em;margin-block:-.22em}
+.sw>i{display:inline-block;font-style:normal}
+.v2js .sw>i{transform:translateY(118%);transition:transform 1s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--w,0)*70ms)}
+.v2js .split.in .sw>i{transform:none}
+.par{will-change:transform}
+.deco{position:absolute;pointer-events:none;z-index:0}
+.deco.star{clip-path:var(--star8);background:var(--sand);opacity:.5}
+.deco.ring{border:1.5px dashed rgba(21,94,90,.28);border-radius:50%;animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* hero */
+.hero{--mx:70%;--my:30%}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(560px circle at var(--mx) var(--my),rgba(246,221,160,.17),transparent 62%)}
+.hero-art .orbit{position:absolute;left:50%;bottom:-60px;width:620px;height:620px;margin-left:-310px;border-radius:50%;border:1.5px dashed rgba(230,188,106,.35);animation:spin 80s linear infinite}
+.hero-art .orbit i{position:absolute;width:22px;height:22px;background:var(--sand);clip-path:var(--star8);top:-11px;left:50%;margin-left:-11px}
+.hero-art .orbit i:nth-child(2){top:auto;bottom:-11px}.hero-art .orbit i:nth-child(3){top:50%;left:-11px;margin:-11px 0 0}
+.arch .c3d{position:absolute;left:50%;top:1%;width:118%;height:58%;transform:translateX(-50%);z-index:2;pointer-events:none;opacity:0;transition:opacity 1s ease}
+.arch.on3d .c3d{opacity:1}
+.arch.on3d .lg{clip-path:inset(45.5% 0 0 0)}
+.arch{overflow:visible}
+.arch::after{content:"";position:absolute;left:10%;right:10%;bottom:-1px;height:1px}
+/* ---------- why: bento بأشكال مختلفة ---------- */
+#why{position:relative;overflow:hidden}
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:22px;position:relative;z-index:1}
+.bn{position:relative;padding:34px 32px;overflow:hidden;transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s}
+.bn:hover{transform:translateY(-6px)}
+.bn h3{font-size:23px}.bn p{font-size:16.5px;margin-top:8px;opacity:.78}
+.bn .ico{transition:transform .6s cubic-bezier(.16,1,.3,1)}.bn:hover .ico{transform:rotate(-8deg) scale(1.08)}
+.bn-live{grid-column:span 7;background:var(--night);color:var(--cream);border-radius:34px;padding:42px 40px 0;display:flex;flex-direction:column;min-height:430px}
+.bn-live h3{color:var(--cream);font-size:30px}.bn-live .ico{background:rgba(251,246,236,.1);color:var(--sand)}
+.live-mock{margin-top:auto;padding:26px 0 34px;display:flex;align-items:center;gap:18px;direction:ltr}
+.live-mock .av{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:var(--sand);color:var(--deep);flex:none;position:relative}
+.live-mock .av svg{width:28px;height:28px}
+.live-mock .av.t{background:var(--teal);color:var(--cream)}
+.live-mock .av::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid currentColor;opacity:0;animation:ping 2.4s ease-out infinite}
+.live-mock .av.t::after{animation-delay:1.2s;color:var(--mist)}
+@keyframes ping{0%{transform:scale(.85);opacity:.7}100%{transform:scale(1.35);opacity:0}}
+.wave{flex:1;height:70px;display:flex;align-items:center;gap:4px;justify-content:center}
+.wave i{width:5px;border-radius:5px;background:linear-gradient(var(--sand),var(--mist));height:20%;animation:wv 1.2s ease-in-out infinite;animation-delay:calc(var(--k)*-90ms)}
+@keyframes wv{0%,100%{height:16%}50%{height:calc(30% + var(--h)*1%)}}
+.live-mock .ok{width:40px;height:40px;border-radius:50%;background:rgba(246,221,160,.16);color:var(--sand);display:grid;place-items:center;flex:none;animation:pop 3.6s ease-in-out infinite}
+.live-mock .ok svg{width:20px;height:20px}
+@keyframes pop{0%,55%{transform:scale(0)}65%{transform:scale(1.2)}72%,92%{transform:scale(1)}100%{transform:scale(0)}}
+.bn-arch{grid-column:span 5;background:var(--sand);color:var(--deep);border-radius:260px 260px 34px 34px;padding:90px 44px 44px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:430px}
+.bn-arch::before{content:"";position:absolute;inset:16px 16px 16px;border:1.5px solid rgba(13,63,60,.28);border-radius:244px 244px 22px 22px;pointer-events:none}
+.bn-arch h3{color:var(--deep);font-size:27px}
+.seal{width:120px;height:120px;position:relative;display:grid;place-items:center;margin-bottom:26px}
+.seal::before{content:"";position:absolute;inset:0;background:var(--deep);clip-path:var(--star8);animation:spin 26s linear infinite}
+.seal svg{position:relative;width:46px;height:46px;color:var(--sand)}
+.bn-leaf{grid-column:span 4;background:#fff;border:1px solid var(--line);border-radius:30px 120px 30px 120px;padding:44px 40px}
+.bn-leaf.alt{background:var(--linen);border-radius:120px 30px 120px 30px;border:0}
+.clock{width:56px;height:56px;border-radius:50%;border:2.5px solid var(--teal);position:relative;margin-bottom:20px}
+.clock::before,.clock::after{content:"";position:absolute;left:50%;bottom:50%;width:2.5px;margin-left:-1.25px;background:var(--teal);border-radius:2px;transform-origin:50% 100%}
+.clock::before{height:18px;animation:spin 6s linear infinite}.clock::after{height:12px;background:var(--sand-d);animation:spin 72s linear infinite}
+.bn-ticket{grid-column:span 4;background:#fff;border-radius:22px;padding:40px 36px;border:1px solid var(--line);-webkit-mask:radial-gradient(14px at 0 62%,#0000 98%,#000) 0 0/51% 100% no-repeat,radial-gradient(14px at 100% 62%,#0000 98%,#000) 100% 0/51% 100% no-repeat;mask:radial-gradient(14px at 0 62%,#0000 98%,#000) 0 0/51% 100% no-repeat,radial-gradient(14px at 100% 62%,#0000 98%,#000) 100% 0/51% 100% no-repeat}
+.bars{display:flex;align-items:flex-end;gap:7px;height:56px;margin-bottom:20px}
+.bars i{width:12px;border-radius:5px 5px 2px 2px;background:var(--teal);height:calc(var(--h)*1%);transform-origin:bottom;transform:scaleY(.15);transition:transform 1.1s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--k)*90ms)}
+.bars i:nth-child(even){background:var(--sand)}
+.in .bars i,.bn-ticket.in .bars i{transform:none}
+.bn-band{grid-column:1/-1;background:var(--teal);color:var(--cream);border-radius:999px;padding:30px 60px;display:flex;align-items:center;gap:26px}
+.bn-band h3{color:var(--cream)}.bn-band .ico{margin:0;flex:none;background:rgba(251,246,236,.12);color:var(--sand);border-radius:50%;width:66px;height:66px}
+.bn-band p{margin:2px 0 0}
+/* ---------- programs: مسار الرحلة ---------- */
+.programs{position:relative;overflow:hidden}
+.pj-pick{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:44px;position:relative;z-index:2}
+.pj-pick b{font-family:var(--kufi);color:var(--teal);font-size:18px}
+.pj-chips{display:flex;gap:10px;flex-wrap:wrap}
+.pj-chips button{border:1.5px solid rgba(21,94,90,.3);background:transparent;color:var(--teal);font-family:var(--body);font-weight:700;font-size:16px;padding:11px 22px;border-radius:999px;cursor:pointer;transition:background .3s,color .3s,transform .3s}
+.pj-chips button:hover{transform:translateY(-2px)}
+.pj-chips button.on{background:var(--teal);color:var(--cream);border-color:var(--teal)}
+.pj-list{position:relative}
+.pj-path{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
+.pj-path path{fill:none;stroke-linecap:round}
+.pj-path .bg{stroke:rgba(21,94,90,.18);stroke-width:2;stroke-dasharray:3 9}
+.pj-path .fg{stroke:var(--sand-d);stroke-width:3}
+.pj-path circle{fill:var(--sand);stroke:var(--cream);stroke-width:4;filter:drop-shadow(0 0 10px rgba(230,188,106,.9))}
+.pj-row{display:grid;grid-template-columns:150px 1fr auto;gap:34px;align-items:center;padding:34px 0;border-bottom:1px solid rgba(21,94,90,.14);position:relative;z-index:1;transition:padding .5s cubic-bezier(.16,1,.3,1)}
+.pj-row:last-child{border-bottom:0}
+.pj-med{width:104px;height:104px;display:grid;place-items:center;position:relative;justify-self:start}
+.pj-row:nth-child(even) .pj-med{justify-self:end}
+.pj-med::before{content:"";position:absolute;inset:0;background:var(--cream);clip-path:var(--star8);transition:background .6s,transform .9s cubic-bezier(.16,1,.3,1)}
+.pj-med span{position:relative;font-family:var(--latin);font-weight:700;font-size:28px;color:var(--teal);transition:color .5s}
+.pj-row.on .pj-med::before{background:var(--teal);transform:rotate(45deg) scale(1.08)}
+.pj-row.on .pj-med span{color:var(--sand)}
+.pj-row h3{font-size:clamp(22px,2.4vw,32px);color:var(--deep);transition:color .4s}
+.pj-row p{font-size:17px;color:rgba(28,43,42,.72);max-width:560px;margin-top:6px}
+.pj-row .tags{margin:0;justify-content:flex-end;max-width:240px}
+.pj-row .tag{background:var(--cream)}
+.pj-fit{position:absolute;inset-inline-end:0;top:14px;background:var(--sand);color:var(--deep);font-weight:700;font-size:13.5px;padding:4px 14px;border-radius:999px;transform:scale(0);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.pj-row.fit .pj-fit{transform:scale(1)}
+.pj-row.fit h3{color:var(--teal)}
+.pj-list.picked .pj-row:not(.fit){opacity:.45}
+.pj-row{transition:opacity .5s,padding .5s}
+/* ---------- pricing calculator ---------- */
+.calc{margin-top:40px;background:var(--night);color:var(--cream);border-radius:38px;padding:54px 56px;display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center;position:relative;overflow:hidden}
+.calc::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(230,188,106,.22),transparent 65%);inset-inline-end:-140px;top:-180px;pointer-events:none}
+.calc .eyebrow{color:var(--sand)}
+.calc h3{color:var(--cream);font-size:clamp(24px,2.6vw,34px);line-height:1.45;margin-bottom:30px}
+.cf{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0;border-bottom:1px solid rgba(251,246,236,.12);flex-wrap:wrap}
+.cf>label,.cf>span.l{font-weight:700;font-size:17px}
+.stepper{display:inline-flex;align-items:center;gap:6px;background:rgba(251,246,236,.08);border-radius:999px;padding:5px}
+.stepper button{width:42px;height:42px;border-radius:50%;border:0;background:var(--cream);color:var(--deep);font-size:22px;font-weight:700;cursor:pointer;line-height:1;transition:transform .2s,background .2s}
+.stepper button:hover{background:var(--sand)}.stepper button:active{transform:scale(.9)}
+.stepper output{min-width:44px;text-align:center;font-family:var(--latin);font-weight:700;font-size:22px}
+.seg2{display:inline-flex;background:rgba(251,246,236,.08);border-radius:999px;padding:5px;flex-wrap:wrap}
+.seg2 button{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:var(--cream);font-family:var(--body);font-weight:700;font-size:15.5px;padding:10px 18px;border-radius:999px;cursor:pointer;transition:background .3s,color .3s;white-space:nowrap}
+.seg2 button.on{background:var(--sand);color:var(--deep)}
+.seg2 small{direction:ltr;unicode-bidi:isolate;display:inline-block;font-family:var(--latin);font-size:12px;opacity:.75}
+.sw2{display:inline-flex;align-items:center;gap:12px;cursor:pointer;font-weight:700;font-size:16.5px}
+.sw2 input{position:absolute;opacity:0;pointer-events:none}
+.sw2 i{width:54px;height:30px;border-radius:999px;background:rgba(251,246,236,.18);position:relative;flex:none;transition:background .3s}
+.sw2 i::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:24px;height:24px;border-radius:50%;background:var(--cream);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.sw2 input:checked+i{background:var(--sand)}
+.sw2 input:checked+i::after{transform:translateX(-24px)}
+html[dir=ltr] .sw2 input:checked+i::after{transform:translateX(24px)}
+.sw2 input:focus-visible+i{outline:2px solid var(--sand);outline-offset:3px}
+.rcpt{background:var(--cream);color:var(--ink);border-radius:26px 26px 0 0;padding:34px 32px 44px;position:relative;transform:rotate(-1.6deg);box-shadow:0 40px 70px -30px rgba(0,0,0,.6);transition:transform .6s cubic-bezier(.16,1,.3,1);
+ -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/22px 51% repeat-x,linear-gradient(#000 0 0) top/100% calc(100% - 11px) no-repeat;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/22px 51% repeat-x,linear-gradient(#000 0 0) top/100% calc(100% - 11px) no-repeat}
+.calc:hover .rcpt{transform:rotate(0)}
+.rcpt .rl{display:flex;justify-content:space-between;gap:14px;font-size:15.5px;padding:7px 0;border-bottom:1px dashed rgba(28,43,42,.16)}
+.rcpt .rl b{direction:ltr;unicode-bidi:isolate;font-family:var(--latin);font-weight:700;white-space:nowrap}
+.rcpt .rl.d{color:#1a7a52}
+.rcpt .tot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:18px}
+.rcpt .tot span{font-weight:700;font-size:15.5px;color:rgba(28,43,42,.7)}
+.rcpt .tot strong{font-family:var(--latin);font-size:54px;line-height:1;color:var(--teal);font-weight:700}
+.rcpt .tot em{font-style:normal;font-family:var(--body);font-size:17px;font-weight:700;color:var(--teal);margin-inline-start:4px}
+.rcpt .now{display:flex;justify-content:space-between;margin-top:14px;font-weight:700;font-size:16px}
+.rcpt .now b{font-family:var(--latin)}
+.rcpt .saved{display:inline-flex;gap:8px;margin-top:14px;background:#DDF2E4;color:#1a6a48;font-weight:700;font-size:14.5px;padding:6px 14px;border-radius:999px}
+.rcpt .saved b{font-family:var(--latin)}
+.rcpt .btn{width:100%;margin-top:20px;background:var(--teal);color:var(--cream)}
+.rcpt small{display:block;text-align:center;margin-top:12px;font-size:13.5px;color:rgba(28,43,42,.6)}
+.calc-custom{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:15.5px;opacity:.85;margin-top:-16px}
+.calc-custom b{color:var(--sand);font-family:var(--kufi)}
+/* ---------- FAQ ask ---------- */
+.ask{max-width:860px;margin:34px auto 0;background:var(--linen);border-radius:999px;padding:10px 10px 10px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+html[dir=rtl] .ask{padding:10px 28px 10px 10px}
+.ask b{font-family:var(--kufi);color:var(--teal);font-size:16.5px;white-space:nowrap}
+.ask input{flex:1;min-width:180px;border:0;background:transparent;font-family:var(--body);font-size:17px;padding:12px 6px;outline:0;color:var(--ink)}
+.ask .btn{height:50px;background:var(--teal);color:var(--cream);font-size:15.5px}
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+ .bn-live,.bn-arch{grid-column:1/-1}.bn-leaf,.bn-ticket{grid-column:span 6}.bn-leaf.alt{grid-column:1/-1}
+ .calc{grid-template-columns:1fr;padding:40px 28px;gap:36px}
+ .pj-row{grid-template-columns:96px 1fr;gap:20px}.pj-row .tags{grid-column:2;justify-content:flex-start;max-width:none}
+ .pj-med{width:84px;height:84px}.pj-row:nth-child(even) .pj-med{justify-self:start}
+ .hero-art .orbit{width:480px;height:480px;margin-left:-240px}
+}
+@media (max-width:640px){
+ .bento{gap:16px}.bn-leaf,.bn-ticket,.bn-leaf.alt{grid-column:1/-1}
+ .bn-live{padding:32px 26px 0;min-height:0}.bn-live h3{font-size:25px}
+ .bn-arch{border-radius:200px 200px 28px 28px;min-height:0;padding:80px 30px 38px}.bn-arch::before{border-radius:186px 186px 18px 18px;inset:12px}
+ .bn-leaf{border-radius:26px 80px 26px 80px;padding:36px 30px}.bn-leaf.alt{border-radius:80px 26px 80px 26px}
+ .bn-band{border-radius:36px;padding:28px 26px;flex-direction:column;align-items:flex-start;gap:14px}
+ .pj-row{grid-template-columns:64px 1fr;gap:16px;padding:26px 0}.pj-med{width:60px;height:60px}.pj-med span{font-size:18px}
+ .pj-fit{top:6px}
+ .calc{border-radius:28px;padding:32px 20px}.cf{padding:14px 0}.seg2 button{padding:9px 13px;font-size:14.5px}
+ .rcpt{padding:28px 22px 40px;transform:none}.rcpt .tot strong{font-size:44px}
+ .ask{border-radius:28px;padding:18px!important}.ask .btn{width:100%}
+ .arch .c3d{width:124%}
+ .wave i:nth-child(n+14){display:none}.live-mock{gap:12px}.live-mock .av{width:52px;height:52px}
+}
+@media (prefers-reduced-motion:reduce){
+ .v2js .mv{transform:none!important;transition:opacity .7s ease;transition-delay:calc(var(--i,0)*60ms)}
+ .v2js .sw>i{transform:none!important;transition:none}
+ .deco.ring,.hero-art .orbit,.seal::before{animation-duration:240s}
+ .wave i{animation-duration:2.4s}
+}
+
 
 html[dir=ltr]{--kufi:'Montserrat',system-ui,sans-serif}
 html[dir=ltr] h1,html[dir=ltr] h2,html[dir=ltr] h3{letter-spacing:-.01em;line-height:1.25}
@@ -552,7 +730,8 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
       </div>
     </div>
     <div class="hero-art">
-      <div class="arch"><svg class="lg" role="img" aria-label="Horouf Min Nour" viewBox="-6.6 -6.6 193.9 343.2" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-6.69 -6.69) scale(0.16734)"><path d="M69.04 1150.75 L39.94 1119.50 L40.30 974.00 C40.61 848.63 40.89 825.80 42.33 809.00 C48.60 735.72 63.28 680.68 91.66 624.00 C108.60 590.16 134.11 551.81 150.44 535.61 C160.08 526.05 200.98 488.38 239.00 454.06 C257.26 437.57 265.73 430.70 277.00 423.25 C312.12 400.04 338.20 384.89 372.81 367.59 C398.65 354.67 416.68 344.27 431.00 334.03 C457.21 315.29 505.54 271.35 517.69 255.20 C525.14 245.30 533.31 232.18 544.14 212.71 C557.19 189.24 561.90 185.06 576.27 184.20 C585.04 183.68 590.09 185.11 596.91 190.05 C601.90 193.66 604.64 197.99 608.93 209.00 C613.88 221.68 618.70 230.43 626.57 241.00 C643.53 263.77 669.01 288.71 703.56 316.37 C737.30 343.37 745.04 348.07 799.00 374.41 C825.74 387.45 855.00 404.20 878.70 420.02 C889.58 427.28 901.21 437.34 966.50 495.93 C1000.98 526.88 1011.63 537.78 1025.22 556.00 C1072.21 619.04 1101.58 687.74 1112.42 760.00 C1113.63 768.06 1119.00 850.51 1119.00 861.02 C1119.00 862.97 1118.19 863.00 1072.67 863.00 L1026.34 863.00 L1025.13 840.75 C1018.10 711.26 987.02 632.00 915.03 559.95 C890.27 535.17 867.75 516.90 835.00 495.02 C813.21 480.47 796.27 470.69 756.55 449.76 C701.15 420.55 685.50 411.49 661.90 394.93 C629.90 372.47 599.10 344.63 580.34 321.21 L578.50 318.91 L572.00 326.67 C556.06 345.69 528.46 370.95 506.26 386.82 C489.74 398.64 479.01 404.79 420.80 435.83 C355.26 470.78 335.89 482.55 301.50 508.32 C209.44 577.30 156.71 657.25 140.13 753.00 C133.81 789.47 133.05 811.79 133.02 960.31 L133.00 1082.12 L137.25 1087.50 L141.50 1092.89 L183.25 1092.94 L225.00 1093.00 L225.04 1071.75 L225.09 1050.50 L253.63 1018.75 L282.17 987.00 L326.33 987.01 L370.50 987.03 L399.70 1018.76 L428.90 1050.50 L428.95 1084.21 L429.00 1117.92 L399.87 1149.96 L370.73 1182.00 L234.44 1182.00 L98.14 1182.00 L69.04 1150.75Z M336.00 1085.00 L336.00 1077.00 L327.00 1077.00 L318.00 1077.00 L318.00 1085.00 L318.00 1093.00 L327.00 1093.00 L336.00 1093.00 L336.00 1085.00Z M211.57 848.25 C213.86 781.95 222.93 738.04 243.69 692.67 C271.40 632.11 315.85 581.48 378.50 539.09 C398.44 525.61 415.74 515.58 461.50 491.04 C481.30 480.42 501.91 468.98 507.30 465.62 C522.57 456.09 540.87 441.99 553.74 429.83 C568.00 416.35 572.32 414.02 583.00 414.02 C592.96 414.02 598.56 416.68 608.85 426.30 C638.89 454.39 658.38 467.71 714.03 498.20 C760.36 523.58 775.86 533.31 803.22 554.19 C886.01 617.39 935.06 701.57 944.99 797.50 C945.55 803.00 946.31 819.99 946.67 835.25 L947.32 863.00 L904.16 863.00 L861.00 863.00 L860.99 834.75 C860.98 803.94 860.04 789.07 856.91 770.19 C852.98 746.47 845.90 726.12 834.88 706.87 C819.36 679.75 794.76 654.42 758.00 627.69 C737.76 612.98 722.14 603.16 690.41 585.19 C673.96 575.88 658.17 566.88 655.32 565.19 C636.55 554.10 611.09 536.57 594.08 523.02 L583.99 514.98 L576.32 521.08 C553.85 538.93 534.87 548.83 484.13 569.12 C452.12 581.93 430.74 591.99 412.79 602.70 C344.17 643.64 306.46 702.54 295.42 786.00 C294.32 794.35 293.60 809.20 293.27 830.75 L292.76 863.00 L251.91 863.00 L211.06 863.00 L211.57 848.25Z M40.00 1968.00 L40.00 1924.00 L51.00 1924.00 L62.00 1924.00 L62.00 1816.00 L62.00 1708.00 L108.50 1708.00 L155.00 1708.00 L155.00 1828.56 L155.00 1949.12 L125.77 1980.56 L96.54 2012.00 L68.27 2012.00 L40.00 2012.00 L40.00 1968.00Z M230.00 1968.00 L230.00 1924.00 L257.00 1924.00 L284.00 1924.00 L284.00 1913.50 L284.00 1903.00 L256.58 1903.00 L229.16 1903.00 L200.63 1870.75 L172.10 1838.50 L172.05 1805.40 L172.00 1772.29 L200.75 1740.15 L229.50 1708.02 L273.62 1708.01 L317.75 1708.00 L347.36 1740.25 L376.98 1772.50 L376.99 1793.25 L377.00 1814.00 L701.50 1814.00 L1026.00 1814.00 L1026.00 1761.00 L1026.00 1708.00 L1072.50 1708.00 L1119.00 1708.00 L1119.00 1805.50 L1119.00 1903.00 L748.00 1903.00 L377.00 1903.00 L377.00 1926.03 L377.00 1949.05 L347.75 1980.53 L318.51 2012.00 L274.25 2012.00 L230.00 2012.00 L230.00 1968.00Z M284.00 1806.00 L284.00 1798.00 L274.50 1798.00 L265.00 1798.00 L265.00 1806.00 L265.00 1814.00 L274.50 1814.00 L284.00 1814.00 L284.00 1806.00Z M68.75 1620.77 L40.00 1589.71 L40.00 1521.85 L40.00 1454.00 L86.50 1454.00 L133.00 1454.00 L133.01 1496.25 L133.01 1538.50 L137.59 1544.25 C141.92 1549.69 142.40 1550.00 146.58 1550.00 L151.00 1550.00 L151.00 1449.00 L151.00 1348.00 L197.50 1348.00 L244.00 1348.00 L244.00 1401.00 L244.00 1454.00 L579.50 1454.00 L915.00 1454.00 L915.03 1432.75 L915.06 1411.50 L943.78 1379.82 L972.50 1348.15 L1017.19 1348.07 L1061.88 1348.00 L1090.90 1379.25 L1119.91 1410.50 L1119.96 1476.75 L1120.00 1543.00 L682.00 1543.00 L244.00 1543.00 L244.00 1597.50 L244.00 1652.00 L170.75 1651.92 L97.50 1651.84 L68.75 1620.77Z M1027.00 1445.50 L1027.00 1437.00 L1018.00 1437.00 L1009.00 1437.00 L1009.00 1445.50 L1009.00 1454.00 L1018.00 1454.00 L1027.00 1454.00 L1027.00 1445.50Z M504.00 1247.00 L504.00 1203.00 L531.00 1203.00 L558.00 1203.00 L558.00 1192.50 L558.00 1182.00 L530.75 1181.97 L503.50 1181.93 L475.25 1149.76 L447.00 1117.60 L447.03 1084.05 L447.06 1050.50 L475.59 1018.75 L504.11 987.00 L548.30 987.03 L592.50 987.05 L621.75 1018.96 L651.00 1050.86 L651.00 1139.73 L651.00 1228.60 L621.96 1259.80 L592.92 1291.00 L548.46 1291.00 L504.00 1291.00 L504.00 1247.00Z M558.00 1085.00 L558.00 1077.00 L549.00 1077.00 L540.00 1077.00 L540.00 1085.00 L540.00 1093.00 L549.00 1093.00 L558.00 1093.00 L558.00 1085.00Z M669.00 1247.00 L669.00 1203.00 L680.00 1203.00 L691.00 1203.00 L691.00 1095.00 L691.00 987.00 L737.50 987.00 L784.00 987.00 L784.00 1040.00 L784.00 1093.00 L902.50 1093.00 L1021.00 1093.00 L1020.95 1088.75 C1020.91 1084.84 1020.48 1084.16 1015.59 1080.25 L1010.28 1076.00 L925.14 1076.00 L840.00 1076.00 L840.00 1031.50 L840.00 987.00 L949.25 987.01 L1058.50 987.02 L1088.75 1015.07 L1119.00 1043.13 L1119.00 1112.56 L1119.00 1182.00 L951.50 1182.00 L784.00 1182.00 L784.00 1205.03 L784.00 1228.05 L754.75 1259.53 L725.51 1291.00 L697.25 1291.00 L669.00 1291.00 L669.00 1247.00Z" fill="#FBF6EC" fill-rule="evenodd"/><path d="M569.39 161.17 C554.81 157.45 540.41 148.82 530.57 137.87 C513.50 118.88 507.20 90.08 514.61 64.90 C516.37 58.89 522.91 45.86 526.09 42.00 L528.15 39.50 L527.55 42.50 C526.13 49.62 525.79 66.96 526.94 73.57 C528.42 82.08 532.75 93.14 537.55 100.65 C552.73 124.37 581.85 138.55 608.50 135.19 C626.56 132.92 641.35 125.79 653.88 113.31 C660.99 106.23 661.23 106.09 660.64 109.23 C660.31 111.03 657.90 116.78 655.29 122.00 C646.77 139.08 630.28 153.24 611.50 159.59 C600.79 163.22 580.44 163.98 569.39 161.17Z M1057.50 1672.00 L1043.52 1657.99 L1058.02 1643.49 L1072.52 1628.99 L1087.00 1643.50 L1101.47 1658.00 L1087.50 1672.00 C1079.81 1679.70 1073.06 1686.00 1072.50 1686.00 C1071.94 1686.00 1065.18 1679.70 1057.50 1672.00Z M71.50 1417.00 L57.53 1403.00 L72.00 1388.50 L86.47 1374.00 L100.74 1388.24 L115.00 1402.47 L100.76 1416.74 C92.93 1424.58 86.29 1431.00 86.00 1431.00 C85.71 1431.00 79.19 1424.70 71.50 1417.00Z M312.74 951.24 C305.18 943.67 299.00 937.02 299.00 936.47 C299.00 935.92 305.30 929.19 313.00 921.50 L327.00 907.53 L341.00 921.50 C348.70 929.19 355.00 935.94 355.00 936.50 C355.00 937.50 327.96 965.00 326.97 965.00 C326.70 965.00 320.29 958.81 312.74 951.24Z M374.92 2009.25 C376.05 2007.74 388.36 1993.67 402.28 1978.00 L427.57 1949.50 L773.79 1949.25 L1120.00 1949.00 L1120.00 1980.50 L1120.00 2012.00 L746.43 2012.00 L372.86 2012.00 L374.92 2009.25Z" fill="#E6BC6A" fill-rule="evenodd"/></g></svg></div>
+      <div class="orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="arch" id="arch"><canvas class="c3d" id="c3d" aria-hidden="true"></canvas><svg class="lg" role="img" aria-label="Horouf Min Nour" viewBox="-6.6 -6.6 193.9 343.2" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-6.69 -6.69) scale(0.16734)"><path d="M69.04 1150.75 L39.94 1119.50 L40.30 974.00 C40.61 848.63 40.89 825.80 42.33 809.00 C48.60 735.72 63.28 680.68 91.66 624.00 C108.60 590.16 134.11 551.81 150.44 535.61 C160.08 526.05 200.98 488.38 239.00 454.06 C257.26 437.57 265.73 430.70 277.00 423.25 C312.12 400.04 338.20 384.89 372.81 367.59 C398.65 354.67 416.68 344.27 431.00 334.03 C457.21 315.29 505.54 271.35 517.69 255.20 C525.14 245.30 533.31 232.18 544.14 212.71 C557.19 189.24 561.90 185.06 576.27 184.20 C585.04 183.68 590.09 185.11 596.91 190.05 C601.90 193.66 604.64 197.99 608.93 209.00 C613.88 221.68 618.70 230.43 626.57 241.00 C643.53 263.77 669.01 288.71 703.56 316.37 C737.30 343.37 745.04 348.07 799.00 374.41 C825.74 387.45 855.00 404.20 878.70 420.02 C889.58 427.28 901.21 437.34 966.50 495.93 C1000.98 526.88 1011.63 537.78 1025.22 556.00 C1072.21 619.04 1101.58 687.74 1112.42 760.00 C1113.63 768.06 1119.00 850.51 1119.00 861.02 C1119.00 862.97 1118.19 863.00 1072.67 863.00 L1026.34 863.00 L1025.13 840.75 C1018.10 711.26 987.02 632.00 915.03 559.95 C890.27 535.17 867.75 516.90 835.00 495.02 C813.21 480.47 796.27 470.69 756.55 449.76 C701.15 420.55 685.50 411.49 661.90 394.93 C629.90 372.47 599.10 344.63 580.34 321.21 L578.50 318.91 L572.00 326.67 C556.06 345.69 528.46 370.95 506.26 386.82 C489.74 398.64 479.01 404.79 420.80 435.83 C355.26 470.78 335.89 482.55 301.50 508.32 C209.44 577.30 156.71 657.25 140.13 753.00 C133.81 789.47 133.05 811.79 133.02 960.31 L133.00 1082.12 L137.25 1087.50 L141.50 1092.89 L183.25 1092.94 L225.00 1093.00 L225.04 1071.75 L225.09 1050.50 L253.63 1018.75 L282.17 987.00 L326.33 987.01 L370.50 987.03 L399.70 1018.76 L428.90 1050.50 L428.95 1084.21 L429.00 1117.92 L399.87 1149.96 L370.73 1182.00 L234.44 1182.00 L98.14 1182.00 L69.04 1150.75Z M336.00 1085.00 L336.00 1077.00 L327.00 1077.00 L318.00 1077.00 L318.00 1085.00 L318.00 1093.00 L327.00 1093.00 L336.00 1093.00 L336.00 1085.00Z M211.57 848.25 C213.86 781.95 222.93 738.04 243.69 692.67 C271.40 632.11 315.85 581.48 378.50 539.09 C398.44 525.61 415.74 515.58 461.50 491.04 C481.30 480.42 501.91 468.98 507.30 465.62 C522.57 456.09 540.87 441.99 553.74 429.83 C568.00 416.35 572.32 414.02 583.00 414.02 C592.96 414.02 598.56 416.68 608.85 426.30 C638.89 454.39 658.38 467.71 714.03 498.20 C760.36 523.58 775.86 533.31 803.22 554.19 C886.01 617.39 935.06 701.57 944.99 797.50 C945.55 803.00 946.31 819.99 946.67 835.25 L947.32 863.00 L904.16 863.00 L861.00 863.00 L860.99 834.75 C860.98 803.94 860.04 789.07 856.91 770.19 C852.98 746.47 845.90 726.12 834.88 706.87 C819.36 679.75 794.76 654.42 758.00 627.69 C737.76 612.98 722.14 603.16 690.41 585.19 C673.96 575.88 658.17 566.88 655.32 565.19 C636.55 554.10 611.09 536.57 594.08 523.02 L583.99 514.98 L576.32 521.08 C553.85 538.93 534.87 548.83 484.13 569.12 C452.12 581.93 430.74 591.99 412.79 602.70 C344.17 643.64 306.46 702.54 295.42 786.00 C294.32 794.35 293.60 809.20 293.27 830.75 L292.76 863.00 L251.91 863.00 L211.06 863.00 L211.57 848.25Z M40.00 1968.00 L40.00 1924.00 L51.00 1924.00 L62.00 1924.00 L62.00 1816.00 L62.00 1708.00 L108.50 1708.00 L155.00 1708.00 L155.00 1828.56 L155.00 1949.12 L125.77 1980.56 L96.54 2012.00 L68.27 2012.00 L40.00 2012.00 L40.00 1968.00Z M230.00 1968.00 L230.00 1924.00 L257.00 1924.00 L284.00 1924.00 L284.00 1913.50 L284.00 1903.00 L256.58 1903.00 L229.16 1903.00 L200.63 1870.75 L172.10 1838.50 L172.05 1805.40 L172.00 1772.29 L200.75 1740.15 L229.50 1708.02 L273.62 1708.01 L317.75 1708.00 L347.36 1740.25 L376.98 1772.50 L376.99 1793.25 L377.00 1814.00 L701.50 1814.00 L1026.00 1814.00 L1026.00 1761.00 L1026.00 1708.00 L1072.50 1708.00 L1119.00 1708.00 L1119.00 1805.50 L1119.00 1903.00 L748.00 1903.00 L377.00 1903.00 L377.00 1926.03 L377.00 1949.05 L347.75 1980.53 L318.51 2012.00 L274.25 2012.00 L230.00 2012.00 L230.00 1968.00Z M284.00 1806.00 L284.00 1798.00 L274.50 1798.00 L265.00 1798.00 L265.00 1806.00 L265.00 1814.00 L274.50 1814.00 L284.00 1814.00 L284.00 1806.00Z M68.75 1620.77 L40.00 1589.71 L40.00 1521.85 L40.00 1454.00 L86.50 1454.00 L133.00 1454.00 L133.01 1496.25 L133.01 1538.50 L137.59 1544.25 C141.92 1549.69 142.40 1550.00 146.58 1550.00 L151.00 1550.00 L151.00 1449.00 L151.00 1348.00 L197.50 1348.00 L244.00 1348.00 L244.00 1401.00 L244.00 1454.00 L579.50 1454.00 L915.00 1454.00 L915.03 1432.75 L915.06 1411.50 L943.78 1379.82 L972.50 1348.15 L1017.19 1348.07 L1061.88 1348.00 L1090.90 1379.25 L1119.91 1410.50 L1119.96 1476.75 L1120.00 1543.00 L682.00 1543.00 L244.00 1543.00 L244.00 1597.50 L244.00 1652.00 L170.75 1651.92 L97.50 1651.84 L68.75 1620.77Z M1027.00 1445.50 L1027.00 1437.00 L1018.00 1437.00 L1009.00 1437.00 L1009.00 1445.50 L1009.00 1454.00 L1018.00 1454.00 L1027.00 1454.00 L1027.00 1445.50Z M504.00 1247.00 L504.00 1203.00 L531.00 1203.00 L558.00 1203.00 L558.00 1192.50 L558.00 1182.00 L530.75 1181.97 L503.50 1181.93 L475.25 1149.76 L447.00 1117.60 L447.03 1084.05 L447.06 1050.50 L475.59 1018.75 L504.11 987.00 L548.30 987.03 L592.50 987.05 L621.75 1018.96 L651.00 1050.86 L651.00 1139.73 L651.00 1228.60 L621.96 1259.80 L592.92 1291.00 L548.46 1291.00 L504.00 1291.00 L504.00 1247.00Z M558.00 1085.00 L558.00 1077.00 L549.00 1077.00 L540.00 1077.00 L540.00 1085.00 L540.00 1093.00 L549.00 1093.00 L558.00 1093.00 L558.00 1085.00Z M669.00 1247.00 L669.00 1203.00 L680.00 1203.00 L691.00 1203.00 L691.00 1095.00 L691.00 987.00 L737.50 987.00 L784.00 987.00 L784.00 1040.00 L784.00 1093.00 L902.50 1093.00 L1021.00 1093.00 L1020.95 1088.75 C1020.91 1084.84 1020.48 1084.16 1015.59 1080.25 L1010.28 1076.00 L925.14 1076.00 L840.00 1076.00 L840.00 1031.50 L840.00 987.00 L949.25 987.01 L1058.50 987.02 L1088.75 1015.07 L1119.00 1043.13 L1119.00 1112.56 L1119.00 1182.00 L951.50 1182.00 L784.00 1182.00 L784.00 1205.03 L784.00 1228.05 L754.75 1259.53 L725.51 1291.00 L697.25 1291.00 L669.00 1291.00 L669.00 1247.00Z" fill="#FBF6EC" fill-rule="evenodd"/><path d="M569.39 161.17 C554.81 157.45 540.41 148.82 530.57 137.87 C513.50 118.88 507.20 90.08 514.61 64.90 C516.37 58.89 522.91 45.86 526.09 42.00 L528.15 39.50 L527.55 42.50 C526.13 49.62 525.79 66.96 526.94 73.57 C528.42 82.08 532.75 93.14 537.55 100.65 C552.73 124.37 581.85 138.55 608.50 135.19 C626.56 132.92 641.35 125.79 653.88 113.31 C660.99 106.23 661.23 106.09 660.64 109.23 C660.31 111.03 657.90 116.78 655.29 122.00 C646.77 139.08 630.28 153.24 611.50 159.59 C600.79 163.22 580.44 163.98 569.39 161.17Z M1057.50 1672.00 L1043.52 1657.99 L1058.02 1643.49 L1072.52 1628.99 L1087.00 1643.50 L1101.47 1658.00 L1087.50 1672.00 C1079.81 1679.70 1073.06 1686.00 1072.50 1686.00 C1071.94 1686.00 1065.18 1679.70 1057.50 1672.00Z M71.50 1417.00 L57.53 1403.00 L72.00 1388.50 L86.47 1374.00 L100.74 1388.24 L115.00 1402.47 L100.76 1416.74 C92.93 1424.58 86.29 1431.00 86.00 1431.00 C85.71 1431.00 79.19 1424.70 71.50 1417.00Z M312.74 951.24 C305.18 943.67 299.00 937.02 299.00 936.47 C299.00 935.92 305.30 929.19 313.00 921.50 L327.00 907.53 L341.00 921.50 C348.70 929.19 355.00 935.94 355.00 936.50 C355.00 937.50 327.96 965.00 326.97 965.00 C326.70 965.00 320.29 958.81 312.74 951.24Z M374.92 2009.25 C376.05 2007.74 388.36 1993.67 402.28 1978.00 L427.57 1949.50 L773.79 1949.25 L1120.00 1949.00 L1120.00 1980.50 L1120.00 2012.00 L746.43 2012.00 L372.86 2012.00 L374.92 2009.25Z" fill="#E6BC6A" fill-rule="evenodd"/></g></svg></div>
       <div class="float f1"><div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div><b>Today's lesson · 18:00</b>Surah Al-Mulk · with Ms. Fatima</div></div>
       <div class="float f2"><b>This month's progress</b>Juz' Amma · 26 of 37 surahs<div class="bar"><i></i></div></div>
     </div>
@@ -566,35 +745,40 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
 <div class="marquee" aria-hidden="true"><div class="track"><span>Quran memorization</span><span>Tajweed and recitation correction</span><span>Al-Qaida An-Nooraniyah</span><span>Hafs reading</span><span>Warsh reading</span><span>Live one-to-one lessons</span><span>Female teachers for kids and women</span><span>Weekly report for parents</span><span>Students worldwide</span><span>Quran memorization</span><span>Tajweed and recitation correction</span><span>Al-Qaida An-Nooraniyah</span><span>Hafs reading</span><span>Warsh reading</span><span>Live one-to-one lessons</span><span>Female teachers for kids and women</span><span>Weekly report for parents</span><span>Students worldwide</span></div></div>
 
 <section class="sec" id="why">
+  <span class="deco star par" data-par="-.18" style="width:90px;height:90px;inset-inline-start:4%;top:110px"></span>
+  <span class="deco ring par" data-par=".12" style="width:300px;height:300px;inset-inline-end:-110px;bottom:120px"></span>
   <div class="wrap">
     <div class="sec-head rv">
       <div><div class="eyebrow">Why Horouf Min Nour</div><h2>Careful Quran teaching, an easy experience for the whole family</h2></div>
       <p class="lead">We combine the authenticity of the traditional Quran school with the flexibility of online learning, so the Quran becomes a daily companion rather than a heavy chore.</p>
     </div>
-    <div class="grid3">
-      <div class="card rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><h3>One-to-one for every student</h3><p>The teacher is with you alone for the whole lesson: listening, correcting and reinforcing, with no waiting for your turn.</p></div>
-      <div class="card rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 8 5-3 5 3-1.5-8"/></svg></div><h3>Certified teachers</h3><p>Every teacher passes a recitation assessment, an interview and training in teaching children.</p></div>
-      <div class="card rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></div><h3>Hafs or Warsh</h3><p>Choose the reading your family uses: Hafs from 'Asim or Warsh from Nafi'.</p></div>
-      <div class="card rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><h3>Times that suit you</h3><p>You choose the days and times in your own time zone, wherever you are.</p></div>
-      <div class="card rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></div><h3>Weekly report for parents</h3><p>What was memorized, what was revised and the teacher's notes reach you every week.</p></div>
-      <div class="card rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div><h3>A safe, respectful setting</h3><p>Female teachers for kids and women, and lessons on trusted platforms that parents can attend.</p></div>
+    <div class="bento">
+      <div class="bn bn-live mv" data-mv="side2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><h3>One-to-one for every student</h3><p>The teacher is with you alone for the whole lesson: listening, correcting and reinforcing, with no waiting for your turn.</p>
+        <div class="live-mock" aria-hidden="true"><span class="av t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><div class="wave"><i style="--k:0;--h:30"></i><i style="--k:1;--h:62"></i><i style="--k:2;--h:44"></i><i style="--k:3;--h:70"></i><i style="--k:4;--h:36"></i><i style="--k:5;--h:58"></i><i style="--k:6;--h:48"></i><i style="--k:7;--h:66"></i><i style="--k:8;--h:28"></i><i style="--k:9;--h:54"></i><i style="--k:10;--h:40"></i><i style="--k:11;--h:68"></i><i style="--k:12;--h:34"></i><i style="--k:13;--h:60"></i><i style="--k:14;--h:46"></i><i style="--k:15;--h:64"></i><i style="--k:16;--h:32"></i><i style="--k:17;--h:56"></i><i style="--k:18;--h:30"></i><i style="--k:19;--h:62"></i><i style="--k:20;--h:44"></i><i style="--k:21;--h:70"></i></div><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="av"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span></div></div>
+      <div class="bn bn-arch mv" data-mv="scale" style="--i:1"><div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 8 5-3 5 3-1.5-8"/></svg></div><h3>Certified teachers</h3><p>Every teacher passes a recitation assessment, an interview and training in teaching children.</p></div>
+      <div class="bn bn-leaf mv" style="--i:0"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></div><h3>Hafs or Warsh</h3><p>Choose the reading your family uses: Hafs from 'Asim or Warsh from Nafi'.</p></div>
+      <div class="bn bn-leaf alt mv" style="--i:1"><div class="clock" aria-hidden="true"></div><h3>Times that suit you</h3><p>You choose the days and times in your own time zone, wherever you are.</p></div>
+      <div class="bn bn-ticket mv" style="--i:2"><div class="bars" aria-hidden="true"><i style="--k:0;--h:38"></i><i style="--k:1;--h:55"></i><i style="--k:2;--h:48"></i><i style="--k:3;--h:72"></i><i style="--k:4;--h:64"></i><i style="--k:5;--h:88"></i><i style="--k:6;--h:100"></i></div><h3>Weekly report for parents</h3><p>What was memorized, what was revised and the teacher's notes reach you every week.</p></div>
+      <div class="bn bn-band mv" data-mv="scale"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div><div><h3>A safe, respectful setting</h3><p>Female teachers for kids and women, and lessons on trusted platforms that parents can attend.</p></div></div>
     </div>
   </div>
 </section>
 
 <section class="sec programs" id="programs">
+  <span class="deco ring par" data-par="-.1" style="width:420px;height:420px;inset-inline-start:-160px;top:60px"></span>
   <div class="wrap">
     <div class="sec-head rv">
       <div><div class="eyebrow">Programs</div><h2>A program for every age and level</h2></div>
       <p class="lead">We pick the right program in the trial lesson, after assessing the student's level.</p>
     </div>
-    <div class="grid3">
-      <div class="prog rv"><div class="prog-top pat"><span class="num">01</span><h3>Foundations and Qaida Nooraniyah</h3></div><div class="prog-body"><p>Letters, their pronunciation and vowels step by step, until the child reads from the Mushaf on their own.</p><div class="tags"><span class="tag">Ages 4 – 7</span><span class="tag">Beginners</span></div></div></div>
-      <div class="prog rv"><div class="prog-top s"><span class="num">02</span><h3>Hifz for kids</h3></div><div class="prog-body"><p>Gradual memorization starting with the short surahs, in a fun way with constant encouragement and regular revision.</p><div class="tags"><span class="tag">Ages 7 – 15</span><span class="tag">Juz' Amma and Tabarak</span></div></div></div>
-      <div class="prog rv"><div class="prog-top d"><span class="num">03</span><h3>Hifz for adults</h3></div><div class="prog-body"><p>A realistic plan that fits your schedule, linking memorization to meaning and reinforcing what you already know.</p><div class="tags"><span class="tag">16 and over</span><span class="tag">Men and women</span></div></div></div>
-      <div class="prog rv"><div class="prog-top d pat"><span class="num">04</span><h3>Tajweed and recitation correction</h3></div><div class="prog-body"><p>Tajweed rules applied while you read, without complicated theory.</p><div class="tags"><span class="tag">All ages</span><span class="tag">Theory and practice</span></div></div></div>
-      <div class="prog rv"><div class="prog-top"><span class="num">05</span><h3>Revision and consolidation</h3></div><div class="prog-body"><p>For those who memorized parts and fear forgetting them: a smart revision plan and regular recitation checks.</p><div class="tags"><span class="tag">For huffaz</span><span class="tag">Revision plan</span></div></div></div>
-      <div class="prog rv"><div class="prog-top s pat"><span class="num">06</span><h3>Ijazah preparation</h3></div><div class="prog-body"><p>Master a full recitation of the Quran in one reading, to prepare for reciting to a sheikh with a chain of transmission.</p><div class="tags"><span class="tag">Advanced</span><span class="tag">Full Quran</span></div></div></div>
+    <div class="pj-pick mv"><b>Who is learning?</b><div class="pj-chips" id="pjChips"><button type="button" data-rec="1">Child, 4–7</button><button type="button" data-rec="2">Child, 7–15</button><button type="button" data-rec="3,4">Teen or adult</button><button type="button" data-rec="5,6">Hafiz who wants to retain</button></div></div>
+    <div class="pj-list" id="pjList"><svg class="pj-path" aria-hidden="true"><path class="bg"/><path class="fg"/><circle r="9"/></svg>
+      <article class="pj-row mv" data-n="1"><div class="pj-med"><span>01</span></div><div><h3>Foundations and Qaida Nooraniyah</h3><p>Letters, their pronunciation and vowels step by step, until the child reads from the Mushaf on their own.</p></div><div class="tags"><span class="tag">Ages 4 – 7</span><span class="tag">Beginners</span></div><span class="pj-fit">Best fit for you</span></article>
+      <article class="pj-row mv" data-n="2"><div class="pj-med"><span>02</span></div><div><h3>Hifz for kids</h3><p>Gradual memorization starting with the short surahs, in a fun way with constant encouragement and regular revision.</p></div><div class="tags"><span class="tag">Ages 7 – 15</span><span class="tag">Juz' Amma and Tabarak</span></div><span class="pj-fit">Best fit for you</span></article>
+      <article class="pj-row mv" data-n="3"><div class="pj-med"><span>03</span></div><div><h3>Hifz for adults</h3><p>A realistic plan that fits your schedule, linking memorization to meaning and reinforcing what you already know.</p></div><div class="tags"><span class="tag">16 and over</span><span class="tag">Men and women</span></div><span class="pj-fit">Best fit for you</span></article>
+      <article class="pj-row mv" data-n="4"><div class="pj-med"><span>04</span></div><div><h3>Tajweed and recitation correction</h3><p>Tajweed rules applied while you read, without complicated theory.</p></div><div class="tags"><span class="tag">All ages</span><span class="tag">Theory and practice</span></div><span class="pj-fit">Best fit for you</span></article>
+      <article class="pj-row mv" data-n="5"><div class="pj-med"><span>05</span></div><div><h3>Revision and consolidation</h3><p>For those who memorized parts and fear forgetting them: a smart revision plan and regular recitation checks.</p></div><div class="tags"><span class="tag">For huffaz</span><span class="tag">Revision plan</span></div><span class="pj-fit">Best fit for you</span></article>
+      <article class="pj-row mv" data-n="6"><div class="pj-med"><span>06</span></div><div><h3>Ijazah preparation</h3><p>Master a full recitation of the Quran in one reading, to prepare for reciting to a sheikh with a chain of transmission.</p></div><div class="tags"><span class="tag">Advanced</span><span class="tag">Full Quran</span></div><span class="pj-fit">Best fit for you</span></article>
     </div>
   </div>
 </section>
@@ -614,7 +798,7 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
 </section>
 
 <section class="wrap">
-  <div class="parents pat rv">
+  <div class="parents pat rv" id="parents">
     <div>
       <div class="eyebrow" style="color:var(--sand)">For parents</div>
       <h2>Parents are our partners</h2>
@@ -700,18 +884,28 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
         <a href="#book" class="btn" data-plan="Hafiz">Start with a free lesson</a></div>
     </div>
 
-    <div class="extras">
-      <div class="extra rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><div><b>Family discount</b><span>15% off the second child and 20% off from the third child on.</span></div></div>
-      <div class="extra rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><b>45-minute lessons for adults</b><span>Available with any plan for +40%, for tajweed and ijazah.</span></div></div>
-      <div class="extra rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></div><div><b>Custom plan</b><span>A different number of lessons or special times? Message us and we'll design a plan for you.</span></div></div>
+    <div class="calc mv" id="calc" data-mv="scale">
+      <div>
+        <div class="eyebrow">Price calculator</div>
+        <h3>Pick what applies to you and the discounts add themselves</h3>
+        <div class="cf"><span class="l">Number of students</span><div class="stepper"><button type="button" data-st="-1" aria-label="Fewer">−</button><output id="cN">1</output><button type="button" data-st="1" aria-label="More">+</button></div></div>
+        <div class="cf"><span class="l">Plan</span><div class="seg2" id="cPlan"><button type="button" data-p="1" data-plan="Start">Start<small>8</small></button><button type="button" class="on" data-p="2" data-plan="Steady">Steady<small>12</small></button><button type="button" data-p="3" data-plan="Hafiz">Hafiz<small>20</small></button></div></div>
+        <div class="cf"><span class="l">Lesson length</span><div class="seg2" id="cDur"><button type="button" class="on" data-d="30">30 min</button><button type="button" data-d="45">45 min<small>+40%</small></button></div></div>
+        <div class="cf"><span class="l">Billing</span><div class="seg2" id="cBill"><button type="button" class="on" data-b="m">Monthly</button><button type="button" data-b="q">Every 3 months<small>−10%</small></button></div></div>
+        <div class="cf"><label class="sw2"><input type="checkbox" id="cNew" checked><i></i><span>New student: 20% off the first month</span></label></div>
+        <span hidden data-k="student">Student</span><span hidden data-k="sib">sibling discount</span><span hidden data-k="q">Quarterly payment discount</span><span hidden data-k="launch">Launch offer (first month)</span>
+      </div>
+      <div class="rcpt" aria-live="polite">
+        <div id="cLines"></div>
+        <div class="tot"><span>Total per month</span><div><strong id="cTot">0</strong><em id="cCur"></em></div></div>
+        <div class="now"><span>You pay now</span><b id="cNow"></b></div>
+        <div class="saved" id="cSaveW"><span>You save</span><b id="cSave"></b></div>
+        <a href="#book" class="btn" id="cGo" data-plan="Steady">Book with this selection</a>
+        <small>Estimated price, confirmed after the free trial lesson.</small>
+      </div>
+      <div class="calc-custom"><b>Custom plan</b><span>A different number of lessons or special times? Message us and we'll design a plan for you.</span></div>
     </div>
 
-    <div class="guarantees rv">
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Free trial lesson</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Free teacher change</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Missed lessons made up</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Cancel anytime</span>
-    </div>
   </div>
 </section>
 
@@ -799,7 +993,7 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
         <div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>
         <h3>Request received, thank you!</h3>
         <p>We'll message you on WhatsApp within two hours (during working hours) to set your free lesson.</p>
-        <ol class="next-steps"><li><b>We message you</b> on your number to agree on a time in your zone</li><li><b>The trial lesson</b> 30 minutes with the teacher on Google Meet</li><li><b>You decide freely</b> after the lesson, with no commitment</li></ol>
+        <ol class="next-steps"><li><b>We message you</b> on your number to agree on a time in your zone</li><li><b>The trial lesson</b> 30 minutes with the teacher, live on video</li><li><b>You decide freely</b> after the lesson, with no commitment</li></ol>
         <a class="btn btn-sand" id="waSend" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20I%27d%20like%20to%20book%20a%20free%20trial%20lesson%20at%20Horouf%20Min%20Nour" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> Want a faster reply? Message us now</a>
         <p class="fnote">Our number: <span class="latin" dir="ltr">+20 11 5668 4979</span></p>
       </div>
@@ -813,13 +1007,14 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
     <div class="faq">
       <details class="rv"><summary>Is the trial lesson really free?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>Yes, the first lesson is completely free with no payment details. We assess the level, the student meets the teacher, then you decide freely.</p></details>
       <details class="rv"><summary>From what age can my child start?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>From around age 4, in the foundations and Qaida Nooraniyah program, with short, fun lessons suited to a child's attention span.</p></details>
-      <details class="rv"><summary>Which platform are the lessons on?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>On Google Meet, from a phone, computer or tablet. Each student has a fixed link and a “Join lesson” button on their tracking page.</p></details>
+      <details class="rv"><summary>Which platform are the lessons on?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>Right inside the academy's app, from a phone, computer or tablet, with nothing to install. At lesson time the student taps “Join lesson” and their private room opens.</p></details>
       <details class="rv"><summary>I'm in a different time zone, will it work?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>Yes, our students come from many countries and we set the lesson in your local time, from Asia to Europe and the Americas.</p></details>
       <details class="rv"><summary>Can I choose a female teacher for my daughter or myself?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>Yes, we have female teachers for kids and women; just choose it when booking.</p></details>
       <details class="rv"><summary>Which reading do you teach?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>Hafs from 'Asim, and Warsh from Nafi' for those who read it. You choose when booking.</p></details>
       <details class="rv"><summary>What if we miss a lesson?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>Let us know at least 6 hours before and we'll make up the lesson at another time within the same month.</p></details>
       <details class="rv"><summary>How do I pay?<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></summary><p>Monthly after the trial lesson, by card, bank transfer or an international payment method available in your country. We send you the right option on WhatsApp.</p></details>
     </div>
+    <form class="ask mv" id="ask"><b>Didn't find your answer?</b><input type="text" id="askQ" placeholder="Type your question here" aria-label="Type your question here"><button class="btn" type="submit">Ask us on WhatsApp</button></form>
   </div>
 </section>
 
@@ -994,9 +1189,9 @@ EUR:['€','€',1.08],GBP:['£','£',1.27],CHF:['CHF','CHF',1.13],SEK:['kr','SE
 const PLOW=['USD',10,15,22,'A'],PREST=['USD',19,27,39,'E'];
 const PR={MA:['MAD',100,150,220,'A'],DZ:['DZD',1400,2000,3000,'A'],TN:['TND',30,45,70,'A'],LY:['LYD',50,75,110,'A'],EG:['EGP',500,750,1100,'A'],MR:['MRU',400,600,900,'A'],SD:PLOW,
 JO:['JOD',7,11,16,'A'],IQ:['IQD',13000,20000,29000,'A'],PS:PLOW,LB:PLOW,SY:PLOW,YE:PLOW,SN:PLOW,ML:PLOW,CI:PLOW,NG:PLOW,ZA:PLOW,TR:PLOW,MY:PLOW,ID:PLOW,PK:PLOW,IN:PLOW,
-SA:['SAR',55,85,120,'G'],AE:['AED',55,80,120,'G'],QA:['QAR',55,80,115,'G'],KW:['KWD',4.5,7,10,'G'],BH:['BHD',6,8.5,12,'G'],OM:['OMR',6,8.5,12,'G'],
-FR:['EUR',18,25,36,'E'],BE:['EUR',18,25,36,'E'],NL:['EUR',18,25,36,'E'],DE:['EUR',18,25,36,'E'],ES:['EUR',18,25,36,'E'],IT:['EUR',18,25,36,'E'],IE:['EUR',18,25,36,'E'],AT:['EUR',18,25,36,'E'],LU:['EUR',18,25,36,'E'],PT:['EUR',18,25,36,'E'],FI:['EUR',18,25,36,'E'],
-GB:['GBP',15,22,32,'E'],CH:['CHF',18,25,36,'E'],SE:['SEK',200,280,400,'E'],NO:['NOK',200,280,400,'E'],DK:['DKK',135,190,270,'E'],US:['USD',19,27,39,'E'],CA:['CAD',26,37,54,'E'],AU:['AUD',29,41,59,'E'],RU:PREST,XX:PREST};
+SA:['SAR',79,119,169,'G'],AE:['AED',55,80,120,'G'],QA:['QAR',55,80,115,'G'],KW:['KWD',4.5,7,10,'G'],BH:['BHD',6,8.5,12,'G'],OM:['OMR',6,8.5,12,'G'],
+FR:['EUR',27,39,55,'E'],BE:['EUR',27,39,55,'E'],NL:['EUR',27,39,55,'E'],DE:['EUR',27,39,55,'E'],ES:['EUR',27,39,55,'E'],IT:['EUR',27,39,55,'E'],IE:['EUR',27,39,55,'E'],AT:['EUR',27,39,55,'E'],LU:['EUR',27,39,55,'E'],PT:['EUR',27,39,55,'E'],FI:['EUR',27,39,55,'E'],
+GB:['GBP',22,32,45,'E'],CH:['CHF',27,39,55,'E'],SE:['SEK',300,430,600,'E'],NO:['NOK',300,430,600,'E'],DK:['DKK',200,290,410,'E'],US:['USD',19,27,39,'E'],CA:['CAD',26,37,54,'E'],AU:['AUD',29,41,59,'E'],RU:PREST,XX:PREST};
 const prOf=iso=>PR[iso]||PREST;
 const PLAN_IDX={start:1,steady:2,hafiz:3};
 /* سعر مرتّب: خصم 10% للدفع every 3 months مع تقريب مناسب لكل عملة */
@@ -1092,6 +1287,91 @@ bk.addEventListener('submit',e=>{
 // sticky mobile call-to-action: hidden on the hero and when the form is on screen
 const mcta=$('#mcta');
 if(mcta){const io=new IntersectionObserver(es=>{es.forEach(en=>{vis[en.target.id]=en.isIntersecting});mcta.classList.toggle('show',!vis.top&&!vis.book&&teach.hidden)},{threshold:0});const vis={};['top','book'].forEach(id=>{const el=document.getElementById(id);el&&io.observe(el)});addEventListener('hashchange',()=>mcta.classList.toggle('show',false))}
+
+/* ================= v2: motion layer, journey, calculator, 3D ================= */
+(function(){
+const D=document.documentElement;D.classList.add('v2js');
+const fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+/* headings: split into words (never letters) */
+$$('.sec-head h2,.parents h2,.calc h3,.teach h2,#teachers h2').forEach(h=>{
+  if(h.children.length)return;const words=h.textContent.trim().split(/\s+/);h.textContent='';h.classList.add('split');
+  words.forEach((w,i)=>{const o=document.createElement('span');o.className='sw';const n=document.createElement('i');n.style.setProperty('--w',i);n.textContent=w;o.append(n);h.append(o,' ')})});
+/* reveal on view */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.14,rootMargin:'0px 0px -6% 0px'});
+$$('.mv,.split').forEach(el=>io.observe(el));
+/* hero light follows the pointer */
+const hero=$('.hero');
+if(hero&&fine)hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();hero.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');hero.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%')},{passive:true});
+/* programs journey: path through the medallions, drawn with scroll */
+const pl=$('#pjList');let pjLen=0,pjPts=[];
+function pjBuild(){
+  if(!pl)return;const svg=$('.pj-path',pl),R=pl.getBoundingClientRect();
+  pjPts=$$('.pj-med',pl).map(m=>{const r=m.getBoundingClientRect();return[r.left-R.left+r.width/2,r.top-R.top+r.height/2]});
+  if(pjPts.length<2)return;let d='M'+pjPts[0][0]+' '+pjPts[0][1];
+  for(let i=1;i<pjPts.length;i++){const a=pjPts[i-1],b=pjPts[i],my=(a[1]+b[1])/2;d+=` C${a[0]} ${my} ${b[0]} ${my} ${b[0]} ${b[1]}`}
+  $$('path',svg).forEach(p=>p.setAttribute('d',d));const fg=$('.fg',svg);pjLen=fg.getTotalLength();fg.style.strokeDasharray=pjLen;pjDraw()}
+function pjDraw(){
+  if(!pl||!pjLen)return;const R=pl.getBoundingClientRect(),vh=innerHeight;
+  const k=Math.min(1,Math.max(0,(vh*.62-R.top)/(R.height||1)));
+  const fg=$('.pj-path .fg',pl),dot=$('.pj-path circle',pl);fg.style.strokeDashoffset=pjLen*(1-k);
+  const pt=fg.getPointAtLength(pjLen*k);dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);dot.style.opacity=k>0&&k<1?1:0;
+  $$('.pj-row',pl).forEach((r,i)=>r.classList.toggle('on',pjPts[i]&&pt.y>=pjPts[i][1]-6))}
+const chips=$('#pjChips');
+if(chips)chips.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const was=b.classList.contains('on');
+  $$('button',chips).forEach(x=>x.classList.toggle('on',x===b&&!was));const rec=was?[]:b.dataset.rec.split(',');
+  pl.classList.toggle('picked',rec.length>0);let first=null;
+  $$('.pj-row',pl).forEach(r=>{const f=rec.includes(r.dataset.n);r.classList.toggle('fit',f);if(f&&!first)first=r});
+  if(first){const y=first.getBoundingClientRect().top;if(y<90||y>innerHeight*.7)goTo(first)}});
+/* parallax decor + scroll-linked bits (one rAF) */
+const pars=$$('.par');let tick=0,h3d=null;
+function onS(){tick=0;pjDraw();
+  if(!reduce)pars.forEach(el=>{const r=el.parentElement.getBoundingClientRect();if(r.bottom<-200||r.top>innerHeight+200)return;el.style.transform=`translate3d(0,${((r.top+r.height/2-innerHeight/2)*(+el.dataset.par)).toFixed(1)}px,0)`});
+  if(h3d&&hero)h3d.setScroll(Math.min(1,Math.max(0,scrollY/(hero.offsetHeight*.9))))}
+const req=()=>{if(!tick)tick=requestAnimationFrame(onS)};
+addEventListener('scroll',req,{passive:true});addEventListener('resize',()=>{pjBuild();req()});
+addEventListener('load',()=>{pjBuild();onS()});setTimeout(()=>{pjBuild();onS()},900);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{pjBuild();onS()});
+/* calculator */
+const C=$('#calc');
+if(C){
+  const st={n:1,plan:2,dur:30};const L=k=>$('[data-k="'+k+'"]',C).textContent;
+  const rr=v=>v>=100?Math.round(v):Math.round(v*2)/2,pc=n=>'<bdi dir="ltr">−'+Math.round(n)+'%</bdi>';
+  function calcRender(){
+    const P=prOf(pcIso),sym=curSym(P[0]),sp=sym.length>1?' ':'',f=v=>fmtP(rr(v))+sp+sym;
+    const base=P[st.plan]*(st.dur===45?1.4:1),q=bill==='q',lz=$('#cNew').checked;let rows=[],sum=0;
+    for(let i=0;i<st.n;i++){const d=i===0?0:i===1?.15:.2,v=base*(1-d);sum+=v;rows.push([L('student')+' '+(i+1)+(d?' · '+L('sib')+' '+pc(d*100):''),f(v),d?'d':''])}
+    let month=sum;if(q){rows.push([L('q')+' '+pc(10),'−'+f(sum*.1),'d']);month=sum*.9}
+    const months=q?3:1;let now=month*months;if(lz){rows.push([L('launch')+' '+pc(20),'−'+f(month*.2),'d']);now-=month*.2}
+    const saved=base*st.n*months-now;
+    $('#cLines').innerHTML=rows.map(r=>`<div class="rl ${r[2]}"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
+    animNum($('#cTot'),rr(month));$('#cCur').textContent=sym;$('#cNow').textContent=f(now);
+    $('#cSave').textContent=f(saved);$('#cSaveW').style.display=rr(saved)>0?'':'none';$('#cN').textContent=st.n;
+    $$('#cBill button').forEach(b=>b.classList.toggle('on',b.dataset.b===bill));
+    const pb=$('#cPlan .on');$('#cGo').dataset.plan=pb.dataset.plan}
+  const seg=(id,fn)=>$(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('button',$(id)).forEach(x=>x.classList.toggle('on',x===b));fn(b);calcRender()});
+  seg('#cPlan',b=>st.plan=+b.dataset.p);seg('#cDur',b=>st.dur=+b.dataset.d);
+  $('#cBill').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const t=$('#billT [data-bill="'+b.dataset.b+'"]');t&&t.click()});
+  $$('[data-st]',C).forEach(b=>b.onclick=()=>{st.n=Math.min(6,Math.max(1,st.n+ +b.dataset.st));calcRender()});
+  $('#cNew').onchange=calcRender;
+  const _rp=renderPrices;renderPrices=function(){_rp();calcRender()};calcRender();
+  $$('#pricing .plan').forEach((p,i)=>p.addEventListener('click',e=>{if(e.target.closest('a'))return;const b=$('#cPlan [data-p="'+(i+1)+'"]');b&&b.click()}));
+  $('#cGo').addEventListener('click',()=>{const pb=$('#cPlan .on');chosenPlan=pb.dataset.plan;const sl=$('#fplan');if(sl)sl.value=chosenPlan;
+    const t=$('#fmsg');if(t){const lines=$$('#cLines .rl').map(r=>r.children[0].textContent+': '+r.children[1].textContent);
+      lines.unshift(pb.firstChild.textContent+' · '+$('#cDur .on').firstChild.textContent+' · '+$('#cBill .on').firstChild.textContent);
+      lines.push($('.rcpt .tot span').textContent+': '+$('#cTot').textContent+' '+$('#cCur').textContent);t.value=lines.join('\n');const dt=t.closest('details');if(dt)dt.open=true}});
+}
+/* FAQ: ask on WhatsApp */
+const ask=$('#ask');if(ask)ask.addEventListener('submit',e=>{e.preventDefault();const q=$('#askQ').value.trim();if(!q){$('#askQ').focus();return}window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(q),'_blank','noopener')});
+/* 3D logo: loaded lazily, only when WebGL is there */
+function start3d(){
+  const cv=$('#c3d');if(!cv||!window.HN3D)return;
+  h3d=HN3D.mount(cv,{reduce,pointerHost:hero,motes:innerWidth<700?12:26});if(h3d){$('#arch').classList.add('on3d');onS()}}
+function load3d(){
+  try{const t=document.createElement('canvas');if(!(t.getContext('webgl2')||t.getContext('webgl')))return}catch(e){return}
+  if(navigator.connection&&navigator.connection.saveData)return;
+  const sc=document.createElement('script');sc.src='hn3d.js';sc.async=true;sc.onload=start3d;document.head.append(sc)}
+if($('#c3d')){if(document.readyState==='complete')setTimeout(load3d,300);else addEventListener('load',()=>setTimeout(load3d,300))}
+})();
 
 </script>
 </body>
