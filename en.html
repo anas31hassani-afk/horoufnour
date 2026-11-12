@@ -680,6 +680,22 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
  .wave i{animation-duration:2.4s}
 }
 
+/* ---------- سلاسة الهاتف: أهداف لمس أكبر، والباقات تُسحب أفقياً ---------- */
+@media(max-width:640px){
+  .burger{width:44px;height:44px;display:grid;place-items:center}
+  .stepper button{width:46px;height:46px}
+  .seg2 button{min-height:44px}
+  #billT button{min-height:44px}
+  .plans{display:flex;grid-template-columns:none;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-inline:-20px;padding:14px 20px 18px}
+  .plans::-webkit-scrollbar{display:none}
+  .plans .plan{flex:0 0 84%;scroll-snap-align:center;opacity:1!important;transform:none!important;padding:28px 24px}
+  .plans-hint{display:flex!important}
+}
+.plans-hint{display:none;justify-content:center;gap:7px;margin-top:2px}
+.plans-hint i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .3s,width .3s}
+.plans-hint i.on{width:20px;border-radius:99px;background:var(--teal)}
+@media(max-width:1000px){.burger{width:44px;height:44px;display:grid;place-items:center}}
+
 
 html[dir=ltr]{--kufi:'Montserrat',system-ui,sans-serif}
 html[dir=ltr] h1,html[dir=ltr] h2,html[dir=ltr] h3{letter-spacing:-.01em;line-height:1.25}
@@ -961,9 +977,13 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
         <div class="bk-page" data-step="2">
           <h3 class="bk-q">When suits you?</h3>
           <div class="field"><label for="fcountry">Country of residence <small class="muted">(we schedule in your time zone)</small></label><select id="fcountry" name="country"></select></div>
-          <label class="bk-l">Preferred times <small class="muted">(one or more)</small></label>
-          <div class="opts o2 sm multi" data-name="time">
-            <button type="button" data-v="صباحاً">Morning</button><button type="button" data-v="بعد الظهر">Afternoon</button><button type="button" data-v="مساءً">Evening</button><button type="button" data-v="نهاية الأسبوع">Weekend</button>
+          <label class="bk-l">Preferred days</label>
+          <div class="opts o2 sm multi" data-name="days">
+            <button type="button" data-v="وسط الأسبوع">Weekdays</button><button type="button" data-v="نهاية الأسبوع">Weekend</button>
+          </div>
+          <label class="bk-l" style="margin-top:14px">Time of day <small class="muted">(one or more)</small></label>
+          <div class="opts o3 sm multi" data-name="time">
+            <button type="button" data-v="صباحاً">Morning</button><button type="button" data-v="بعد الظهر">Afternoon</button><button type="button" data-v="مساءً">Evening</button>
           </div>
           <div class="bk-sub">
             <label class="bk-l">Teacher</label>
@@ -1271,14 +1291,14 @@ bk.addEventListener('submit',e=>{
   if(!name){f.name.focus();return}
   if(!ph.ok){$('.tel-n',bkTel).focus();return}
   bkSent=true;const btn=$('#bkSend');btn.disabled=true;
-  const country=ccOf(fc.value)[1],who=pick('who')[0]||'',age=pick('age')[0]||'',program=pick('program')[0]||'',riwaya=pick('riwaya')[0]||'',times=pick('time').join(', '),teacher=pick('teacher')[0]||'';
+  const country=ccOf(fc.value)[1],who=pick('who')[0]||'',age=pick('age')[0]||'',program=pick('program')[0]||'',riwaya=pick('riwaya')[0]||'',times=[...pick('days'),...pick('time')].join(', '),teacher=pick('teacher')[0]||'';
   const pi=f.plan.selectedIndex,PP=prOf(pcIso),pAmt=pi>0?(bill==='q'?niceP(PP[pi]*.9):PP[pi]):0;
   const plan=pi>0?f.plan.value+' — '+fmtP(pAmt)+' '+(CUR[PP[0]]||CUR.USD)[1]+' '+(bill==='q'?'every 3 months (per month)':'per month'):'';
   const msg=f.msg.value.trim(),timeTxt=(times||'any time')+' · '+country;
   hnPost('lead',{name,phone,who,age,program,riwaya,time:timeTxt,teacher,plan,msg:(LG!=='ar'?'[لغة الموقع: '+LG.toUpperCase()+'] ':'')+msg,hp:f.website?f.website.value:''});
   const row=(l,v)=>v?'• '+l+': '+v:'';
   const lines=['*Free trial lesson request | Horouf Min Nour*','','Assalamu alaykum wa rahmatullahi wa barakatuh,','I sent a trial lesson request from the website, here are my details:','',
-    row('Name',name),row('WhatsApp',phone),row('Country',country),row('For',lab('who')[0]),row('Age',age),row('Program',lab('program')[0]),row('Reading',lab('riwaya')[0]),row('Times',lab('time').join(', ')),row('Teacher',lab('teacher')[0]),row('Plan',plan),msg?'• Note: '+msg:'','','Thank you, jazakum Allahu khayran.'].filter((x,i,a)=>x!==''||(i>0&&a[i-1]!==''));
+    row('Name',name),row('WhatsApp',phone),row('Country',country),row('For',lab('who')[0]),row('Age',age),row('Program',lab('program')[0]),row('Reading',lab('riwaya')[0]),row('Times',[...lab('days'),...lab('time')].join(', ')),row('Teacher',lab('teacher')[0]),row('Plan',plan),msg?'• Note: '+msg:'','','Thank you, jazakum Allahu khayran.'].filter((x,i,a)=>x!==''||(i>0&&a[i-1]!==''));
   $('#waSend').href='https://wa.me/'+WA+'?text='+encodeURIComponent(lines.join('\n'));
   $('#formBody').style.display='none';$('#done').style.display='block';
   try{sessionStorage.setItem('hn_booked','1')}catch(_){}
@@ -1372,6 +1392,12 @@ function load3d(){
   const sc=document.createElement('script');sc.src='hn3d.js';sc.async=true;sc.onload=start3d;document.head.append(sc)}
 if($('#c3d')){if(document.readyState==='complete')setTimeout(load3d,300);else addEventListener('load',()=>setTimeout(load3d,300))}
 })();
+
+/* الهاتف: الباقات تُسحب أفقياً، ونبدأ من الأكثر اختياراً */
+(function(){const pl=$('.plans');if(!pl||!matchMedia('(max-width:640px)').matches)return;const cs=$$('.plan',pl),h=document.createElement('div');h.className='plans-hint';h.setAttribute('aria-hidden','true');h.innerHTML=cs.map(()=>'<i></i>').join('');pl.after(h);
+  const upd=()=>{const m=pl.getBoundingClientRect(),mid=m.left+m.width/2;let bi=0,bd=1e9;cs.forEach((c,i)=>{const r=c.getBoundingClientRect(),d=Math.abs(r.left+r.width/2-mid);if(d<bd){bd=d;bi=i}});[...h.children].forEach((x,i)=>x.classList.toggle('on',i===bi))};
+  pl.addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true});
+  const pop=$('.plan.pop',pl);if(pop){const m=pl.getBoundingClientRect(),r=pop.getBoundingClientRect();pl.scrollLeft+=r.left+r.width/2-(m.left+m.width/2)}upd()})();
 
 </script>
 </body>

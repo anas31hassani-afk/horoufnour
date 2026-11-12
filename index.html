@@ -680,6 +680,22 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
  .wave i{animation-duration:2.4s}
 }
 
+/* ---------- سلاسة الهاتف: أهداف لمس أكبر، والباقات تُسحب أفقياً ---------- */
+@media(max-width:640px){
+  .burger{width:44px;height:44px;display:grid;place-items:center}
+  .stepper button{width:46px;height:46px}
+  .seg2 button{min-height:44px}
+  #billT button{min-height:44px}
+  .plans{display:flex;grid-template-columns:none;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-inline:-20px;padding:14px 20px 18px}
+  .plans::-webkit-scrollbar{display:none}
+  .plans .plan{flex:0 0 84%;scroll-snap-align:center;opacity:1!important;transform:none!important;padding:28px 24px}
+  .plans-hint{display:flex!important}
+}
+.plans-hint{display:none;justify-content:center;gap:7px;margin-top:2px}
+.plans-hint i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .3s,width .3s}
+.plans-hint i.on{width:20px;border-radius:99px;background:var(--teal)}
+@media(max-width:1000px){.burger{width:44px;height:44px;display:grid;place-items:center}}
+
 </style>
 <link rel="alternate" hreflang="ar" href="https://horoufnour.com/">
 <link rel="alternate" hreflang="fr" href="https://horoufnour.com/fr.html">
@@ -953,9 +969,13 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
         <div class="bk-page" data-step="2">
           <h3 class="bk-q">متى يناسبك؟</h3>
           <div class="field"><label for="fcountry">بلد الإقامة <small class="muted">(نحدّد الموعد بتوقيتك)</small></label><select id="fcountry" name="country"></select></div>
-          <label class="bk-l">الأوقات المناسبة <small class="muted">(اختر وقتاً أو أكثر)</small></label>
-          <div class="opts o2 sm multi" data-name="time">
-            <button type="button" data-v="صباحاً">صباحاً</button><button type="button" data-v="بعد الظهر">بعد الظهر</button><button type="button" data-v="مساءً">مساءً</button><button type="button" data-v="نهاية الأسبوع">نهاية الأسبوع</button>
+          <label class="bk-l">الأيام المناسبة</label>
+          <div class="opts o2 sm multi" data-name="days">
+            <button type="button" data-v="وسط الأسبوع">وسط الأسبوع</button><button type="button" data-v="نهاية الأسبوع">نهاية الأسبوع</button>
+          </div>
+          <label class="bk-l" style="margin-top:14px">الوقت المناسب <small class="muted">(اختر وقتاً أو أكثر)</small></label>
+          <div class="opts o3 sm multi" data-name="time">
+            <button type="button" data-v="صباحاً">صباحاً</button><button type="button" data-v="بعد الظهر">بعد الظهر</button><button type="button" data-v="مساءً">مساءً</button>
           </div>
           <div class="bk-sub">
             <label class="bk-l">المعلّم</label>
@@ -1396,14 +1416,14 @@ bk.addEventListener('submit',e=>{
   if(!name){f.name.focus();return}
   if(!ph.ok){$('.tel-n',bkTel).focus();return}
   bkSent=true;const btn=$('#bkSend');btn.disabled=true;
-  const country=ccOf(fc.value)[1],who=pick('who')[0]||'',age=pick('age')[0]||'',program=pick('program')[0]||'',riwaya=pick('riwaya')[0]||'',times=pick('time').join('، '),teacher=pick('teacher')[0]||'';
+  const country=ccOf(fc.value)[1],who=pick('who')[0]||'',age=pick('age')[0]||'',program=pick('program')[0]||'',riwaya=pick('riwaya')[0]||'',times=[...pick('days'),...pick('time')].join('، '),teacher=pick('teacher')[0]||'';
   const pi=f.plan.selectedIndex,PP=prOf(pcIso),pAmt=pi>0?(bill==='q'?niceP(PP[pi]*.9):PP[pi]):0;
   const plan=pi>0?f.plan.value+' — '+fmtP(pAmt)+' '+(CUR[PP[0]]||CUR.USD)[1]+' '+(bill==='q'?'كل 3 أشهر (للشهر)':'شهرياً'):'';
   const msg=f.msg.value.trim(),timeTxt=(times||'أي وقت')+' · '+country;
   hnPost('lead',{name,phone,who,age,program,riwaya,time:timeTxt,teacher,plan,msg:(LG!=='ar'?'[لغة الموقع: '+LG.toUpperCase()+'] ':'')+msg,hp:f.website?f.website.value:''});
   const row=(l,v)=>v?'• '+l+': '+v:'';
   const lines=['*طلب حصة تجريبية مجانية | حروف من نور*','','السلام عليكم ورحمة الله وبركاته،','أرسلت طلب حصة تجريبية من الموقع، وهذه بياناتي:','',
-    row('الاسم',name),row('الواتساب',phone),row('البلد',country),row('الحصة لـ',lab('who')[0]),row('العمر',age),row('البرنامج',lab('program')[0]),row('الرواية',lab('riwaya')[0]),row('الأوقات',lab('time').join('، ')),row('المعلّم',lab('teacher')[0]),row('الباقة',plan),msg?'• ملاحظة: '+msg:'','','جزاكم الله خيراً.'].filter((x,i,a)=>x!==''||(i>0&&a[i-1]!==''));
+    row('الاسم',name),row('الواتساب',phone),row('البلد',country),row('الحصة لـ',lab('who')[0]),row('العمر',age),row('البرنامج',lab('program')[0]),row('الرواية',lab('riwaya')[0]),row('الأوقات',[...lab('days'),...lab('time')].join('، ')),row('المعلّم',lab('teacher')[0]),row('الباقة',plan),msg?'• ملاحظة: '+msg:'','','جزاكم الله خيراً.'].filter((x,i,a)=>x!==''||(i>0&&a[i-1]!==''));
   $('#waSend').href='https://wa.me/'+WA+'?text='+encodeURIComponent(lines.join('\n'));
   $('#formBody').style.display='none';$('#done').style.display='block';
   try{sessionStorage.setItem('hn_booked','1')}catch(_){}
@@ -1497,6 +1517,12 @@ function load3d(){
   const sc=document.createElement('script');sc.src='hn3d.js';sc.async=true;sc.onload=start3d;document.head.append(sc)}
 if($('#c3d')){if(document.readyState==='complete')setTimeout(load3d,300);else addEventListener('load',()=>setTimeout(load3d,300))}
 })();
+
+/* الهاتف: الباقات تُسحب أفقياً، ونبدأ من الأكثر اختياراً */
+(function(){const pl=$('.plans');if(!pl||!matchMedia('(max-width:640px)').matches)return;const cs=$$('.plan',pl),h=document.createElement('div');h.className='plans-hint';h.setAttribute('aria-hidden','true');h.innerHTML=cs.map(()=>'<i></i>').join('');pl.after(h);
+  const upd=()=>{const m=pl.getBoundingClientRect(),mid=m.left+m.width/2;let bi=0,bd=1e9;cs.forEach((c,i)=>{const r=c.getBoundingClientRect(),d=Math.abs(r.left+r.width/2-mid);if(d<bd){bd=d;bi=i}});[...h.children].forEach((x,i)=>x.classList.toggle('on',i===bi))};
+  pl.addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true});
+  const pop=$('.plan.pop',pl);if(pop){const m=pl.getBoundingClientRect(),r=pop.getBoundingClientRect();pl.scrollLeft+=r.left+r.width/2-(m.left+m.width/2)}upd()})();
 
 /* ---------- teacher application wizard ---------- */
 const wz=$('#wz'),pages=$$('.wz-page',wz),bars=$$('#wzBar i');
