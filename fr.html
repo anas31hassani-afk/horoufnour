@@ -1353,10 +1353,11 @@ const PLAN_N=[0,8,10,14],PLAN_DUR=[0,30,45,45],D45=1.4,EX_STEP=4,EX_MAX=12;
 const nice4=v=>v>=1000?Math.round(v/50)*50:v>=40?Math.round(v/5)*5:v>=10?Math.round(v):Math.round(v*2)/2;
 const add4Of=P=>P[5]||nice4(P[2]*.31);
 /* الحلقة الجماعية: 6 طلاب، 8 حصص/شهر، 45 دقيقة، سعر ثابت للطالب بلا خصومات أو زيادة.
-   القاعدة: 60% من سعر باقة البداية في بلد الطالب (60 ريالاً في Arabie saoudite، 60 درهماً في Maroc، 300 جنيه في Égypte) */
-const GROUP_N=8,GROUP_SIZE=6,GROUP_RATE=.6;
+   القاعدة: 80% من سعر باقة البداية في الدول العربية غير الخليجية (الفئة A: Maroc 80 درهماً، Égypte 400 جنيه)،
+   و60% في الخليج وأوروبا وباقي العالم (Arabie saoudite 60 ريالاً) */
+const GROUP_N=8,GROUP_SIZE=6,GROUP_RATE={A:.8,G:.6,E:.6};
 const g5=v=>v>=1000?Math.round(v/50)*50:v>=50?Math.round(v/5)*5:v>=10?Math.round(v):Math.round(v*2)/2;
-const groupP=iso=>{const P=prOf(iso);return P===PREST||iso==='US'?12:g5(P[1]*GROUP_RATE)};
+const groupP=iso=>{const P=prOf(iso);return P===PREST||iso==='US'?12:g5(P[1]*(GROUP_RATE[P[4]]||.6))};
 /* سعر مرتّب: خصم 10% للدفع tous les 3 mois مع تقريب مناسب لكل عملة */
 const niceP=v=>v>=1000?Math.round(v/50)*50:v>=100?Math.round(v/5)*5:v>=20?Math.round(v):Math.round(v*2)/2;
 const fmtP=v=>Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(1).replace(/\.0$/,'');
