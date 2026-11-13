@@ -227,9 +227,27 @@ footer p{opacity:.75;font-size:16px;max-width:300px}
 .social svg{width:20px;height:20px}
 .copy{border-top:1px solid rgba(251,246,236,.12);margin-top:56px;padding-top:24px;display:flex;justify-content:space-between;font-size:14.5px;opacity:.6;flex-wrap:wrap;gap:10px}
 
-.wa-float{position:fixed;bottom:24px;left:24px;z-index:60;width:62px;height:62px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;box-shadow:0 14px 30px -10px rgba(0,0,0,.45);transition:transform .2s}
-.wa-float:hover{transform:scale(1.07)}
-.wa-float svg{width:32px;height:32px}
+/* زر التواصل العائم: زر واحد يتوسّع إلى المساعد الذكي وواتساب */
+.fab{position:fixed;bottom:24px;right:24px;z-index:70;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.fab-pop{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.fab-pop[hidden]{display:none}
+.fab-act{display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:transparent;padding:0;font-family:var(--body);opacity:0;transform:translateY(12px) scale(.8);transition:opacity .28s cubic-bezier(.16,1,.3,1),transform .28s cubic-bezier(.16,1,.3,1)}
+.fab.open .fab-act{opacity:1;transform:none}
+.fab.open .fab-act.sup{transition-delay:.06s}
+.fab-act span{background:var(--cream);color:var(--deep);font-weight:700;font-size:14.5px;padding:8px 14px;border-radius:999px;box-shadow:0 8px 22px -10px rgba(13,63,60,.4);white-space:nowrap}
+.fab-act i{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;flex:none;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+.fab-act i svg{width:27px;height:27px}
+.fab-act.wa i{background:#25D366;color:#fff}
+.fab-act.sup i{background:var(--teal);color:var(--sand)}
+.fab-toggle{position:relative;width:62px;height:62px;border-radius:50%;border:0;cursor:pointer;background:var(--teal);color:var(--sand);display:grid;place-items:center;box-shadow:0 14px 30px -10px rgba(13,63,60,.6);transition:transform .25s,background .25s}
+.fab-toggle:hover{transform:scale(1.05)}
+.fab.open .fab-toggle{background:var(--deep);transform:rotate(90deg)}
+.fab-toggle i{position:absolute;display:grid;place-items:center;transition:opacity .2s,transform .2s}
+.fab-toggle i svg{width:30px;height:30px}
+.fab-toggle .fi-close{opacity:0;transform:rotate(-90deg) scale(.6)}
+.fab.open .fab-toggle .fi-open{opacity:0;transform:scale(.6)}
+.fab.open .fab-toggle .fi-close{opacity:1;transform:rotate(-90deg) scale(1)}
+@media (max-width:760px){.fab{bottom:18px;right:16px;gap:10px}.fab-toggle{width:56px;height:56px}.fab-act i{width:48px;height:48px}}
 
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.float{animation:none}html{scroll-behavior:auto}}
 
@@ -754,6 +772,24 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
 @media(max-width:640px){.plan .xl{flex-direction:column;align-items:stretch;text-align:center;gap:8px;padding:12px}.plan .xl .stepper{align-self:center}}
 .xl-t small{white-space:nowrap}
 
+/* ---------- الحلقة الجماعية ---------- */
+.grp{display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:center;background:var(--teal);color:var(--cream);border-radius:26px;padding:34px 36px;margin:6px 0 20px;position:relative;overflow:hidden}
+.grp::after{content:"";position:absolute;inset-inline-end:-80px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(246,221,160,.16),transparent 70%)}
+.grp-badge{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;background:rgba(251,246,236,.14);color:var(--sand);padding:6px 14px;border-radius:999px;margin-bottom:12px}
+.grp-badge svg{width:16px;height:16px}
+.grp-body h3{font-size:26px;color:var(--cream);margin:0 0 8px}
+.grp-body p{font-size:16px;opacity:.85;line-height:1.75;margin:0 0 14px;max-width:46ch}
+.grp-tags{display:flex;flex-wrap:wrap;gap:8px 18px}
+.grp-tags span{display:inline-flex;align-items:center;gap:7px;font-size:14.5px;opacity:.92}
+.grp-tags svg{width:17px;height:17px;color:var(--sand);flex:none}
+.grp-buy{text-align:center;background:rgba(251,246,236,.08);border:1px solid rgba(251,246,236,.14);border-radius:20px;padding:24px 22px;position:relative;z-index:1}
+.grp-buy .price{justify-content:center;margin:0 0 2px}
+.grp-buy .price .v{color:var(--cream);font-size:48px}
+.grp-buy .price .c{color:var(--sand);font-weight:700}
+.grp-per{font-size:14.5px;opacity:.8;margin-bottom:16px}
+.grp-buy .btn{width:100%;background:var(--sand);color:var(--deep)}
+@media (max-width:760px){.grp{grid-template-columns:1fr;padding:26px 22px;gap:20px}.grp-body h3{font-size:23px}}
+
 
 html[dir=ltr]{--kufi:'Montserrat',system-ui,sans-serif}
 html[dir=ltr] h1,html[dir=ltr] h2,html[dir=ltr] h3{letter-spacing:-.01em;line-height:1.25}
@@ -961,6 +997,21 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
     </div>
     <span hidden id="pwFew">lessons</span><span hidden id="pwMany">lessons</span>
 
+    <div class="grp rv">
+      <div class="grp-body">
+        <span class="grp-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg> For groups · 6 students</span>
+        <h3>Group circle</h3>
+        <p>A circle of 6 students with one teacher, 8 lessons a month × 45 min. Ideal for siblings and friends who like to memorize together, at a lower price per student.</p>
+        <div class="grp-tags"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Fixed price per student</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>8 lessons a month</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Motivating peer environment</span></div>
+      </div>
+      <div class="grp-buy">
+        <div class="price"><span class="v" id="grpV">16</span><span class="c" id="grpC">$</span></div>
+        <div class="grp-per">per student / month</div>
+        <a class="btn" id="grpGo" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20I%27d%20like%20to%20book%20a%20free%20trial%20lesson%20at%20Horouf%20Min%20Nour" target="_blank" rel="noopener">Join a group circle</a>
+        <span hidden id="grpT">Assalamu alaykum, I would like to join a group circle at Horouf Min Nour academy.</span>
+      </div>
+    </div>
+
     <div class="aid rv">
       <div><b>Can't afford the fees?</b><span>We don't turn away anyone who wants to memorize the Book of Allah. Message us on WhatsApp and we'll find what works for you.</span></div>
       <a class="pill" id="aidGo" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20I%27d%20like%20to%20book%20a%20free%20trial%20lesson%20at%20Horouf%20Min%20Nour" target="_blank" rel="noopener">Message us on WhatsApp</a>
@@ -1137,8 +1188,14 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
   </div>
 </footer>
 
-<div class="mcta" id="mcta"><a class="btn btn-sand" href="#book">Book my free lesson</a><a class="wa" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20I%27d%20like%20to%20book%20a%20free%20trial%20lesson%20at%20Horouf%20Min%20Nour" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg></a></div>
-<a class="wa-float" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20I%27d%20like%20to%20book%20a%20free%20trial%20lesson%20at%20Horouf%20Min%20Nour" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg></a>
+<div class="mcta" id="mcta"><a class="btn btn-sand" href="#book">Book my free lesson</a></div>
+<div class="fab" id="fab">
+  <div class="fab-pop" id="fabPop" hidden>
+    <a class="fab-act wa" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20I%27d%20like%20to%20book%20a%20free%20trial%20lesson%20at%20Horouf%20Min%20Nour" target="_blank" rel="noopener" id="fabWa"><span>Direct WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg></i></a>
+    <button class="fab-act sup" type="button" id="fabSup"><span>AI assistant</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></i></button>
+  </div>
+  <button class="fab-toggle" id="fabToggle" type="button" aria-expanded="false" aria-label="Contact"><i class="fi-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></i><i class="fi-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20" /></svg></i></button>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -1259,6 +1316,7 @@ function renderPrices(){
     const xl=$('.xl',p);if(xl){$('output',xl).textContent=ex?'+'+ex:'0';$('.xl-p',xl).textContent='+'+fmtP(a4)+sp+sym;xl.classList.toggle('on',ex>0);
       $('[data-x="-1"]',xl).disabled=ex<=0;$('[data-x="1"]',xl).disabled=ex>=EX_MAX}
   });
+  var gv=$('#grpV');if(gv){gv.textContent=fmtP(groupP(pcIso));$('#grpC').textContent=sp+sym;}
 }
 $$('#pricing .xl').forEach(xl=>xl.addEventListener('click',e=>{const b=e.target.closest('[data-x]');if(!b)return;const i=+xl.dataset.xl;EX[i]=Math.min(EX_MAX,Math.max(0,EX[i]+ +b.dataset.x*EX_STEP));renderPrices()}));
 $$('#billT button').forEach(b=>b.onclick=()=>{bill=b.dataset.bill;$$('#billT button').forEach(x=>x.classList.toggle('on',x===b));renderPrices()});
@@ -1294,6 +1352,10 @@ const PLAN_IDX={start:1,steady:2,hafiz:3};
 const PLAN_N=[0,8,10,14],PLAN_DUR=[0,30,45,45],D45=1.4,EX_STEP=4,EX_MAX=12;
 const nice4=v=>v>=1000?Math.round(v/50)*50:v>=40?Math.round(v/5)*5:v>=10?Math.round(v):Math.round(v*2)/2;
 const add4Of=P=>P[5]||nice4(P[2]*.31);
+/* الحلقة الجماعية: 6 طلاب، 8 حصص/شهر، 45 دقيقة، سعر ثابت للطالب بلا خصومات أو زيادة. 60 ريالاً في Saudi Arabia ≈ 16$ */
+const GROUP_N=8,GROUP_SIZE=6,GROUP_USD=16;
+const g5=v=>v>=1000?Math.round(v/50)*50:v>=50?Math.round(v/5)*5:v>=10?Math.round(v):Math.round(v*2)/2;
+const groupP=iso=>{const P=prOf(iso),u=CUR[P[0]][2];return g5(GROUP_USD/u)};
 /* سعر مرتّب: خصم 10% للدفع every 3 months مع تقريب مناسب لكل عملة */
 const niceP=v=>v>=1000?Math.round(v/50)*50:v>=100?Math.round(v/5)*5:v>=20?Math.round(v):Math.round(v*2)/2;
 const fmtP=v=>Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(1).replace(/\.0$/,'');
@@ -1465,6 +1527,7 @@ if(C){
   $$('#pricing .plan').forEach((p,i)=>{const a=$('a.btn',p);a&&a.addEventListener('click',()=>{const ex=EX[i+1]||0,t=$('#fmsg');if(ex&&t){t.value=a.dataset.plan+' · '+L('extra')+' +'+ex;const dt=t.closest('details');if(dt)dt.open=true}})});
   /* غير المقتدرين: رسالة واتساب جاهزة */
   const ag=$('#aidGo'),at=$('#aidT');if(ag&&at)ag.href='https://wa.me/'+WA+'?text='+encodeURIComponent(at.textContent);
+  const gg=$('#grpGo'),gt=$('#grpT');if(gg&&gt)gg.href='https://wa.me/'+WA+'?text='+encodeURIComponent(gt.textContent);
   $('#cGo').addEventListener('click',()=>{const pb=$('#cPlan .on');chosenPlan=pb.dataset.plan;const sl=$('#fplan');if(sl)sl.value=chosenPlan;
     const t=$('#fmsg');if(t){const lines=$$('#cLines .rl').map(r=>r.children[0].textContent+': '+r.children[1].textContent);
       lines.unshift(pb.firstChild.textContent+' · '+$('#cDur .on').firstChild.textContent+' · '+$('#cBill .on').firstChild.textContent);
@@ -1494,29 +1557,19 @@ if($('#c3d')){if(document.readyState==='complete')setTimeout(load3d,300);else ad
   pl.addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true});
   const pop=$('.plan.pop',pl);if(pop){const m=pl.getBoundingClientRect(),r=pop.getBoundingClientRect();pl.scrollLeft+=r.left+r.width/2-(m.left+m.width/2)}upd()})();
 
-/* زر الدعم (جابستر): بألوان الأكاديمية بدل الشكل الافتراضي */
+/* زر التواصل: يخفي زر جابستر ويفتحه من «المساعد الذكي» */
 (function(){
-  var ICON='<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#E6BC6A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';
-  function brand(){
-    var ic=document.querySelector('.gabster-widget-icon');
-    if(!ic)return false;
-    var img=ic.querySelector('img[src*="main-logo"]');
-    if(!img)return true;               /* الحالة المفتوحة: لا نلمسها */
-    ic.style.setProperty('background','#155E5A','important');
-    ic.style.setProperty('box-shadow','0 12px 28px -10px rgba(13,63,60,.65)','important');
-    img.style.display='none';
-    if(!ic.querySelector('.hn-chat-ic')){
-      var s=document.createElement('span');
-      s.className='hn-chat-ic';
-      s.setAttribute('aria-hidden','true');
-      s.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none';
-      s.innerHTML=ICON;
-      ic.appendChild(s);
-    }
-    return true;
-  }
-  var n=0,t=setInterval(function(){if(brand()||++n>40)clearInterval(t)},500);
-  try{new MutationObserver(brand).observe(document.body,{childList:true,subtree:true});}catch(e){}
+  var fab=document.getElementById('fab');if(!fab)return;
+  var tog=document.getElementById('fabToggle'),pop=document.getElementById('fabPop'),sup=document.getElementById('fabSup'),wa=document.getElementById('fabWa');
+  function setOpen(o){fab.classList.toggle('open',o);tog.setAttribute('aria-expanded',o?'true':'false');if(o){pop.hidden=false}else{setTimeout(function(){if(!fab.classList.contains('open'))pop.hidden=true},300)}}
+  tog.addEventListener('click',function(e){e.stopPropagation();setOpen(!fab.classList.contains('open'))});
+  wa&&wa.addEventListener('click',function(){setOpen(false)});
+  sup&&sup.addEventListener('click',function(){var g=document.querySelector('.gabster-widget-icon');if(g)g.click();setOpen(false)});
+  document.addEventListener('click',function(e){if(fab.classList.contains('open')&&!fab.contains(e.target))setOpen(false)});
+  /* إخفاء زر جابستر الافتراضي مع إبقائه قابلاً للفتح برمجياً */
+  function hideGab(){var g=document.querySelector('.gabster-widget-icon');if(!g)return;g.style.setProperty('opacity','0','important');g.style.setProperty('pointer-events','none','important');}
+  var n=0,t=setInterval(function(){hideGab();if(document.querySelector('.gabster-widget-icon')||++n>40)clearInterval(t)},500);
+  try{new MutationObserver(hideGab).observe(document.body,{childList:true,subtree:true});}catch(e){}
 })();
 
 </script>
