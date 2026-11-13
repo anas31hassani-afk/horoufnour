@@ -1005,7 +1005,7 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
         <div class="grp-tags"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Tarif fixe par élève</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>8 cours par mois</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Une émulation entre pairs</span></div>
       </div>
       <div class="grp-buy">
-        <div class="price"><span class="v" id="grpV">16</span><span class="c" id="grpC">$</span></div>
+        <div class="price"><span class="v" id="grpV">12</span><span class="c" id="grpC">$</span></div>
         <div class="grp-per">par élève / mois</div>
         <a class="btn" id="grpGo" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20je%20souhaite%20r%C3%A9server%20un%20cours%20d%27essai%20gratuit%20chez%20Horouf%20Min%20Nour" target="_blank" rel="noopener">Rejoindre un cercle</a>
         <span hidden id="grpT">Assalamu alaykum, je souhaite rejoindre un cercle collectif chez Horouf Min Nour.</span>
@@ -1340,7 +1340,7 @@ const CUR={MAD:['درهم','MAD',0.1],DZD:['دج','DZD',0.0074],TND:['د.ت','TN
 SAR:['ريال','SAR',0.2667],AED:['درهم','AED',0.2723],QAR:['ريال','QAR',0.2747],KWD:['د.ك','KWD',3.25],BHD:['د.ب','BHD',2.66],OMR:['ر.ع','OMR',2.6],
 EUR:['€','€',1.08],GBP:['£','£',1.27],CHF:['CHF','CHF',1.13],SEK:['kr','SEK',0.095],NOK:['kr','NOK',0.093],DKK:['kr','DKK',0.145],USD:['$','$',1],CAD:['CA$','CA$',0.73],AUD:['A$','A$',0.65]};
 const PLOW=['USD',10,15,22,'A'],PREST=['USD',19,27,39,'E'];
-const PR={MA:['MAD',100,150,220,'A'],DZ:['DZD',1400,2000,3000,'A'],TN:['TND',30,45,70,'A'],LY:['LYD',50,75,110,'A'],EG:['EGP',500,750,1100,'A'],MR:['MRU',400,600,900,'A'],SD:PLOW,
+const PR={MA:['MAD',100,150,220,'A'],DZ:['DZD',1400,2000,3000,'A'],TN:['TND',30,45,70,'A'],LY:['LYD',50,75,110,'A'],EG:['EGP',500,750,1100,'A',250],MR:['MRU',400,600,900,'A'],SD:PLOW,
 JO:['JOD',7,11,16,'A'],IQ:['IQD',13000,20000,29000,'A'],PS:PLOW,LB:PLOW,SY:PLOW,YE:PLOW,SN:PLOW,ML:PLOW,CI:PLOW,NG:PLOW,ZA:PLOW,TR:PLOW,MY:PLOW,ID:PLOW,PK:PLOW,IN:PLOW,
 SA:['SAR',99,149,199,'G',40],AE:['AED',99,149,199,'G',40],QA:['QAR',99,149,199,'G',40],KW:['KWD',8,12,16,'G',3.5],BH:['BHD',10,15,20,'G',4],OM:['OMR',10,15,20,'G',4],
 FR:['EUR',27,39,55,'E'],BE:['EUR',27,39,55,'E'],NL:['EUR',27,39,55,'E'],DE:['EUR',27,39,55,'E'],ES:['EUR',27,39,55,'E'],IT:['EUR',27,39,55,'E'],IE:['EUR',27,39,55,'E'],AT:['EUR',27,39,55,'E'],LU:['EUR',27,39,55,'E'],PT:['EUR',27,39,55,'E'],FI:['EUR',27,39,55,'E'],
@@ -1352,10 +1352,11 @@ const PLAN_IDX={start:1,steady:2,hafiz:3};
 const PLAN_N=[0,8,10,14],PLAN_DUR=[0,30,45,45],D45=1.4,EX_STEP=4,EX_MAX=12;
 const nice4=v=>v>=1000?Math.round(v/50)*50:v>=40?Math.round(v/5)*5:v>=10?Math.round(v):Math.round(v*2)/2;
 const add4Of=P=>P[5]||nice4(P[2]*.31);
-/* الحلقة الجماعية: 6 طلاب، 8 حصص/شهر، 45 دقيقة، سعر ثابت للطالب بلا خصومات أو زيادة. 60 ريالاً في Arabie saoudite ≈ 16$ */
-const GROUP_N=8,GROUP_SIZE=6,GROUP_USD=16;
+/* الحلقة الجماعية: 6 طلاب، 8 حصص/شهر، 45 دقيقة، سعر ثابت للطالب بلا خصومات أو زيادة.
+   القاعدة: 60% من سعر باقة البداية في بلد الطالب (60 ريالاً في Arabie saoudite، 60 درهماً في Maroc، 300 جنيه في Égypte) */
+const GROUP_N=8,GROUP_SIZE=6,GROUP_RATE=.6;
 const g5=v=>v>=1000?Math.round(v/50)*50:v>=50?Math.round(v/5)*5:v>=10?Math.round(v):Math.round(v*2)/2;
-const groupP=iso=>{const P=prOf(iso),u=CUR[P[0]][2];return g5(GROUP_USD/u)};
+const groupP=iso=>{const P=prOf(iso);return P===PREST||iso==='US'?12:g5(P[1]*GROUP_RATE)};
 /* سعر مرتّب: خصم 10% للدفع tous les 3 mois مع تقريب مناسب لكل عملة */
 const niceP=v=>v>=1000?Math.round(v/50)*50:v>=100?Math.round(v/5)*5:v>=20?Math.round(v):Math.round(v*2)/2;
 const fmtP=v=>Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(1).replace(/\.0$/,'');
