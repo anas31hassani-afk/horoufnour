@@ -699,6 +699,61 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
 .arch .lg{height:384px;margin-top:6px}
 @media(max-width:1000px){.arch .lg{height:300px}}
 
+/* ---------- الباقات: حصص إضافية + شريط غير المقتدرين ---------- */
+.plan .xl{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--linen);border-radius:18px;padding:10px 12px 10px 14px;margin-bottom:14px}
+.plan .xl+.btn{margin-top:0}
+.plan.pop .xl{background:rgba(251,246,236,.1)}
+.xl-t b{display:block;font-size:15px;line-height:1.3}
+.xl-t small{display:block;font-size:13px;opacity:.72;line-height:1.4}
+.xl-t bdi{font-weight:700;opacity:1;white-space:nowrap}
+.stepper.sm{background:rgba(21,94,90,.08);padding:4px;gap:2px;flex:none}
+.plan.pop .stepper.sm{background:rgba(251,246,236,.1)}
+.stepper.sm button{width:36px;height:36px;font-size:20px;background:#fff;color:var(--teal)}
+.plan.pop .stepper.sm button{background:var(--cream);color:var(--deep)}
+.stepper.sm output{min-width:38px;font-size:17px;direction:ltr}
+.stepper button:disabled{opacity:.35;cursor:default;pointer-events:none}
+.plan .xl.on{box-shadow:inset 0 0 0 1.5px var(--sand)}
+.plan .sub .pn{font-family:var(--latin);font-weight:700}
+#cEx{direction:ltr}
+#cDur button.fix{pointer-events:none}#cDur button.fix small{display:none}
+.aid{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;border:1.5px dashed rgba(21,94,90,.35);background:var(--cream);border-radius:22px;padding:18px 26px;margin:6px 0 34px}
+.aid b{display:block;font-family:var(--kufi);color:var(--teal);font-size:18px}
+.aid span:not([hidden]){display:block;font-size:15.5px;opacity:.8;margin-top:2px}
+#cExW[hidden],#cDur [hidden],.aid [hidden]{display:none!important}
+.aid .pill{background:var(--teal);color:var(--cream);font-weight:700;border-radius:999px;padding:10px 20px;font-size:15px;white-space:nowrap;transition:transform .2s}
+.aid .pill:hover{transform:translateY(-2px)}
+
+/* ---------- إصلاحات الهاتف واللوحة ---------- */
+/* اللوحة: بطاقات المميزات تملأ الصف بلا فراغ */
+@media(min-width:641px) and (max-width:1000px){
+  .bn-leaf.alt{grid-column:span 6}.bn-ticket{grid-column:1/-1}
+  .bn-arch{min-height:0;padding:70px 44px 40px}
+}
+/* الدائرة المنقّطة لا تمرّ فوق العنوان والأزرار */
+@media(max-width:1000px){.programs>.deco.ring{display:none}#why>.deco.ring{inset-inline-end:-190px!important}}
+/* بطاقة الحصة الفردية: الموجة لا تدفع الصورة خارج البطاقة */
+@media(max-width:640px){.wave{min-width:0;overflow:hidden}.live-mock .av::after{inset:-4px}.live-mock{padding-inline:4px}}
+/* الرأس على الهواتف الضيقة: الاسم لا يدخل تحت زر الدخول */
+@media(max-width:430px){
+  .nav .wrap{padding-inline:14px}.brand{gap:8px;min-width:0}.brand .ic{height:38px}.brand b{font-size:17.5px}
+  .nav-in{height:38px;padding:0 10px;font-size:13px;gap:5px;margin-inline:auto 2px}.nav-in svg{width:16px;height:16px}
+}
+@media(max-width:350px){.brand b{font-size:16px}}
+/* اللوحة: الباقات الثلاث في صف واحد مضغوط، وتحت ذلك تُسحب أفقياً */
+@media(min-width:760px) and (max-width:1000px){
+  .plans{grid-template-columns:repeat(3,1fr);gap:14px}
+  .plans .plan{padding:28px 20px}.plan .price .v{font-size:44px}.plan ul{font-size:15px}.plan .xl{flex-direction:column;align-items:stretch;text-align:center}.plan .xl .stepper{align-self:center}
+}
+@media(min-width:641px) and (max-width:759px){
+  .plans{display:flex;grid-template-columns:none;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-inline:-24px;padding:14px 24px 18px}
+  .plans::-webkit-scrollbar{display:none}
+  .plans .plan{flex:0 0 56%;scroll-snap-align:center;opacity:1!important;transform:none!important;padding:28px 24px}
+  .plans-hint{display:flex!important}
+}
+@media(max-width:640px){.aid{padding:16px 18px;margin-top:14px}.aid .pill{width:100%;text-align:center}}
+@media(max-width:640px){.plan .xl{flex-direction:column;align-items:stretch;text-align:center;gap:8px;padding:12px}.plan .xl .stepper{align-self:center}}
+.xl-t small{white-space:nowrap}
+
 
 html[dir=ltr]{--kufi:'Montserrat',system-ui,sans-serif}
 html[dir=ltr] h1,html[dir=ltr] h2,html[dir=ltr] h3{letter-spacing:-.01em;line-height:1.25}
@@ -861,8 +916,8 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
 <section class="sec pricing" id="pricing">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><div class="eyebrow">Planes y precios</div><h2>Más clases, menor precio por clase</h2>
-        <p class="lead" style="margin-top:10px">Todas las clases son individuales, en directo, de 30 minutos, y siempre empiezan con una clase de prueba gratis para evaluar el nivel.</p></div>
+      <div><div class="eyebrow">Planes y precios</div><h2>Elige el plan que se ajusta a tu objetivo</h2>
+        <p class="lead" style="margin-top:10px">Todas las clases son individuales y en directo con el profesor, y empiezan siempre con una clase de prueba gratis para evaluar el nivel.</p></div>
       <div class="price-controls">
         <div class="toggle" id="billT"><button class="on" data-bill="m">Mensual</button><button data-bill="q">Cada 3 meses<span class="save">-10%</span></button></div>
         <label class="cty"><span>Precios para</span><select id="pcountry" aria-label="País de los precios"></select></label>
@@ -876,31 +931,40 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
 
     <div class="plans">
       <div class="plan tilt rv"><span class="shine"></span>
-        <span class="who">Para pequeños y principiantes</span>
-        <h3>Inicio</h3><div class="sub">2 clases por semana · 8 al mes</div>
+        <span class="who">Un buen comienzo en tu camino con el Corán</span>
+        <h3>Inicio</h3><div class="sub"><span class="pn">8</span> <span class="pw">clases</span> al mes · 30 o 45 min</div>
         <div class="price"><span class="v" data-usd="19" data-eur="18">19</span><span class="c">$</span><span class="old"></span></div>
         <div class="total"></div>
         <div class="each">Precio por clase <span class="pe" data-n="8">2.4$</span></div>
-        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Plan de memorización personal tras la evaluación</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Informe semanal para los padres</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Prueba mensual de consolidación</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Certificado por cada sura larga terminada</li></ul>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Evaluación del nivel del alumno y de sus necesidades</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Un plan de aprendizaje adaptado a su nivel y objetivo</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Memorización y repaso según el objetivo del alumno</li></ul>
         <a href="#book" class="btn" data-plan="Inicio">Empezar con una clase gratis</a></div>
 
       <div class="plan pop tilt rv"><span class="shine"></span><span class="badge">La más elegida</span>
-        <span class="who">Ideal para niños de 6 a 14 años</span>
-        <h3>Constancia</h3><div class="sub">3 clases por semana · 12 al mes</div>
+        <span class="who">Aprendizaje más profundo, mayor dominio</span>
+        <h3>Progreso</h3><div class="sub"><span class="pn">10</span> <span class="pw">clases</span> al mes · 45 min</div>
         <div class="price"><span class="v" data-usd="27" data-eur="25">27</span><span class="c">$</span><span class="old"></span></div>
         <div class="total"></div>
-        <div class="each">Precio por clase <span class="pe" data-n="12">2.25$</span></div>
-        <ul><li class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Todo lo de Inicio, y además:</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Audio de la lección para repasar en casa</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Certificado por cada yuz terminado</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Círculo grupal mensual: concursos e historias de los profetas</li></ul>
-        <a href="#book" class="btn" data-plan="Constancia">Empezar con una clase gratis</a></div>
+        <div class="each">Precio por clase <span class="pe" data-n="10">2.7$</span></div>
+        <ul><li class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Todo lo de Inicio, y además:</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Un plan de aprendizaje más amplio, adaptado a este plan</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Repaso acumulativo continuo</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Pruebas periódicas, certificados y premios</li></ul>
+        <div class="xl" data-xl="2"><div class="xl-t"><b>Clases extra</b><small>Cada 4 clases <bdi class="xl-p"></bdi></small></div><div class="stepper sm"><button type="button" data-x="-1" aria-label="Menos">−</button><output>0</output><button type="button" data-x="1" aria-label="Más">+</button></div></div>
+        <a href="#book" class="btn" data-plan="Progreso">Empezar con una clase gratis</a></div>
 
       <div class="plan tilt rv"><span class="shine"></span>
-        <span class="who">Para memorización intensiva y adultos</span>
-        <h3>Hafiz</h3><div class="sub">5 clases por semana · 20 al mes</div>
+        <span class="who">Un camino intensivo hacia una memorización sólida</span>
+        <h3>Hafiz</h3><div class="sub"><span class="pn">14</span> <span class="pw">clases</span> al mes · 45 min</div>
         <div class="price"><span class="v" data-usd="39" data-eur="36">39</span><span class="c">$</span><span class="old"></span></div>
         <div class="total"></div>
-        <div class="each">Precio por clase <span class="pe" data-n="20">1.95$</span></div>
-        <ul><li class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Todo lo de Constancia, y además:</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Plan intensivo con repaso diario</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Prioridad al elegir profesor y horarios</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Seguimiento diario por WhatsApp y preparación para la iyaza</li></ul>
+        <div class="each">Precio por clase <span class="pe" data-n="14">2.8$</span></div>
+        <ul><li class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Todo lo de Progreso, y además:</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Un plan intensivo de memorización y repaso</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Más atención a consolidar lo memorizado y perfeccionar la recitación</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Práctica adicional en los errores y pasajes difíciles</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Seguimiento más cercano con el profesor</li></ul>
+        <div class="xl" data-xl="3"><div class="xl-t"><b>Clases extra</b><small>Cada 4 clases <bdi class="xl-p"></bdi></small></div><div class="stepper sm"><button type="button" data-x="-1" aria-label="Menos">−</button><output>0</output><button type="button" data-x="1" aria-label="Más">+</button></div></div>
         <a href="#book" class="btn" data-plan="Hafiz">Empezar con una clase gratis</a></div>
+    </div>
+    <span hidden id="pwFew">clases</span><span hidden id="pwMany">clases</span>
+
+    <div class="aid rv">
+      <div><b>¿No puedes pagar las cuotas?</b><span>No rechazamos a nadie que quiera memorizar el Libro de Allah. Escríbenos por WhatsApp y encontraremos una solución.</span></div>
+      <a class="pill" id="aidGo" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20quiero%20reservar%20una%20clase%20de%20prueba%20gratis%20en%20Horouf%20Min%20Nour" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+      <span hidden id="aidT">Assalamu alaykum, quiero memorizar el Corán en Horouf Min Nour, pero no puedo pagar la cuota completa.</span>
     </div>
 
     <div class="calc mv" id="calc" data-mv="scale">
@@ -908,18 +972,19 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
         <div class="eyebrow">Calculadora de precio</div>
         <h3>Elige lo que te corresponde y los descuentos se aplican solos</h3>
         <div class="cf"><span class="l">Número de alumnos</span><div class="stepper"><button type="button" data-st="-1" aria-label="Menos">−</button><output id="cN">1</output><button type="button" data-st="1" aria-label="Más">+</button></div></div>
-        <div class="cf"><span class="l">Plan</span><div class="seg2" id="cPlan"><button type="button" data-p="1" data-plan="Inicio">Inicio<small>8</small></button><button type="button" class="on" data-p="2" data-plan="Constancia">Constancia<small>12</small></button><button type="button" data-p="3" data-plan="Hafiz">Hafiz<small>20</small></button></div></div>
+        <div class="cf"><span class="l">Plan</span><div class="seg2" id="cPlan"><button type="button" data-p="1" data-plan="Inicio">Inicio<small>8</small></button><button type="button" class="on" data-p="2" data-plan="Progreso">Progreso<small>10</small></button><button type="button" data-p="3" data-plan="Hafiz">Hafiz<small>14</small></button></div></div>
         <div class="cf"><span class="l">Duración de la clase</span><div class="seg2" id="cDur"><button type="button" class="on" data-d="30">30 min</button><button type="button" data-d="45">45 min<small>+40%</small></button></div></div>
+        <div class="cf" id="cExW"><span class="l">Clases extra</span><div class="stepper"><button type="button" data-ex="-1" aria-label="Menos">−</button><output id="cEx">0</output><button type="button" data-ex="1" aria-label="Más">+</button></div></div>
         <div class="cf"><span class="l">Pago</span><div class="seg2" id="cBill"><button type="button" class="on" data-b="m">Mensual</button><button type="button" data-b="q">Cada 3 meses<small>−10%</small></button></div></div>
         <div class="cf"><label class="sw2"><input type="checkbox" id="cNew" checked><i></i><span>Alumno nuevo: 20 % de descuento el primer mes</span></label></div>
-        <span hidden data-k="student">Alumno</span><span hidden data-k="sib">descuento hermanos</span><span hidden data-k="q">Descuento por pago trimestral</span><span hidden data-k="launch">Oferta de lanzamiento (primer mes)</span>
+        <span hidden data-k="student">Alumno</span><span hidden data-k="sib">descuento hermanos</span><span hidden data-k="q">Descuento por pago trimestral</span><span hidden data-k="launch">Oferta de lanzamiento (primer mes)</span><span hidden data-k="extra">Clases extra</span>
       </div>
       <div class="rcpt" aria-live="polite">
         <div id="cLines"></div>
         <div class="tot"><span>Total al mes</span><div><strong id="cTot">0</strong><em id="cCur"></em></div></div>
         <div class="now"><span>Pagas ahora</span><b id="cNow"></b></div>
         <div class="saved" id="cSaveW"><span>Ahorras</span><b id="cSave"></b></div>
-        <a href="#book" class="btn" id="cGo" data-plan="Constancia">Reservar con esta selección</a>
+        <a href="#book" class="btn" id="cGo" data-plan="Progreso">Reservar con esta selección</a>
         <small>Precio orientativo, se confirma tras la clase de prueba gratuita.</small>
       </div>
       <div class="calc-custom"><b>Plan a medida</b><span>¿Otro número de clases u horarios especiales? Escríbenos y diseñamos un plan para ti.</span></div>
@@ -992,7 +1057,7 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
             <label class="bk-l">Profesor</label>
             <div class="opts o3 sm" data-name="teacher"><button type="button" data-v="معلّمة">Profesora</button><button type="button" data-v="معلّم">Profesor</button><button type="button" data-v="لا يهم" class="on">Me da igual</button></div>
           </div>
-          <div class="field bk-sub"><label for="fplan">Plan que te interesa <small class="muted">(opcional)</small></label><select id="fplan" name="plan"><option>Aún no lo sé</option><option>Inicio</option><option>Constancia</option><option>Hafiz</option></select></div>
+          <div class="field bk-sub"><label for="fplan">Plan que te interesa <small class="muted">(opcional)</small></label><select id="fplan" name="plan"><option>Aún no lo sé</option><option>Inicio</option><option>Progreso</option><option>Hafiz</option></select></div>
         </div>
 
         <div class="bk-page" data-step="3">
@@ -1059,8 +1124,8 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
         <div class="lng lng-f" style="display:inline-flex;margin:4px 0 14px"><a href="./" hreflang="ar" lang="ar" data-l="ar">ع</a><a href="fr.html" hreflang="fr" lang="fr" data-l="fr">FR</a><a href="en.html" hreflang="en" lang="en" data-l="en">EN</a><a href="es.html" hreflang="es" lang="es" data-l="es" class="on" aria-current="page">ES</a></div>
         <div class="social">
           <a href="https://instagram.com/horoufnour" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></a>
-          <a href="https://www.tiktok.com/@horoufnour" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3c.4 2.6 2 4.2 4.5 4.5v3.3c-1.7 0-3.2-.5-4.5-1.4V15a6 6 0 1 1-6-6v3.4a2.6 2.6 0 1 0 2.6 2.6V3z"/></svg></a>
-          <a href="https://facebook.com/horoufnour" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="https://www.tiktok.com/@huroof_min_noor_academy" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3c.4 2.6 2 4.2 4.5 4.5v3.3c-1.7 0-3.2-.5-4.5-1.4V15a6 6 0 1 1-6-6v3.4a2.6 2.6 0 1 0 2.6 2.6V3z"/></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=61596321005461" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
           <a href="https://x.com/horoufnour" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20" /></svg></a>
           <a href="https://snapchat.com/add/horoufnour" target="_blank" rel="noopener" aria-label="Snapchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c3 0 5 2.2 5 5.2v2.3l1.8-.6c.6 0 .9.6.4 1l-2 1.1c.6 1.9 2 3.2 3.8 3.7-.3.8-1.6 1-2.6 1.1l-.4 1.3c-1.3-.2-2.4.1-3.6 1-.8.6-1.6.9-2.4.9s-1.6-.3-2.4-.9c-1.2-.9-2.3-1.2-3.6-1l-.4-1.3c-1-.1-2.3-.3-2.6-1.1 1.8-.5 3.2-1.8 3.8-3.7l-2-1.1c-.5-.4-.2-1 .4-1l1.8.6V8.2C7 5.2 9 3 12 3z"/></svg></a>
         </div></div>
@@ -1178,18 +1243,24 @@ function animNum(el,to){
   requestAnimationFrame(step);
 }
 function curSym(code){const c=CUR[code]||CUR.USD;return (document.documentElement.lang||'ar')==='ar'?c[0]:c[1]}
+/* حصص إضافية للارتقاء والحافظ: 4 في كل مرة */
+const EX={2:0,3:0};
 function renderPrices(){
-  const P=prOf(pcIso),sym=curSym(P[0]),sp=sym.length>1?' ':'';
+  const P=prOf(pcIso),sym=curSym(P[0]),sp=sym.length>1?' ':'',a4=add4Of(P);
   $$('#pricing .plan').forEach((p,i)=>{
-    const v=$('.v',p),base=P[i+1],n=+$('.pe',p).dataset.n;
+    const v=$('.v',p),ex=EX[i+1]||0,base=P[i+1]+ex/EX_STEP*a4,n=PLAN_N[i+1]+ex;
     const monthly=bill==='q'?niceP(base*.9):base;
     animNum(v,monthly);
     $('.c',p).textContent=sp+sym;
     const old=$('.old',p);old.textContent=fmtP(base)+sp+sym;old.classList.toggle('show',bill==='q');
     $('.total',p).textContent=bill==='q'?`Pagas ${fmtP(niceP(monthly*3))}${sp}${sym} cada 3 meses en lugar de ${fmtP(base*3)}${sp}${sym}`:'Pago mensual · cancela cuando quieras';
     const per=monthly/n;$('.pe',p).textContent=fmtP(per>=20?Math.round(per):Math.round(per*100)/100)+sp+sym;
+    const pn=$('.pn',p);if(pn){pn.textContent=n;const w=$('.pw',p),few=$('#pwFew'),many=$('#pwMany');if(w&&few&&many)w.textContent=(n>=3&&n<=10?few:many).textContent}
+    const xl=$('.xl',p);if(xl){$('output',xl).textContent=ex?'+'+ex:'0';$('.xl-p',xl).textContent='+'+fmtP(a4)+sp+sym;xl.classList.toggle('on',ex>0);
+      $('[data-x="-1"]',xl).disabled=ex<=0;$('[data-x="1"]',xl).disabled=ex>=EX_MAX}
   });
 }
+$$('#pricing .xl').forEach(xl=>xl.addEventListener('click',e=>{const b=e.target.closest('[data-x]');if(!b)return;const i=+xl.dataset.xl;EX[i]=Math.min(EX_MAX,Math.max(0,EX[i]+ +b.dataset.x*EX_STEP));renderPrices()}));
 $$('#billT button').forEach(b=>b.onclick=()=>{bill=b.dataset.bill;$$('#billT button').forEach(x=>x.classList.toggle('on',x===b));renderPrices()});
 
 /* ---------- countries + phone with country code ---------- */
@@ -1205,18 +1276,24 @@ const guessCC=(()=>{try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZon
 
 /* ---------- regional prices: one table for the site and the app ----------
    CUR: [رمز العملة بالعربية, رمز العملة اللاتيني, قيمة الوحدة بالdólar تقريباً (لحساب أجر المعلم)]
-   PR:  دولة → [العملة, باقة 8 حصص, باقة 12, باقة 20, الفئة] — الفئة A: أفريقيا والدول العربية غير الخليجية، G: الخليج، E: أوروبا وباقي العالم */
+   PR:  دولة → [العملة, البداية 8 حصص × 30 د, الارتقاء 10 حصص × 45 د, الحافظ 14 حصة × 45 د, الفئة, (اختياري) سعر 4 حصص إضافية]
+        الفئة A: أفريقيا والدول العربية غير الخليجية، G: الخليج، E: أوروبا وباقي العالم */
 const CUR={MAD:['درهم','MAD',0.1],DZD:['دج','DZD',0.0074],TND:['د.ت','TND',0.32],LYD:['د.ل','LYD',0.2],EGP:['جنيه','EGP',0.0205],MRU:['أوقية','MRU',0.025],JOD:['دينار','JOD',1.41],IQD:['د.ع','IQD',0.00076],
 SAR:['ريال','SAR',0.2667],AED:['درهم','AED',0.2723],QAR:['ريال','QAR',0.2747],KWD:['د.ك','KWD',3.25],BHD:['د.ب','BHD',2.66],OMR:['ر.ع','OMR',2.6],
 EUR:['€','€',1.08],GBP:['£','£',1.27],CHF:['CHF','CHF',1.13],SEK:['kr','SEK',0.095],NOK:['kr','NOK',0.093],DKK:['kr','DKK',0.145],USD:['$','$',1],CAD:['CA$','CA$',0.73],AUD:['A$','A$',0.65]};
 const PLOW=['USD',10,15,22,'A'],PREST=['USD',19,27,39,'E'];
 const PR={MA:['MAD',100,150,220,'A'],DZ:['DZD',1400,2000,3000,'A'],TN:['TND',30,45,70,'A'],LY:['LYD',50,75,110,'A'],EG:['EGP',500,750,1100,'A'],MR:['MRU',400,600,900,'A'],SD:PLOW,
 JO:['JOD',7,11,16,'A'],IQ:['IQD',13000,20000,29000,'A'],PS:PLOW,LB:PLOW,SY:PLOW,YE:PLOW,SN:PLOW,ML:PLOW,CI:PLOW,NG:PLOW,ZA:PLOW,TR:PLOW,MY:PLOW,ID:PLOW,PK:PLOW,IN:PLOW,
-SA:['SAR',79,119,169,'G'],AE:['AED',55,80,120,'G'],QA:['QAR',55,80,115,'G'],KW:['KWD',4.5,7,10,'G'],BH:['BHD',6,8.5,12,'G'],OM:['OMR',6,8.5,12,'G'],
+SA:['SAR',99,149,199,'G',40],AE:['AED',99,149,199,'G',40],QA:['QAR',99,149,199,'G',40],KW:['KWD',8,12,16,'G',3.5],BH:['BHD',10,15,20,'G',4],OM:['OMR',10,15,20,'G',4],
 FR:['EUR',27,39,55,'E'],BE:['EUR',27,39,55,'E'],NL:['EUR',27,39,55,'E'],DE:['EUR',27,39,55,'E'],ES:['EUR',27,39,55,'E'],IT:['EUR',27,39,55,'E'],IE:['EUR',27,39,55,'E'],AT:['EUR',27,39,55,'E'],LU:['EUR',27,39,55,'E'],PT:['EUR',27,39,55,'E'],FI:['EUR',27,39,55,'E'],
 GB:['GBP',22,32,45,'E'],CH:['CHF',27,39,55,'E'],SE:['SEK',300,430,600,'E'],NO:['NOK',300,430,600,'E'],DK:['DKK',200,290,410,'E'],US:['USD',19,27,39,'E'],CA:['CAD',26,37,54,'E'],AU:['AUD',29,41,59,'E'],RU:PREST,XX:PREST};
 const prOf=iso=>PR[iso]||PREST;
 const PLAN_IDX={start:1,steady:2,hafiz:3};
+/* الباقات: عدد الحصص الmensualة ومدة الحصة. البداية 30 دقيقة (أو 45 مقابل +40%) ولا تقبل حصصاً إضافية؛
+   الارتقاء والحافظ دائماً 45 دقيقة، ويمكن زيادة الحصص 4 في كل مرة */
+const PLAN_N=[0,8,10,14],PLAN_DUR=[0,30,45,45],D45=1.4,EX_STEP=4,EX_MAX=12;
+const nice4=v=>v>=1000?Math.round(v/50)*50:v>=40?Math.round(v/5)*5:v>=10?Math.round(v):Math.round(v*2)/2;
+const add4Of=P=>P[5]||nice4(P[2]*.31);
 /* سعر مرتّب: خصم 10% للدفع cada 3 meses مع تقريب مناسب لكل عملة */
 const niceP=v=>v>=1000?Math.round(v/50)*50:v>=100?Math.round(v/5)*5:v>=20?Math.round(v):Math.round(v*2)/2;
 const fmtP=v=>Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(1).replace(/\.0$/,'');
@@ -1361,23 +1438,33 @@ if(C){
   const rr=v=>v>=100?Math.round(v):Math.round(v*2)/2,pc=n=>'<bdi dir="ltr">−'+Math.round(n)+'%</bdi>';
   function calcRender(){
     const P=prOf(pcIso),sym=curSym(P[0]),sp=sym.length>1?' ':'',f=v=>fmtP(rr(v))+sp+sym;
-    const base=P[st.plan]*(st.dur===45?1.4:1),q=bill==='q',lz=$('#cNew').checked;let rows=[],sum=0;
+    const fix=PLAN_DUR[st.plan]===45,ex=EX[st.plan]||0,exAmt=ex/EX_STEP*add4Of(P);
+    /* الارتقاء والحافظ: 45 دقيقة دائماً بلا زيادة؛ البداية: 30 أو 45 (+40%) */
+    const d30=$('#cDur [data-d="30"]'),d45=$('#cDur [data-d="45"]');d30.hidden=fix;d45.classList.toggle('fix',fix);d30.classList.toggle('on',!fix&&st.dur===30);d45.classList.toggle('on',fix||st.dur===45);
+    $('#cExW').hidden=!fix;$('#cEx').textContent=ex?'+'+ex:'0';$('[data-ex="-1"]',C).disabled=ex<=0;$('[data-ex="1"]',C).disabled=ex>=EX_MAX;
+    const base=P[st.plan]*(!fix&&st.dur===45?D45:1),q=bill==='q',lz=$('#cNew').checked;let rows=[],sum=0;
     for(let i=0;i<st.n;i++){const d=i===0?0:i===1?.15:.2,v=base*(1-d);sum+=v;rows.push([L('student')+' '+(i+1)+(d?' · '+L('sib')+' '+pc(d*100):''),f(v),d?'d':''])}
+    if(ex){sum+=exAmt*st.n;rows.push([L('extra')+' <bdi dir="ltr">+'+ex+'</bdi>'+(st.n>1?' × '+st.n:''),'+'+f(exAmt*st.n),''])}
     let month=sum;if(q){rows.push([L('q')+' '+pc(10),'−'+f(sum*.1),'d']);month=sum*.9}
     const months=q?3:1;let now=month*months;if(lz){rows.push([L('launch')+' '+pc(20),'−'+f(month*.2),'d']);now-=month*.2}
-    const saved=base*st.n*months-now;
+    const saved=(base+exAmt)*st.n*months-now;
     $('#cLines').innerHTML=rows.map(r=>`<div class="rl ${r[2]}"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
     animNum($('#cTot'),rr(month));$('#cCur').textContent=sym;$('#cNow').textContent=f(now);
     $('#cSave').textContent=f(saved);$('#cSaveW').style.display=rr(saved)>0?'':'none';$('#cN').textContent=st.n;
     $$('#cBill button').forEach(b=>b.classList.toggle('on',b.dataset.b===bill));
     const pb=$('#cPlan .on');$('#cGo').dataset.plan=pb.dataset.plan}
   const seg=(id,fn)=>$(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('button',$(id)).forEach(x=>x.classList.toggle('on',x===b));fn(b);calcRender()});
-  seg('#cPlan',b=>st.plan=+b.dataset.p);seg('#cDur',b=>st.dur=+b.dataset.d);
+  seg('#cPlan',b=>st.plan=+b.dataset.p);seg('#cDur',b=>{if(PLAN_DUR[st.plan]!==45)st.dur=+b.dataset.d});
+  $$('[data-ex]',C).forEach(b=>b.onclick=()=>{EX[st.plan]=Math.min(EX_MAX,Math.max(0,(EX[st.plan]||0)+ +b.dataset.ex*EX_STEP));renderPrices()});
   $('#cBill').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const t=$('#billT [data-bill="'+b.dataset.b+'"]');t&&t.click()});
   $$('[data-st]',C).forEach(b=>b.onclick=()=>{st.n=Math.min(6,Math.max(1,st.n+ +b.dataset.st));calcRender()});
   $('#cNew').onchange=calcRender;
   const _rp=renderPrices;renderPrices=function(){_rp();calcRender()};calcRender();
   $$('#pricing .plan').forEach((p,i)=>p.addEventListener('click',e=>{if(e.target.closest('a'))return;const b=$('#cPlan [data-p="'+(i+1)+'"]');b&&b.click()}));
+  /* زر الباقة نفسه: يحمل الحصص الإضافية إلى نموذج الحجز */
+  $$('#pricing .plan').forEach((p,i)=>{const a=$('a.btn',p);a&&a.addEventListener('click',()=>{const ex=EX[i+1]||0,t=$('#fmsg');if(ex&&t){t.value=a.dataset.plan+' · '+L('extra')+' +'+ex;const dt=t.closest('details');if(dt)dt.open=true}})});
+  /* غير المقتدرين: رسالة واتساب جاهزة */
+  const ag=$('#aidGo'),at=$('#aidT');if(ag&&at)ag.href='https://wa.me/'+WA+'?text='+encodeURIComponent(at.textContent);
   $('#cGo').addEventListener('click',()=>{const pb=$('#cPlan .on');chosenPlan=pb.dataset.plan;const sl=$('#fplan');if(sl)sl.value=chosenPlan;
     const t=$('#fmsg');if(t){const lines=$$('#cLines .rl').map(r=>r.children[0].textContent+': '+r.children[1].textContent);
       lines.unshift(pb.firstChild.textContent+' · '+$('#cDur .on').firstChild.textContent+' · '+$('#cBill .on').firstChild.textContent);
@@ -1402,7 +1489,7 @@ if($('#c3d')){if(document.readyState==='complete')setTimeout(load3d,300);else ad
 })();
 
 /* الهاتف: الباقات تُسحب أفقياً، ونبدأ من الأكثر اختياراً */
-(function(){const pl=$('.plans');if(!pl||!matchMedia('(max-width:640px)').matches)return;const cs=$$('.plan',pl),h=document.createElement('div');h.className='plans-hint';h.setAttribute('aria-hidden','true');h.innerHTML=cs.map(()=>'<i></i>').join('');pl.after(h);
+(function(){const pl=$('.plans');if(!pl||!matchMedia('(max-width:759px)').matches)return;const cs=$$('.plan',pl),h=document.createElement('div');h.className='plans-hint';h.setAttribute('aria-hidden','true');h.innerHTML=cs.map(()=>'<i></i>').join('');pl.after(h);
   const upd=()=>{const m=pl.getBoundingClientRect(),mid=m.left+m.width/2;let bi=0,bd=1e9;cs.forEach((c,i)=>{const r=c.getBoundingClientRect(),d=Math.abs(r.left+r.width/2-mid);if(d<bd){bd=d;bi=i}});[...h.children].forEach((x,i)=>x.classList.toggle('on',i===bi))};
   pl.addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true});
   const pop=$('.plan.pop',pl);if(pop){const m=pl.getBoundingClientRect(),r=pop.getBoundingClientRect();pl.scrollLeft+=r.left+r.width/2-(m.left+m.width/2)}upd()})();

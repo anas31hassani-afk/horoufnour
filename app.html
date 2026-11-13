@@ -519,7 +519,7 @@ const TRL=[
 ['بعد التحويل اضغطوا «أرسلتُ المبلغ». تتأكد الإدارة من وصوله ثم تتجدد الباقة. صورة الإيصال تُرسل على واتساب الأكاديمية.','Après le virement, appuyez sur « J\'ai envoyé le montant ». L\'académie vérifie la réception puis renouvelle la formule. Envoyez la photo du reçu sur le WhatsApp de l\'académie.','After the transfer, tap "I have sent the amount". The academy checks it has arrived, then renews your plan. Send the receipt photo to the academy WhatsApp.'],
 ['تتأكد الإدارة من وصول المبلغ ثم تتجدد الباقة.','L\'académie vérifie la réception puis renouvelle la formule.','The academy checks it has arrived, then renews your plan.'],
 ['عرض الانطلاق','Offre de lancement','Launch offer'],['خصم 20% على الشهر الأول','20 % de réduction le premier mois','20% off the first month'],
-['البداية','Début','Start'],['المثابرة','Persévérance','Steady'],['الحافظ','Hafiz','Hafiz'],['باقة خاصة','Formule sur mesure','Custom plan'],
+['البداية','Début','Start'],['المثابرة','Persévérance','Steady'],['الارتقاء','Progression','Advance'],['الحافظ','Hafiz','Hafiz'],['باقة خاصة','Formule sur mesure','Custom plan'],
 ['التأسيس والقاعدة النورانية','Bases et Qaida Nouraniya','Foundations and Noorani Qaida'],['تحفيظ الأطفال','Mémorisation enfants','Kids memorisation'],['تحفيظ الكبار','Mémorisation adultes','Adults memorisation'],['التجويد وتصحيح التلاوة','Tajwid et correction de la récitation','Tajweed and recitation correction'],['المراجعة والتثبيت','Révision et consolidation','Revision and consolidation'],['الإجازة','Ijaza','Ijazah'],
 ['تم تسجيل الاعتذار ✓','Annulation enregistrée ✓','Cancellation recorded ✓'],['أُلغي الاعتذار ✓','Annulation retirée ✓','Cancellation removed ✓'],['اختاروا طريقة الدفع أولاً','Choisissez d\'abord un moyen de paiement','Choose a payment method first'],['نُسخت بيانات الدفع ✓','Coordonnées copiées ✓','Payment details copied ✓'],['وصل إشعاركم ✓ تؤكّده الإدارة قريباً','Avis reçu ✓ L\'académie le confirme bientôt','Notice received ✓ The academy will confirm soon'],
 ['تعذّر الإرسال','Envoi impossible','Could not send'],['تعذّر الإرسال، تحقق من الإنترنت','Envoi impossible, vérifiez votre connexion','Could not send, check your connection'],['تعذّر الإرسال، حاولوا مرة أخرى','Envoi impossible, réessayez','Could not send, please try again'],['تعذّر التراجع، راسلونا على واتساب','Impossible de rétablir, écrivez-nous sur WhatsApp','Could not undo, message us on WhatsApp'],['تعذّر التسجيل، راسلونا على واتساب','Enregistrement impossible, écrivez-nous sur WhatsApp','Could not record it, message us on WhatsApp'],['تعذّر الحفظ، حاول مرة أخرى','Enregistrement impossible, réessayez','Could not save, try again'],['تعذّر تحميل المصحف. تحقق من الإنترنت.','Impossible de charger le Coran. Vérifiez votre connexion.','Could not load the Quran. Check your connection.'],
@@ -794,18 +794,24 @@ const guessCC=(()=>{try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZon
 
 /* ---------- regional prices: one table for the site and the app ----------
    CUR: [رمز العملة بالعربية, رمز العملة اللاتيني, قيمة الوحدة بالدولار تقريباً (لحساب أجر المعلم)]
-   PR:  دولة → [العملة, باقة 8 حصص, باقة 12, باقة 20, الفئة] — الفئة A: أفريقيا والدول العربية غير الخليجية، G: الخليج، E: أوروبا وباقي العالم */
+   PR:  دولة → [العملة, البداية 8 حصص × 30 د, الارتقاء 10 حصص × 45 د, الحافظ 14 حصة × 45 د, الفئة, (اختياري) سعر 4 حصص إضافية]
+        الفئة A: أفريقيا والدول العربية غير الخليجية، G: الخليج، E: أوروبا وباقي العالم */
 const CUR={MAD:['درهم','MAD',0.1],DZD:['دج','DZD',0.0074],TND:['د.ت','TND',0.32],LYD:['د.ل','LYD',0.2],EGP:['جنيه','EGP',0.0205],MRU:['أوقية','MRU',0.025],JOD:['دينار','JOD',1.41],IQD:['د.ع','IQD',0.00076],
 SAR:['ريال','SAR',0.2667],AED:['درهم','AED',0.2723],QAR:['ريال','QAR',0.2747],KWD:['د.ك','KWD',3.25],BHD:['د.ب','BHD',2.66],OMR:['ر.ع','OMR',2.6],
 EUR:['€','€',1.08],GBP:['£','£',1.27],CHF:['CHF','CHF',1.13],SEK:['kr','SEK',0.095],NOK:['kr','NOK',0.093],DKK:['kr','DKK',0.145],USD:['$','$',1],CAD:['CA$','CA$',0.73],AUD:['A$','A$',0.65]};
 const PLOW=['USD',10,15,22,'A'],PREST=['USD',19,27,39,'E'];
 const PR={MA:['MAD',100,150,220,'A'],DZ:['DZD',1400,2000,3000,'A'],TN:['TND',30,45,70,'A'],LY:['LYD',50,75,110,'A'],EG:['EGP',500,750,1100,'A'],MR:['MRU',400,600,900,'A'],SD:PLOW,
 JO:['JOD',7,11,16,'A'],IQ:['IQD',13000,20000,29000,'A'],PS:PLOW,LB:PLOW,SY:PLOW,YE:PLOW,SN:PLOW,ML:PLOW,CI:PLOW,NG:PLOW,ZA:PLOW,TR:PLOW,MY:PLOW,ID:PLOW,PK:PLOW,IN:PLOW,
-SA:['SAR',79,119,169,'G'],AE:['AED',55,80,120,'G'],QA:['QAR',55,80,115,'G'],KW:['KWD',4.5,7,10,'G'],BH:['BHD',6,8.5,12,'G'],OM:['OMR',6,8.5,12,'G'],
+SA:['SAR',99,149,199,'G',40],AE:['AED',99,149,199,'G',40],QA:['QAR',99,149,199,'G',40],KW:['KWD',8,12,16,'G',3.5],BH:['BHD',10,15,20,'G',4],OM:['OMR',10,15,20,'G',4],
 FR:['EUR',27,39,55,'E'],BE:['EUR',27,39,55,'E'],NL:['EUR',27,39,55,'E'],DE:['EUR',27,39,55,'E'],ES:['EUR',27,39,55,'E'],IT:['EUR',27,39,55,'E'],IE:['EUR',27,39,55,'E'],AT:['EUR',27,39,55,'E'],LU:['EUR',27,39,55,'E'],PT:['EUR',27,39,55,'E'],FI:['EUR',27,39,55,'E'],
 GB:['GBP',22,32,45,'E'],CH:['CHF',27,39,55,'E'],SE:['SEK',300,430,600,'E'],NO:['NOK',300,430,600,'E'],DK:['DKK',200,290,410,'E'],US:['USD',19,27,39,'E'],CA:['CAD',26,37,54,'E'],AU:['AUD',29,41,59,'E'],RU:PREST,XX:PREST};
 const prOf=iso=>PR[iso]||PREST;
 const PLAN_IDX={start:1,steady:2,hafiz:3};
+/* الباقات: عدد الحصص الشهرية ومدة الحصة. البداية 30 دقيقة (أو 45 مقابل +40%) ولا تقبل حصصاً إضافية؛
+   الارتقاء والحافظ دائماً 45 دقيقة، ويمكن زيادة الحصص 4 في كل مرة */
+const PLAN_N=[0,8,10,14],PLAN_DUR=[0,30,45,45],D45=1.4,EX_STEP=4,EX_MAX=12;
+const nice4=v=>v>=1000?Math.round(v/50)*50:v>=40?Math.round(v/5)*5:v>=10?Math.round(v):Math.round(v*2)/2;
+const add4Of=P=>P[5]||nice4(P[2]*.31);
 /* سعر مرتّب: خصم 10% للدفع كل 3 أشهر مع تقريب مناسب لكل عملة */
 const niceP=v=>v>=1000?Math.round(v/50)*50:v>=100?Math.round(v/5)*5:v>=20?Math.round(v):Math.round(v*2)/2;
 const fmtP=v=>Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(1).replace(/\.0$/,'');
@@ -851,7 +857,7 @@ const ccOptsApp=sel=>{const i=isoOf(sel);return (i==='XX'&&sel&&!/^[A-Za-z]{2}$/
 const tzFor=iso=>{const city=Object.keys(TZC).find(k=>TZC[k]===iso);return city?(TZS.find(z=>z.endsWith('/'+city))||''):''};
 /* سعر الطالب الشهري بعملته */
 function stPrice(s){const c=curK(s.currency);if(+s.price>0)return{v:+s.price,c};const i=PLAN_IDX[s.plan];
-  if(i){const r=prOf(isoOf(s.country)||'XX');if(r[0]===c)return{v:r[i],c};const P=(DB&&DB.plans||{})[s.plan];if(c==='EUR'&&P)return{v:P.eur,c}}
+  if(i){const r=prOf(isoOf(s.country)||'XX');if(r[0]===c)return{v:r[i]+extraOf(s)/EX_STEP*add4Of(r),c};const P=(DB&&DB.plans||{})[s.plan];if(c==='EUR'&&P)return{v:P.eur,c}}
   return{v:+s.priceUsd||((DB&&DB.plans||{})[s.plan]||{}).usd||0,c:'USD'}}
 /* مجموع مبالغ بعملات مختلفة: «1,500 درهم · 25€» + ما يعادلها بالدولار */
 function sumCur(rows){const by={};rows.forEach(x=>{const k=curK(x.currency);by[k]=(by[k]||0)+ +x.amount});const usd=Object.entries(by).reduce((a,[k,v])=>a+usdOf(v,k),0);return{by,usd,txt:Object.entries(by).map(([k,v])=>money(v,k)).join(' · ')||money(0)}}
@@ -870,8 +876,12 @@ const rr=v=>v>=100?Math.round(v):Math.round(v*2)/2;
 const DEALS=[['d45','حصة 45 دقيقة','+40%'],['sib15','الأخ الثاني','−15%'],['sib20','الأخ الثالث فأكثر','−20%'],['q','الدفع كل 3 أشهر','−10%'],['launch','عرض الانطلاق، الشهر الأول','−20%']];
 const dealSet=s=>new Set(String(s&&s.deal||'').split(',').filter(Boolean).concat(String(s&&s.dur)==='45'?['d45']:[]));
 const dealPrice=(base,set)=>rr(base*(set.has('d45')?1.4:1)*(1-(set.has('sib20')?.2:set.has('sib15')?.15:0)));
-const dealTxt=s=>{const set=dealSet(s);return DEALS.filter(d=>set.has(d[0])).map(d=>d[1]+' '+d[2]).join(' · ')};
-const lessonMin=s=>String(s&&s.dur)==='45'?45:30;
+/* الارتقاء والحافظ: 45 دقيقة دائماً (بلا زيادة)، والحصص الإضافية 4 في كل مرة */
+const fixed45=p=>PLAN_DUR[PLAN_IDX[p]]===45;
+const planN=p=>PLAN_N[PLAN_IDX[p]]||((typeof DB!=='undefined'&&DB&&DB.plans||{})[p]||{}).n||0;
+const extraOf=s=>{const x=(+s.sessions||0)-planN(s.plan);return fixed45(s.plan)&&x>0?Math.min(EX_MAX,Math.round(x/EX_STEP)*EX_STEP):0};
+const dealTxt=s=>{const set=dealSet(s);if(fixed45(s&&s.plan))set.delete('d45');return DEALS.filter(d=>set.has(d[0])).map(d=>d[1]+' '+d[2]).join(' · ')};
+const lessonMin=s=>String(s&&s.dur)==='45'||fixed45(s&&s.plan)?45:30;
 /* ما يُدفع الآن: p فيه price,currency,plan,country,deal,dur,count,sessions */
 function dueOf(p){const sp=stPrice(p),set=dealSet(p),q=set.has('q'),month=q?rr(sp.v*.9):sp.v,months=q?3:1,launch=set.has('launch')&&!(+p.count>0);
   const n=(+p.sessions||((typeof DB!=='undefined'&&DB&&DB.plans||{})[p.plan]||{}).n||0)*months;
@@ -1042,7 +1052,7 @@ function feed(){
 const repRemind=it=>`السلام عليكم ${it.t?it.t.name:''}، تذكير لطيف: تقرير حصة ${it.s.name} (${dayHm(it.o.ms)}) لم يُسجّل بعد. سجّله من صفحتك ليصل لولي الأمر:\n${it.t?tLink(it.t):''}\nجزاك الله خيراً.`;
 const renewMsg=s=>{const p=stPrice(s);return `السلام عليكم ${s.parentName||''}، جزاكم الله خيراً على متابعة ${s.name}. ${s.cycle&&s.cycle.left?'بقيت حصة واحدة في باقة هذا الشهر':'انتهت حصص باقة هذا الشهر'}، ويسعدنا تجديدها (${planLabel(s)}: ${money(dueOf(Object.assign({},s,{count:1})).now,p.c)}${dealSet(s).has('q')?' عن 3 أشهر':''}) لتستمر رحلته مع القرآن.`};
 function offerMsg(s){const r=prOf(isoOf(s.country)||'XX');const L=[`السلام عليكم ${s.parentName||''}، الحمد لله تمت الحصة التجريبية لـ ${s.name}، ونرجو أن تكون نالت إعجابكم.`,'','باقاتنا الشهرية:'];
-  Object.entries(DB.plans).forEach(([k,P])=>L.push(`• ${P.name}: ${P.n} حصص — ${money(r[PLAN_IDX[k]],r[0])}`));L.push('• خصم 10% عند الدفع كل 3 أشهر','','أي باقة تناسبكم لنثبّت المواعيد مع المعلم؟');return L.join('\n')}
+  Object.entries(DB.plans).forEach(([k,P])=>{const n=planN(k);L.push(`• ${P.name}: ${n} ${n>2&&n<11?'حصص':'حصة'} × ${fixed45(k)?'45 دقيقة':'30 دقيقة (أو 45 مقابل +40%)'} — ${money(r[PLAN_IDX[k]],r[0])}`)});L.push(`• في الارتقاء والحافظ يمكن زيادة 4 حصص مقابل ${money(add4Of(r),r[0])}`,'• خصم 10% عند الدفع كل 3 أشهر','','أي باقة تناسبكم لنثبّت المواعيد مع المعلم؟');return L.join('\n')}
 /* الإجراء الرئيسي لكل بند */
 function mainAct(it){
   switch(it.k){
@@ -1189,10 +1199,10 @@ function welcomeMsg(st){
   L.push('','*الغياب والتعويض*','• أخبرونا قبل 6 ساعات على الأقل نعوّض الحصة.','• الغياب دون إشعار تُحتسب فيه الحصة.','• إن غاب المعلم نعوّض الحصة دائماً.','','عشر دقائق مراجعة يومياً تضاعف التقدّم بإذن الله.','بارك الله فيكم.');
   return L.join('\n');
 }
-function planLabel(s){const P=DB.plans[s.plan];return P?P.name:(s.plan==='custom'?`خاصة ${s.sessions||''} حصة`:'بلا باقة')}
+function planLabel(s){const P=DB.plans[s.plan],x=extraOf(s);return P?P.name+(x?' +'+x+' حصص':''):(s.plan==='custom'?`خاصة ${s.sessions||''} حصة`:'بلا باقة')}
 /* أجر المعلم للحصة: نسبة من سعر الحصة تتبع الباقة، بحد أدنى إلا في دول الفئة المنخفضة */
 const SHARE0={start:.35,steady:.3,hafiz:.25};
-const shareOf=(plan,n)=>{const k=DB.plans[plan]?plan:(n<=8?'start':n<=12?'steady':'hafiz');return +((DB.settings||{}).shares||{})[k]||SHARE0[k]};
+const shareOf=(plan,n)=>{const k=DB.plans[plan]?plan:(n<=8?'start':n<=13?'steady':'hafiz');return +((DB.settings||{}).shares||{})[k]||SHARE0[k]};
 const tPay=(usd,n,iso,plan)=>Math.max(prOf(iso||'XX')[4]==='A'?0:+(DB.settings||{}).floor||1.1,usd/(n||8)*shareOf(plan,n||8));
 function studentForm(s){
   const isNew=!s.id,set=dealSet(s),MULTI=['US','CA','AU','RU','ID'];
@@ -1203,6 +1213,7 @@ function studentForm(s){
   <div class="f2"><div class="field"><label>البلد</label><select name="country">${ccOptsApp(s.country||isoByPhone(s.phone))}</select></div><div class="field"><label>المعلم</label><select name="teacherId"><option value="">— اختر —</option>${DB.teachers.filter(t=>t.status!=='متوقف').map(t=>`<option value="${t.id}" ${t.id===s.teacherId?'selected':''}>${esc(t.name)}</option>`).join('')}</select></div></div>
   <div class="f2"><div class="field"><label>البرنامج</label><select name="program">${PROGRAMS.map(x=>`<option ${x===s.program?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>الباقة</label><select name="plan"></select></div></div>
   <div class="field"><label>المدة والخصومات</label><div class="fchips" style="flex-wrap:wrap" id="deals">${DEALS.map(d=>`<button type="button" data-d="${d[0]}">${d[1]} <bdi dir="ltr">${d[2]}</bdi></button>`).join('')}</div><p class="small muted" id="sibH" style="margin:6px 0 0"></p></div>
+  <div class="field" id="exF"><label>حصص إضافية <span class="muted" id="exH"></span></label><select name="extra">${[0,4,8,12].map(x=>`<option value="${x}" ${x===extraOf(s)?'selected':''}>${x?'+'+x+' حصص':'بدون'}</option>`).join('')}</select></div>
   <div class="card small" id="pBox" style="margin:0 0 14px"></div>
   <div class="field"><label>أيام الحصص</label><div class="daypick">${DAYS.map(([k,l])=>`<label><input type="checkbox" name="day" value="${k}" ${String(s.days||'').split(',').includes(k)?'checked':''}>${l}</label>`).join('')}</div></div>
   <div class="field"><label>وقت الحصة <span class="muted" id="tzL"></span></label><input type="time" name="time" value="${esc(s.time)}"></div>
@@ -1217,35 +1228,36 @@ function studentForm(s){
   <button class="btn b-teal mt" style="width:100%">حفظ</button></form>`,(box,close)=>{
     const f=$('#stf',box),cu=$('#cust',box),pBox=$('#pBox',box),adv=$('#adv',box);let dirty=false,sibTouched=!isNew||set.has('sib15')||set.has('sib20');
     const iso=()=>isoOf(f.country.value)||'XX';
-    const base=()=>{const r=prOf(iso()),i=PLAN_IDX[f.plan.value];if(!i)return 0;return r[0]===f.currency.value?r[i]:r2(r[i]*CUR[r[0]][2]/CUR[curK(f.currency.value)][2])};
-    const plans=()=>{const r=prOf(iso()),cur=f.plan.value||s.plan||'steady';f.plan.innerHTML=Object.entries(DB.plans).map(([k,v])=>`<option value="${k}" ${k===cur?'selected':''}>${v.name} — ${v.n} حصص · ${money(r[PLAN_IDX[k]],r[0])}</option>`).join('')+`<option value="custom" ${cur==='custom'?'selected':''}>باقة خاصة</option>`};
-    const paint=()=>$$('#deals button',box).forEach(b=>b.classList.toggle('on',set.has(b.dataset.d)));
+    const fix=()=>fixed45(f.plan.value),ex=()=>fix()?+f.extra.value||0:0,pset=()=>{if(!fix())return set;const z=new Set(set);z.delete('d45');return z};
+    const base=()=>{const r=prOf(iso()),i=PLAN_IDX[f.plan.value];if(!i)return 0;const v=r[i]+ex()/EX_STEP*add4Of(r);return r[0]===f.currency.value?v:r2(v*CUR[r[0]][2]/CUR[curK(f.currency.value)][2])};
+    const plans=()=>{const r=prOf(iso()),cur=f.plan.value||s.plan||'steady';f.plan.innerHTML=Object.entries(DB.plans).map(([k,v])=>`<option value="${k}" ${k===cur?'selected':''}>${v.name} — ${planN(k)} ${planN(k)<11?'حصص':'حصة'} × ${fixed45(k)?45:30} د · ${money(r[PLAN_IDX[k]],r[0])}</option>`).join('')+`<option value="custom" ${cur==='custom'?'selected':''}>باقة خاصة</option>`};
+    const paint=()=>$$('#deals button',box).forEach(b=>{const lock=b.dataset.d==='d45'&&fix();b.classList.toggle('on',set.has(b.dataset.d)||lock);b.disabled=lock;b.style.opacity=lock?.6:'';if(b.dataset.d==='d45')b.lastElementChild.style.display=lock?'none':''});
     const tzNow=()=>f.tz.value||tzFor(iso());
-    const clash=()=>{const fd=new FormData(f),c=clashes({id:s.id,teacherId:f.teacherId.value,days:fd.getAll('day').join(','),time:f.time.value,tz:tzNow(),dur:set.has('d45')?'45':''},DB.students);
+    const clash=()=>{const fd=new FormData(f),c=clashes({id:s.id,teacherId:f.teacherId.value,days:fd.getAll('day').join(','),time:f.time.value,tz:tzNow(),dur:set.has('d45')||fix()?'45':''},DB.students);
       $('#clashH',box).innerHTML=c.map(x=>`<div class="due" style="white-space:normal;display:block;border-radius:10px;padding:6px 10px;margin-bottom:4px">تعارض: للمعلم حصة ${esc(x.s.name)} في الوقت نفسه (${esc(dayHm(x.ms))} بتوقيتك)</div>`).join(' ')};
-    const calc=()=>{const custom=f.plan.value==='custom',n=custom?+f.sessions.value:(DB.plans[f.plan.value]||{}).n,cur=f.currency.value,pv=+f.price.value||0,usd=usdOf(pv,cur);
+    const calc=()=>{const custom=f.plan.value==='custom',n=custom?+f.sessions.value:planN(f.plan.value)+ex(),cur=f.currency.value,pv=+f.price.value||0,usd=usdOf(pv,cur);
       const d=dueOf({price:pv,currency:cur,deal:[...set].join(','),count:isNew?0:DB.payments.filter(x=>x.studentId===s.id).length,sessions:n});
       const line=(a,b)=>`<div class="row" style="justify-content:space-between"><span>${a}</span><b>${b}</b></div>`;
       pBox.innerHTML=pv>0?line('السعر الشهري',money(d.month,cur))+(d.q?line('يدفع الآن عن 3 أشهر',money(d.now,cur)):d.launch?line('يدفع في الشهر الأول',money(d.now,cur)):'')+`<div class="muted" style="margin-top:4px">أجر المعلم ≈ ${money(r2(tPay(usd,n,iso(),f.plan.value)))} للحصة${dirty?' · السعر مُدخل يدوياً':''}</div>`:'<span class="muted">اختر البلد والباقة ليظهر السعر'+(custom?'، أو اكتب السعر في الخيارات الإضافية':'')+'.</span>';
       const z=tzNow();$('#tzL',box).textContent=z?'(بتوقيت '+tzName(z)+')':'(اختر توقيت الطالب من الخيارات الإضافية)';
       clash()};
-    const fill=()=>{const custom=f.plan.value==='custom';cu.style.display=custom?'':'none';if(custom)adv.open=true;if(!dirty&&!custom)f.price.value=dealPrice(base(),set)||'';calc()};
+    const fill=()=>{const custom=f.plan.value==='custom';cu.style.display=custom?'':'none';if(custom)adv.open=true;$('#exF',box).style.display=fix()?'':'none';if(fix())$('#exH',box).textContent='(كل 4 حصص +'+money(add4Of(prOf(iso())),prOf(iso())[0])+')';paint();if(!dirty&&!custom)f.price.value=dealPrice(base(),pset())||'';calc()};
     const sib=()=>{const ph=digits(f.phone.value).replace(/^0+/,''),n=ph.length>=8?DB.students.filter(x=>x.id!==s.id&&x.status!=='محذوف'&&x.status!=='متوقف'&&digits(x.phone).replace(/^0+/,'')===ph).length:0;
       $('#sibH',box).textContent=n?`لهذه العائلة ${n===1?'طالب آخر':n+' طلاب آخرون'} في الأكاديمية${isNew&&!sibTouched?'، فطُبّق خصم الإخوة':''}.`:'';
       if(isNew&&!sibTouched){set.delete('sib15');set.delete('sib20');if(n===1)set.add('sib15');else if(n>1)set.add('sib20');paint();fill()}};
     $$('#deals button',box).forEach(b=>b.onclick=()=>{const d=b.dataset.d;if(set.has(d))set.delete(d);else{set.add(d);if(d==='sib15')set.delete('sib20');if(d==='sib20')set.delete('sib15')}if(d.startsWith('sib'))sibTouched=true;dirty=false;paint();fill()});
     f.phone.oninput=()=>{if(!f.country.value){const i=isoByPhone(f.phone.value);if(i){f.country.value=i;f.country.onchange()}}sib()};
     f.country.onchange=()=>{const r=prOf(iso());f.currency.value=r[0];const z=tzFor(iso());if(z&&(isNew||!f.tz.value))f.tz.value=z;if(MULTI.includes(iso())||!z)adv.open=true;dirty=false;plans();fill()};
-    f.plan.onchange=()=>{dirty=false;fill()};f.currency.onchange=()=>{dirty=false;fill()};
+    f.plan.onchange=()=>{dirty=false;fill()};f.currency.onchange=()=>{dirty=false;fill()};f.extra.onchange=()=>{dirty=false;fill()};
     f.price.oninput=()=>{dirty=true;calc()};f.sessions.oninput=calc;f.teacherId.onchange=f.time.oninput=f.tz.onchange=calc;$$('input[name=day]',box).forEach(x=>x.onchange=calc);
     if(!s.currency&&f.country.value)f.currency.value=prOf(iso())[0];
     if(isNew&&!f.tz.value&&f.country.value){const z=tzFor(iso());if(z)f.tz.value=z}
     plans();paint();
-    dirty=+s.price>0&&(f.plan.value==='custom'||Math.abs(+s.price-dealPrice(base(),set))>.01);
+    dirty=+s.price>0&&(f.plan.value==='custom'||Math.abs(+s.price-dealPrice(base(),pset()))>.01);
     fill();sib();
     f.onsubmit=async e=>{e.preventDefault();const fd=new FormData(f);const data=Object.fromEntries(fd);data.days=fd.getAll('day').join(',');delete data.day;if(s.id)data.id=s.id;if(s.leadId)data.leadId=s.leadId;
       if(!data.tz)data.tz=tzFor(iso());
-      data.dur=set.has('d45')?'45':'';data.deal=[...set].filter(x=>x!=='d45').join(',');
+      data.dur=set.has('d45')||fix()?'45':'';data.deal=[...set].filter(x=>x!=='d45').join(',');if(data.plan!=='custom')data.sessions=String(planN(data.plan)+ex());delete data.extra;
       data.priceUsd=String(r2(usdOf(data.price,data.currency))||'');
       try{const r=await api('saveStudent',{data});close();toast('تم الحفظ ✓');await refresh();if(isNew&&r.parentToken){const st=Sx(r.id);if(st){const msg=welcomeMsg(st);sheet('تمت إضافة '+st.name,`<p>رسالة الترحيب جاهزة: فيها رابط المتابعة والمعلم والمواعيد وطريقة دخول الحصة وقواعد الغياب. أرسلها للعائلة بضغطة:</p><div class="card mt small" style="white-space:pre-wrap;max-height:240px;overflow:auto">${esc(msg)}</div><div class="row mt"><a class="btn b-wa" target="_blank" rel="noopener" href="${waLink(st.phone,msg)}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> إرسال للعائلة</a><button class="btn b-ghost" id="cpl">نسخ الرسالة</button></div>`,b=>{$('#cpl',b).onclick=()=>copy(msg)})}}}catch(err){toast('تعذّر الحفظ')}};
   });
