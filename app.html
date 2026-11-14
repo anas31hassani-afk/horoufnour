@@ -318,6 +318,34 @@ details.coll>.in{padding:0 16px 16px}
 .qn button{border:1px solid var(--line);background:none;color:inherit;opacity:.85;border-radius:99px;padding:5px 11px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
 .lngsw.mini{justify-content:flex-end;margin:0 0 8px}.lngsw.mini button{padding:3px 10px;font-size:12px;border-width:1px}
 body.ltr .bnav,body.ltr .wrap{direction:ltr}
+/* ===== التقويم الشهري ومحرّر المواعيد ===== */
+.mcal{margin:2px 0 4px}
+.mc-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.mc-h b{font-family:var(--kufi);font-size:16px}
+.mc-nv{width:36px;height:36px;border-radius:12px;border:1.5px solid var(--line);background:var(--s2);color:inherit;font-size:20px;line-height:1;cursor:pointer}
+.mc-w,.mc-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mc-w span{text-align:center;font-size:11.5px;opacity:.6;padding:2px 0}
+.mc-g i{display:block}
+.mc-d{aspect-ratio:1/1;min-height:40px;border:1px solid var(--line);border-radius:10px;background:var(--s2);color:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:2px;cursor:pointer;font:inherit}
+.mc-d b{font-size:13px;font-weight:600;opacity:.75}
+.mc-d.has b{opacity:1}
+.mc-d span{display:flex;gap:2px;min-height:7px}
+.mc-d span i,.mc-leg i{width:7px;height:7px;border-radius:50%;display:inline-block;box-shadow:inset 0 0 0 1.5px currentColor}
+.mc-d span i[style],.mc-leg i[style]{box-shadow:none}
+.mc-d.tdy{box-shadow:inset 0 0 0 2px var(--gold)}
+.mc-d.sel{background:var(--teal);color:#fff;border-color:var(--teal)}
+.mc-d.sel span i{box-shadow:0 0 0 1.5px #fff}
+.mc-leg{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;margin:10px 2px 2px;align-items:center}
+.mc-leg span{display:inline-flex;align-items:center;gap:5px}
+.mc-leg i{margin:0}
+.slots{display:grid;gap:6px}
+.sl{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:6px 10px;background:var(--s2)}
+.sl.on{border-color:var(--teal)}
+.sl label{flex:1;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14.5px}
+.sl input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal)}
+.sl input[type=time]{width:auto;min-width:118px;border:1.5px solid var(--line);border-radius:10px;padding:6px 8px;background:transparent;color:inherit;font:inherit}
+.sl input[type=time]:disabled{opacity:.35}
+body.studio .mc-d.sel{background:#1f7a72}
 </style>
 </head>
 <body>
@@ -444,7 +472,7 @@ function icsFor(events,name){
 }
 function firstDate(days,tz){const ms=nextClasses(days,'00:01',tz,1)[0]||Date.now();const p=new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));return p.replace(/-/g,'')}
 function downloadFile(name,text,type){const b=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
-function classEvent(st,title){const tz=st.tz&&st.tz.includes('/')?st.tz:Intl.DateTimeFormat().resolvedOptions().timeZone;const [hh,mm]=String(st.time).split(':');return{tz,start:firstDate(st.days,tz)+'T'+hh.padStart(2,'0')+mm.padStart(2,'0')+'00',rrule:'FREQ=WEEKLY;BYDAY='+st.days,title,desc:'حصة القرآن مع أكاديمية حروف من نور — '+base()}}
+function classEvent(st,title){return classEvents(st,title)[0]}
 function addMin(st,m){const d=new Date(Date.UTC(+st.slice(0,4),+st.slice(4,6)-1,+st.slice(6,8),+st.slice(9,11),+st.slice(11,13)+m));return d.toISOString().replace(/[-:]/g,'').slice(0,15)}
 function gcalLink(e){return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+e.start+'/'+addMin(e.start,e.min||30)+'&ctz='+encodeURIComponent(e.tz)+'&recur='+encodeURIComponent('RRULE:'+e.rrule)+'&details='+encodeURIComponent(e.desc)}
 
@@ -580,8 +608,8 @@ function renderParent(){
   lngBind(app);
 }
 async function practice(kind){try{await api('parentPractice',{kind});PD.practice.push({date:PD.today,kind});return true}catch(e){toast('تعذّر الحفظ، حاول مرة أخرى');return false}}
-function parentEvents(){const s=PD.student;if(!s.days||!s.time)return null;const ev=classEvent(s,'حصة القرآن — '+s.name);ev.label='الحصص الأسبوعية';
-  const wd={tz:ev.tz,start:firstDate('SA,SU,MO,TU,WE,TH,FR',ev.tz)+'T190000',rrule:'FREQ=DAILY',title:'وِرد اليوم — '+s.name,label:'تذكير الوِرد اليومي (7 مساءً)',desc:'افتح «وِردي» في تطبيق حروف من نور: '+base()+'#p='+auth.p,dur:'PT10M',min:10,before:0};return [ev,wd]}
+function parentEvents(){const s=PD.student;if(!hasSched(s))return null;const E=classEvents(s,'حصة القرآن — '+s.name);E.forEach(e=>e.label='الحصص الأسبوعية'+(E.length>1?' · '+tLbl(e.start.slice(9,11)+':'+e.start.slice(11,13)):''));const ev=E[0];
+  const wd={tz:ev.tz,start:firstDate('SA,SU,MO,TU,WE,TH,FR',ev.tz)+'T190000',rrule:'FREQ=DAILY',title:'وِرد اليوم — '+s.name,label:'تذكير الوِرد اليومي (7 مساءً)',desc:'افتح «وِردي» في تطبيق حروف من نور: '+base()+'#p='+auth.p,dur:'PT10M',min:10,before:0};return E.concat([wd])}
 let PTICK=null;
 function pJourney(p){
   const d=PD,s=d.student,ssAll=d.sessions,ss=ssAll.filter(x=>x.date<=d.today),c=d.cycle,now=Date.now();
@@ -589,17 +617,18 @@ function pJourney(p){
   const mem=memSet(s.memorized,ss),lastNew=ss.find(x=>+x.surah),cur=lastNew&&!mem.has(+lastNew.surah)?+lastNew.surah:0;
   const msr=[...mem].sort((a,b)=>a-b),med=msr.length?msr[msr.length>>1]:(/الكبار/.test(s.program||'')?1:114),rev=med>57||(cur&&cur>57&&!msr.length);
   const order=Array.from({length:114},(_,i)=>rev?114-i:i+1);
-  const sk=streakInfo(d.practice,d.today),absD=new Set(ssAll.filter(x=>/^absent/.test(x.status)&&x.date>=d.today).map(x=>x.date)),nxA=nextClasses(s.days,s.time,s.tz,8),nx=nxA.filter(m=>!absD.has(dateIn(m,s.tz))).slice(0,3),apol=nxA.filter(m=>absD.has(dateIn(m,s.tz))&&ssAll.some(x=>x.date===dateIn(m,s.tz)&&x.note===ABSENT_NOTE)),live=nx[0]&&nx[0]<=now+15*6e4;
+  const sk=streakInfo(d.practice,d.today),absD=new Set(ssAll.filter(x=>/^absent/.test(x.status)&&x.date>=d.today).map(x=>x.date)),nxA=nextOf(s,8),nx=nxA.filter(m=>!absD.has(dateIn(m,s.tz))).slice(0,3),apol=nxA.filter(m=>absD.has(dateIn(m,s.tz))&&ssAll.some(x=>x.date===dateIn(m,s.tz)&&x.note===ABSENT_NOTE)),live=nx[0]&&nx[0]<=now+15*6e4;
   const ps=payState(d),due=d.pay?dueOf(d.pay):null;
   const tw=d.teacher?(d.teacher.gender==='معلمة'?'المعلمة ':'المعلم ')+d.teacher.name:'';
   const W=WR||rangeFromLast(),last=ss[0],hw=ss.find(x=>x.homework);
   p.innerHTML=`<header class="phead">${lngSw('mini')}<p class="small muted">${esc(fmtD.format(new Date()))}</p><h1>رحلة ${esc(s.name)} مع القرآن</h1><p class="small muted">${[tw,s.program,s.riwaya&&'رواية '+s.riwaya].filter(Boolean).map(esc).join(' · ')}</p>${(d.family||[]).length?`<div class="famsw"><button class="on">${esc(s.name)}</button>${d.family.map(f=>`<button data-fam="${esc(f.token)}">${esc(f.name)}</button>`).join('')}</div>`:''}</header>
   <section class="pnow${live?' live':''}"><div class="lbl"><i class="dot"></i>${live?'الحصة الآن':'الحصة القادمة'}</div>
-    ${nx.length?`<h2>${esc(live?'حصة '+s.name+' بدأت':dayHm(nx[0]))}</h2><p id="cd">${esc(live?'ادخل الآن، و'+(d.teacher&&d.teacher.gender==='معلمة'?'المعلمة تقبل':'المعلم يقبل')+' دخولك':inT(nx[0]))}</p>`:`<h2>المواعيد قيد الترتيب</h2><p>ستظهر هنا الحصة القادمة بعد تحديد المواعيد مع الأكاديمية.</p>`}
-    <div class="row mt">${d.video?`<button class="btn ${live?'b-sand':'b-light'}" style="flex:1" id="joinC"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> ادخل الحصة</button>`:d.meet?`<a class="btn ${live?'b-sand':'b-light'}" style="flex:1" href="${esc(d.meet)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> ادخل الحصة</a>`:''}${nx.length?'<button class="btn b-glass" id="ics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 21a2 2 0 0 0 4 0"/></svg> ذكّرني</button>':`<a class="btn b-glass" target="_blank" rel="noopener" href="${waLink(WA,'السلام عليكم، أريد ترتيب مواعيد حصص '+s.name)}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> رتّب المواعيد</a>`}</div>
+    ${nx.length?`<h2>${esc(live?'حصة '+s.name+' بدأت':dayHm(nx[0]))}</h2><p id="cd">${esc(live?'ادخل الآن، و'+(d.teacher&&d.teacher.gender==='معلمة'?'المعلمة تقبل':'المعلم يقبل')+' دخولك':inT(nx[0]))}</p>`:(propOf(s)&&propOf(s).st==='wait'?`<h2>${esc(L3('أكّدوا مواعيد الحصص','Confirmez les horaires','Confirm the lesson times'))}</h2><p>${esc(L3('أرسل '+tWord(d)+' المواعيد التي اتفقتم عليها. اضغطوا «أوافق» بالأسفل.','Les horaires convenus ont été envoyés. Appuyez sur « J’accepte » ci-dessous.','The agreed times were sent. Tap “I agree” below.'))}</p>`:`<h2>المواعيد قيد الترتيب</h2><p>ستظهر هنا الحصة القادمة بعد تحديد المواعيد مع الأكاديمية.</p>`)}
+    <div class="row mt">${d.video?`<button class="btn ${live?'b-sand':'b-light'}" style="flex:1" id="joinC"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> ادخل الحصة</button>`:d.meet?`<a class="btn ${live?'b-sand':'b-light'}" style="flex:1" href="${esc(d.meet)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> ادخل الحصة</a>`:''}${nx.length?'<button class="btn b-glass" id="ics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 21a2 2 0 0 0 4 0"/></svg> ذكّرني</button>':propOf(s)&&propOf(s).st==='wait'?'':`<a class="btn b-glass" target="_blank" rel="noopener" href="${waLink(WA,'السلام عليكم، أريد ترتيب مواعيد حصص '+s.name)}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> رتّب المواعيد</a>`}</div>
     ${nx.length>1?`<p class="small" style="opacity:.7;margin-top:10px">بعدها: ${nx.slice(1).map(x=>esc(dayHm(x))).join(' · ')}</p>`:''}
     ${apol.map(m=>`<p class="small" style="opacity:.9;margin-top:8px">اعتذرتم عن حصة ${esc(dayHm(m))}. <button class="lnk" data-undo="${dateIn(m,s.tz)}">تراجع</button></p>`).join('')}
     ${nx.length&&!live&&d.absentH?'<button class="lnk" id="absB">أعتذر عن هذه الحصة</button>':''}</section>
+  ${pSchedCards(d)}
   ${!ps?'':ps.k==='pending'?`<div class="card mt" style="background:#eaf5ee"><b>وصلنا إشعار دفعتكم.</b> <span class="muted">${money(+d.pay.pending.amount,d.pay.pending.currency)} · تؤكّدها الإدارة قريباً فتتجدد الباقة.</span></div>`:`<div class="card mt" style="background:#fff6e3"><b>${ps.k==='first'?'فعّلوا الباقة لتبدأ الحصص.':ps.k==='last'?'بقيت حصة واحدة في الباقة.':'انتهت حصص الباقة الحالية.'}</b>${due&&due.now?` <span class="muted">المبلغ: ${money(due.now,due.c)}${due.q?' عن 3 أشهر':''}</span>`:''}<div class="mt">${d.pay&&d.pay.methods.length?'<button class="btn b-sand b-sm" id="payB"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg> ادفع وجدّد الباقة</button>':`<a class="btn b-wa b-sm" target="_blank" rel="noopener" href="${waLink(WA,'السلام عليكم، أريد تجديد باقة '+s.name)}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> جدّد الباقة</a>`}</div></div>`}
   <div class="pgrid">
     <section class="card"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div><div class="small muted">وِرد اليوم</div><b style="font-family:var(--kufi);font-size:18px">سورة ${esc(sName(W.s))}</b><div class="small muted">الآيات ${W.from} إلى ${W.to}</div></div><div class="flame ${sk.doneToday?'on':''}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-6 1-9.5z"/></svg></div></div>
@@ -615,6 +644,7 @@ function pJourney(p){
     <div class="legend"><span><i style="background:var(--teal)"></i>محفوظة</span><span><i style="background:#fff6e3;box-shadow:inset 0 0 0 2px var(--sand)"></i>يحفظها الآن</span><span><i style="background:#fff;box-shadow:inset 0 0 0 1px var(--line)"></i>لم تبدأ بعد</span></div>
     <div class="qmap">${order.map(i=>`<div class="${mem.has(i)?'done':cur===i?'cur':''}"><b>${i}</b>${esc(SUR.n[i-1])}</div>`).join('')}</div>
     <p class="small muted mt">${rev?'مرتّبة من جزء عمّ (سورة الناس) صعوداً، كما يحفظ أغلب الطلاب.':'مرتّبة كترتيب المصحف من سورة الفاتحة.'}</p></div></details>
+  ${hasSched(s)||movesOf(s).length?`<details class="coll" id="pcal"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ${esc(L3('تقويم الحصص','Calendrier des cours','Lesson calendar'))}</summary><div class="in" id="pcalB"></div></details>`:''}
   <details class="coll"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg> كل تقارير الحصص (${ss.length})</summary><div class="in"><div class="list">${ss.length?ss.map(x=>repHTML(x)).join(''):'<div class="empty">لا توجد تقارير بعد.</div>'}</div></div></details>
   <div class="card mt2" style="text-align:center"><p>لأي سؤال أو لتغيير موعد، راسلونا مباشرة.</p><a class="btn b-wa mt" target="_blank" rel="noopener" href="${waLink(WA,'السلام عليكم، بخصوص '+s.name+': ')}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> واتساب الأكاديمية</a><p class="small muted mt">هذا الرابط خاص بعائلتكم، فلا تشاركوه مع غيركم.</p></div>`;
   $$('[data-go]',p).forEach(b=>b.onclick=()=>{ptab=b.dataset.go;renderParent();scrollTo(0,0)});
@@ -624,6 +654,9 @@ function pJourney(p){
     if(!await askConfirm('الاعتذار عن حصة '+dayHm(ms)+'؟',late?'بقي أقل من '+H+' ساعات على الحصة، فتُحتسب من الباقة حسب قواعد الأكاديمية.':'يصل الاعتذار للمعلم والإدارة، ولا تُحتسب الحصة من الباقة.','نعم، أعتذر'))return;
     try{const r=await api('parentAbsent',{data:{date:dt,at:new Date(ms).toISOString()}});if(!PD.sessions.some(x=>x.date===dt))PD.sessions.unshift({date:dt,status:r.status||'absent_notice',note:ABSENT_NOTE});toast('تم تسجيل الاعتذار ✓');renderParent()}catch(e){toast('تعذّر التسجيل، راسلونا على واتساب')}};
   $$('[data-undo]',p).forEach(b=>b.onclick=async()=>{try{await api('parentAbsentUndo',{date:b.dataset.undo});PD.sessions=PD.sessions.filter(x=>!(x.date===b.dataset.undo&&x.note===ABSENT_NOTE));toast('أُلغي الاعتذار ✓');renderParent()}catch(e){toast('تعذّر التراجع، راسلونا على واتساب')}});
+  bindSchedCards(p);
+  const pc=$('#pcal',p);if(pc)pc.ontoggle=()=>{if(pc.open&&!pc.dataset.on){pc.dataset.on=1;const me=Object.assign({},s,{id:'me'}),tT=d.teacher&&d.teacher.tz;
+    monthCal($('#pcalB',p),{soft:1,studentOf:()=>me,ss:ssAll.map(x=>Object.assign({},x,{studentId:'me'})),list:(a,b)=>occ(me,a,b),other:o=>tT&&zOf(tT)!==myTz()?'= '+msT(o.ms,tT)+' '+tTime(d)+' ('+tzLbl(tT)+')':''})}};
   const jc=$('#joinC',p);if(jc)jc.onclick=()=>openClass('parentClass',{},'حصة '+s.name,d.meet);
   const ev=parentEvents(),ic=$('#ics',p);if(ic&&ev)ic.onclick=()=>remindSheet(ev,'horoufnour-classes.ics','حروف من نور');
   clearInterval(PTICK);if(nx.length&&!live)PTICK=setInterval(()=>{const e=$('#cd');if(!e)return clearInterval(PTICK);if(nx[0]<=Date.now()+15*6e4){clearInterval(PTICK);renderParent()}else e.textContent=inT(nx[0])},30000);
@@ -658,6 +691,31 @@ function paySheet(){const d=PD,p=d.pay,s=d.student,due=dueOf(p);let sel=p.method
     $$('[data-cp]',b).forEach(x=>x.onclick=()=>{sel=+x.dataset.cp;paint();copy(p.methods[sel].details,'نُسخت بيانات الدفع ✓')});
     $('#pmGo',b).onclick=async()=>{if(sel<0)return toast('اختاروا طريقة الدفع أولاً');try{await api('parentPaid',{data:{amount:due.now,currency:due.c,method:p.methods[sel].name,note:$('#pmN',b).value}});cl();toast('وصل إشعاركم ✓ تؤكّده الإدارة قريباً');PD.pay.pending={amount:String(due.now),currency:due.c,method:p.methods[sel].name};renderParent()}catch(e){toast('تعذّر الإرسال، حاولوا مرة أخرى')}};
   })}
+
+/* ---------- المواعيد: ولي الأمر يؤكّد ما أدخله المعلم ---------- */
+const tWord=d=>{const f=d.teacher&&d.teacher.gender==='معلمة';return L3(f?'المعلمة':'المعلم',f?"l'enseignante":"l'enseignant",'the teacher')};
+const tTime=d=>{const f=d.teacher&&d.teacher.gender==='معلمة';return L3('بتوقيت '+(f?'المعلمة':'المعلم'),'heure '+(f?"de l'enseignante":"de l'enseignant"),"teacher's time")};
+function pSchedCards(d){const s=d.student,sz=zOf(s.tz),me=myTz(),tT=d.teacher&&d.teacher.tz,other=tT&&zOf(tT)!==me,pr=propOf(s),out=[];
+  const card=(body)=>`<section class="card mt" style="box-shadow:inset 0 0 0 1.5px var(--teal);background:#eef7f5">${body}</section>`;
+  if(pr&&pr.st==='wait'){const L=slotsOf({slots:pr.slots});
+    out.push(card(`<b>${esc(L3(tWord(d)+' حدّد مواعيد الحصص',(tWord(d)==="l'enseignante"?"L'enseignante":"L'enseignant")+' a fixé les horaires','The teacher has set the lesson times'))}</b>
+      <p class="small muted" style="margin:4px 0 8px">${esc(L3('كما اتفقتم في مجموعة واتساب. الأوقات بتوقيتك','Comme convenu dans le groupe WhatsApp. Heures de votre fuseau','As agreed in the WhatsApp group. Times in your time zone'))} (${esc(tzLbl(me))})</p>
+      ${L.map(x=>{const a=slotsConv([x],sz,me)[0],b=other?slotsConv([x],sz,tT)[0]:null;return `<div class="row" style="justify-content:space-between;padding:4px 0;border-top:1px solid rgba(0,0,0,.06)"><b>${esc(dLong(a.d)+' · '+tLbl(a.t))}</b>${b?`<span class="small muted">= ${esc(tLbl(b.t)+(b.d!==a.d?' '+dLong(b.d):'')+' '+tTime(d)+' ('+tzLbl(tT)+')')}</span>`:''}</div>`}).join('')}
+      <div class="row mt"><button class="btn b-teal" style="flex:1" id="psOk">${esc(L3('أوافق ✓',"J'accepte ✓",'I agree ✓'))}</button><button class="btn b-ghost" id="psNo">${esc(L3('غير مناسب','Ne convient pas','Not suitable'))}</button></div>`))}
+  movesOf(s).filter(m=>m.st==='wait'&&Date.parse(m.to)>Date.now()).forEach(m=>{const [y,mo,dd]=m.from.split('-').map(Number),[hh,mi]=String(m.fromT||s.time||'00:00').split(':').map(Number),old=zonedMs(y,mo,dd,hh,mi||0,sz),to=Date.parse(m.to);
+    out.push(card(`<b>${esc(L3('طلب '+tWord(d)+' تغيير موعد حصة','Changement d’horaire demandé','The teacher asks to move a lesson'))}</b>
+      <div class="small mt"><span class="muted">${esc(L3('من','De','From'))}:</span> <s>${esc(dayHm(old))}</s></div>
+      <div class="small"><span class="muted">${esc(L3('إلى','À','To'))}:</span> <b>${esc(dayHm(to))}</b>${other?` <span class="muted">(= ${esc(msT(to,tT)+' '+tTime(d))})</span>`:''}</div>
+      <p class="small muted" style="margin:6px 0 0">${esc(L3('تتغير هذه الحصة فقط.','Seul ce cours change.','Only this lesson changes.'))}</p>
+      <div class="row mt"><button class="btn b-teal" style="flex:1" data-mok="${esc(m.id)}">${esc(L3('أوافق ✓',"J'accepte ✓",'I agree ✓'))}</button><button class="btn b-ghost" data-mno="${esc(m.id)}">${esc(L3('غير مناسب','Ne convient pas','Not suitable'))}</button></div>`))});
+  return out.join('')}
+function bindSchedCards(p){const s=PD.student,after=(msg,fx)=>{toast(msg);try{fx&&fx()}catch(e){}renderParent();parent(auth.p)};
+  const ok=$('#psOk',p),no=$('#psNo',p);
+  if(ok)ok.onclick=async()=>{try{await api('parentSched',{ok:1});after(L3('تم ✓ ثُبّتت المواعيد','C’est noté ✓ horaires confirmés','Done ✓ times confirmed'),()=>{const pr=propOf(s);s.slots=pr.slots;const L=slotsOf(s);s.days=[...new Set(L.map(x=>x.d))].join(',');s.time=L[0].t;s.proposal=null})}catch(e){toast(L3('تعذّر الحفظ، حاول مرة أخرى','Échec, réessayez','Could not save, try again'))}};
+  if(no)no.onclick=async()=>{if(!await askConfirm(L3('المواعيد غير مناسبة؟','Horaires inadaptés ?','Times not suitable?'),L3('يصل ردكم للمعلم والإدارة. اكتبوا الوقت المناسب لكم في مجموعة واتساب.','L’enseignant et l’académie seront prévenus. Proposez un horaire dans le groupe WhatsApp.','The teacher and the academy will be told. Suggest a time in the WhatsApp group.'),L3('نعم، غير مناسبة','Oui','Yes')))return;
+    try{await api('parentSched',{ok:0});after(L3('وصل ردكم ✓','Réponse envoyée ✓','Sent ✓'),()=>{s.proposal=Object.assign({},propOf(s),{st:'no'})})}catch(e){toast(L3('تعذّر الحفظ، حاول مرة أخرى','Échec, réessayez','Could not save, try again'))}};
+  $$('[data-mok],[data-mno]',p).forEach(b=>b.onclick=async()=>{const y=!!b.dataset.mok;try{await api('parentMove',{id:b.dataset.mok||b.dataset.mno,ok:y?1:0});after(y?L3('تم ✓ تغيّر موعد الحصة','C’est noté ✓','Done ✓'):L3('وصل ردكم ✓ تبقى الحصة في موعدها','Réponse envoyée ✓','Sent ✓ the lesson stays as planned'),()=>{const id=b.dataset.mok||b.dataset.mno;s.moves=movesOf(s).map(m=>m.id===id?Object.assign({},m,{st:y?'ok':'no'}):m)})}catch(e){toast(L3('تعذّر الحفظ، حاول مرة أخرى','Échec, réessayez','Could not save, try again'))}});
+}
 
 function rangeFromLast(){
   const ss=PD.sessions,last=ss.find(x=>+x.surah);
@@ -824,20 +882,8 @@ const fmtP=v=>Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(1).replace
 
 /* ================= SHARED: المواعيد، الوقت، الأسعار ================= */
 const DTF={};const dtf=tz=>DTF[tz]||(DTF[tz]=new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'}));
-/* كل حصص طالب بين وقتين (بتوقيت الطالب) */
-function occ(st,from,to){
-  if(!st||!st.days||!st.time)return[];
-  try{const tz=st.tz&&st.tz.includes('/')?st.tz:Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const want=String(st.days).split(',').map(x=>DAYJS[x.trim()]).filter(x=>x!==undefined);if(!want.length)return[];
-    const [hh,mm]=String(st.time).split(':').map(Number),out=[];
-    for(let t=from-864e5;t<=to+864e5;t+=864e5){const p=dtf(tz).formatToParts(new Date(t)),g=k=>p.find(x=>x.type===k).value;
-      if(!want.includes({Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[g('weekday')]))continue;
-      const ms=zonedMs(+g('year'),+g('month'),+g('day'),hh,mm||0,tz),date=g('year')+'-'+g('month')+'-'+g('day');
-      if(ms>=from&&ms<=to&&!out.some(o=>o.ms===ms))out.push({ms,date,st})}
-    return out.sort((a,b)=>a.ms-b.ms)}catch(e){return[]}
-}
 /* هل سُجّل تقرير لهذه الحصة؟ (نقبل فرق يوم واحد بسبب اختلاف التوقيت إن لم يكن ذلك اليوم يوم حصة أيضاً) */
-function reported(ss,o){if(o.ms>Date.now())return false;const w=String(o.st.days||'').split(',').map(x=>DAYJS[x.trim()]);
+function reported(ss,o){if(o.ms>Date.now())return false;const w=slotsOf(o.st).map(x=>DAYJS[x.d]);
   return ss.some(x=>{if(x.studentId!==o.st.id)return false;if(x.date===o.date)return true;if(x.createdAt&&Date.parse(x.createdAt)<o.ms-2*36e5)return false;const dd=Math.round((Date.parse(x.date)-Date.parse(o.date))/864e5);return Math.abs(dd)===1&&!w.includes(new Date(x.date+'T12:00:00Z').getUTCDay())})}
 const hm=ms=>new Intl.DateTimeFormat(LOC(),{hour:'2-digit',minute:'2-digit'}).format(new Date(ms));
 function dayHm(ms){const d=new Date(ms),t=new Date(),k=x=>x.toDateString(),tm=new Date(Date.now()+864e5),ys=new Date(Date.now()-864e5);
@@ -893,11 +939,145 @@ function dueOf(p){const sp=stPrice(p),set=dealSet(p),q=set.has('q'),month=q?rr(s
   const n=(+p.sessions||((typeof DB!=='undefined'&&DB&&DB.plans||{})[p.plan]||{}).n||0)*months;
   return{month,months,now:rr(month*months-(launch?rr(month*.2):0)),c:sp.c,q,launch,n}}
 /* تعارض موعد طالب مع طلاب المعلم نفسه خلال الأسبوع القادم */
-function clashes(cand,all){if(!cand.teacherId||!cand.days||!cand.time)return[];const now=Date.now(),mine=occ(cand,now,now+7*864e5),out=[];
+function clashes(cand,all){if(!cand.teacherId||!slotsOf(cand).length)return[];const now=Date.now(),mine=occ(cand,now,now+7*864e5),out=[];
   all.filter(s=>s.id!==cand.id&&s.teacherId===cand.teacherId&&(s.status==='نشط'||s.status==='تجريبي')).forEach(s=>{const o=occ(s,now,now+7*864e5);
     const hit=mine.find(a=>o.some(b=>a.ms<b.ms+lessonMin(s)*6e4&&b.ms<a.ms+lessonMin(cand)*6e4));if(hit)out.push({s,ms:hit.ms})});return out}
 const dayName=ms=>{const d=new Date(ms),k=x=>x.toDateString();return k(d)===k(new Date())?'اليوم':k(d)===k(new Date(Date.now()+864e5))?'غداً':new Intl.DateTimeFormat(LOC(),{weekday:'long',day:'numeric',month:'long'}).format(d)};
 const dateIn=(ms,tz)=>{try{const p=dtf(tz&&tz.includes('/')?tz:Intl.DateTimeFormat().resolvedOptions().timeZone).formatToParts(new Date(ms)),g=k=>p.find(x=>x.type===k).value;return g('year')+'-'+g('month')+'-'+g('day')}catch(e){return new Date(ms).toISOString().slice(0,10)}};
+
+/* ================= المواعيد: وقت لكل يوم، تغيير حصة واحدة، والتقويم الشهري =================
+   الأوقات تُحفظ بتوقيت الطالب (st.tz) في slots مثل "SA@17:00,MO@19:00"، وكل شخص يراها بتوقيت جهازه. */
+const DORD=['SA','SU','MO','TU','WE','TH','FR'],DCODE=['SU','MO','TU','WE','TH','FR','SA'],WDJ={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+const L3=(a,f,e)=>LNG==='fr'?f:LNG==='en'?e:a;
+const myTz=()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC'}catch(e){return 'UTC'}};
+const zOf=z=>z&&String(z).includes('/')?String(z):myTz();
+const tzLbl=z=>LNG==='ar'?tzName(z):String(z||'').split('/').pop().replace(/_/g,' ');
+const jsonOf=(v,def)=>{if(v&&typeof v==='object')return v;try{const o=JSON.parse(v||'');return o==null?def:o}catch(e){return def}};
+function slotsOf(st){if(!st)return[];const raw=String(st.slots||'').trim();
+  if(raw)return raw.split(',').map(x=>{const m=x.trim().match(/^(SA|SU|MO|TU|WE|TH|FR)@(\d{1,2}):(\d{2})$/);return m?{d:m[1],t:m[2].padStart(2,'0')+':'+m[3]}:null}).filter(Boolean);
+  if(!st.days||!st.time)return[];const t=String(st.time).slice(0,5).padStart(5,'0');return String(st.days).split(',').map(x=>x.trim()).filter(x=>DORD.includes(x)).map(d=>({d,t}))}
+const slotsSort=L=>L.slice().sort((a,b)=>DORD.indexOf(a.d)-DORD.indexOf(b.d)||(a.t<b.t?-1:a.t>b.t?1:0));
+const slotsStr=L=>slotsSort(L).map(x=>x.d+'@'+x.t).join(',');
+const movesOf=st=>jsonOf(st&&st.moves,[]).filter(m=>m&&m.from&&m.to);
+const propOf=st=>{const p=jsonOf(st&&st.proposal,null);return p&&p.slots?p:null};
+const hasSched=st=>slotsOf(st).length>0;
+const PTF={};
+function partsIn(ms,tz){const z=zOf(tz),f=PTF[z]||(PTF[z]=new Intl.DateTimeFormat('en-US',{timeZone:z,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',weekday:'short'}));
+  const p=f.formatToParts(new Date(ms)),g=k=>p.find(x=>x.type===k).value,hh=+g('hour')%24;
+  return{y:+g('year'),m:+g('month'),d:+g('day'),hh,mm:+g('minute'),wd:WDJ[g('weekday')],date:g('year')+'-'+g('month')+'-'+g('day'),t:String(hh).padStart(2,'0')+':'+g('minute')}}
+/* موعد أسبوعي من توقيت إلى آخر (السبت 20:00 بمصر = السبت 19:00 بالمغرب) */
+function slotsConv(L,fromTz,toTz){const a=zOf(fromTz),b=zOf(toTz);if(a===b)return L.map(x=>({d:x.d,t:x.t}));const now=Date.now();
+  return L.map(s=>{for(let k=0;k<8;k++){const p=partsIn(now+k*864e5,a);if(DCODE[p.wd]!==s.d)continue;const [hh,mm]=s.t.split(':').map(Number),q=partsIn(zonedMs(p.y,p.m,p.d,hh,mm,a),b);return{d:DCODE[q.wd],t:q.t}}return{d:s.d,t:s.t}})}
+/* أسماء الأيام والأوقات حسب لغة الصفحة */
+const dLong=d=>new Intl.DateTimeFormat(LOC(),{weekday:'long',timeZone:'UTC'}).format(Date.UTC(2024,0,7+DCODE.indexOf(d)));
+const tLbl=t=>{const [h,m]=String(t).split(':').map(Number);return new Intl.DateTimeFormat(LOC(),{hour:'numeric',minute:'2-digit',timeZone:'UTC'}).format(Date.UTC(2024,0,1,h||0,m||0))};
+const msT=(ms,tz)=>tLbl(partsIn(ms,tz).t);
+/* «السبت والاثنين 5:00 م، الأربعاء 7:00 م» */
+function slotsTxt(L){const by={};slotsSort(L).forEach(x=>(by[x.t]=by[x.t]||[]).push(x.d));
+  const and=L3(' و',' et ',' & ');return Object.keys(by).sort((a,b)=>DORD.indexOf(by[a][0])-DORD.indexOf(by[b][0])).map(t=>by[t].map(dLong).join(and)+' '+tLbl(t)).join(L3('، ',', ',', '))}
+/* كل حصص طالب بين وقتين: الأوقات الأسبوعية + الحصص المنقولة (بعد موافقة ولي الأمر) */
+function occ(st,from,to){
+  const L=slotsOf(st),mv=movesOf(st);if(!L.length&&!mv.length)return[];
+  try{const tz=zOf(st.tz),out=[],okM=mv.filter(m=>m.st==='ok'),wt=mv.filter(m=>m.st==='wait');
+    const hit=(arr,date,t)=>arr.find(m=>m.from===date&&(!m.fromT||m.fromT===t));
+    if(L.length)for(let t=from-864e5;t<=to+864e5;t+=864e5){const p=partsIn(t,tz);
+      L.filter(s=>s.d===DCODE[p.wd]).forEach(s=>{const [hh,mm]=s.t.split(':').map(Number),ms=zonedMs(p.y,p.m,p.d,hh,mm,tz);
+        if(ms<from||ms>to||out.some(o=>o.ms===ms))return;if(hit(okM,p.date,s.t))return;
+        out.push({ms,date:p.date,t:s.t,st,pend:hit(wt,p.date,s.t)||null})})}
+    okM.forEach(m=>{const ms=Date.parse(m.to);if(ms>=from&&ms<=to&&!out.some(o=>o.ms===ms))out.push({ms,date:dateIn(ms,tz),t:partsIn(ms,tz).t,st,moved:m})});
+    return out.sort((a,b)=>a.ms-b.ms)}catch(e){return[]}
+}
+/* هل تُحسب هذه الحصة؟ (بعد بدء الطالب وبعد آخر تغيير للمواعيد) */
+const counts=o=>{const s=o.st||{},a=String(s.slotsAt||'');return o.date>=(s.startDate||'')&&(!a||(a.length>10?o.ms>Date.parse(a):o.date>a))};
+const nextOf=(st,n)=>{const now=Date.now();return occ(st,now-30*6e4,now+35*864e5).slice(0,n||3).map(o=>o.ms)};
+/* ملفات التقويم: حدث أسبوعي لكل وقت مختلف */
+function classEvents(st,title){const tz=zOf(st.tz),by={};slotsOf(st).forEach(x=>(by[x.t]=by[x.t]||[]).push(x.d));
+  return Object.keys(by).map(t=>{const days=by[t].join(',');return{tz,start:firstDate(days,tz)+'T'+t.replace(':','')+'00',rrule:'FREQ=WEEKLY;BYDAY='+days,title,desc:'حصة القرآن مع أكاديمية حروف من نور — '+base()}})}
+
+/* ---------- حالة كل حصة في التقويم ---------- */
+const CALS={rep:[L3('بانتظار التقرير','Compte rendu à venir','Report pending'),'#9DB1AE'],ok:[L3('تمت','Fait','Done'),'#2E9E8F'],abs:[L3('اعتذار','Absence','Absent'),'#E0A33A'],cx:[L3('أُلغيت','Annulé','Cancelled'),'#8C9A98'],miss:[L3('بلا تقرير','Sans compte rendu','No report'),'#D9534F'],wait:[L3('تنتظر الموافقة','En attente','Pending'),'#C9A24E'],up:[L3('قادمة','À venir','Upcoming'),'']};
+function occState(o,ss){const now=Date.now();
+  if(o.ms>now)return o.pend?'wait':'up';
+  const x=ss.find(v=>v.studentId===o.st.id&&v.date===o.date);
+  if(x)return x.status==='present'?'ok':x.status==='teacher_cancel'?'cx':/^absent/.test(x.status)?'abs':'ok';
+  if(reported(ss,o))return 'ok';
+  return o.ms+40*6e4<now?'miss':'up'}
+/* التقويم الشهري. opt: list(from,to)→حصص، ss: التقارير، pick(o): عند الضغط على حصة، other(o): سطر التوقيت الآخر، names: إظهار اسم الطالب */
+function monthCal(box,opt){
+  const tz=myTz(),todayD=partsIn(Date.now(),tz).date,stOf=o=>{const s=occState(o,opt.ss||[]);return s==='miss'&&(opt.soft||!counts(o))?'rep':s};let ym=opt.ym||todayD.slice(0,7),sel=opt.sel||null;
+  const draw=()=>{const [y,m]=ym.split('-').map(Number),first=zonedMs(y,m,1,0,0,tz),nd=new Date(Date.UTC(y,m,0)).getUTCDate(),last=zonedMs(y,m,nd,23,59,tz);
+    const now=Date.now(),SS=opt.ss||[],raw=opt.list(first-864e5,last+864e5).filter(o=>partsIn(o.ms,tz).date.slice(0,7)===ym);
+    const list=raw.filter(o=>o.ms>now-40*6e4||occState(o,SS)!=='miss'||counts(o)),by={};
+    if(opt.studentOf)SS.forEach(x=>{if(x.date.slice(0,7)!==ym||raw.some(o=>o.st.id===x.studentId&&(o.date===x.date||reported([x],o))))return;const st=opt.studentOf(x.studentId);if(st)list.push({ms:Date.parse(x.date+'T12:00:00Z'),date:x.date,st,extra:1,noT:1})});
+    list.forEach(o=>{const k=o.noT?o.date:partsIn(o.ms,tz).date;(by[k]=by[k]||[]).push(o)});
+    const lead=(DORD.indexOf(DCODE[partsIn(zonedMs(y,m,1,12,0,tz),tz).wd])+7)%7;
+    const title=new Intl.DateTimeFormat(LOC(),{month:'long',year:'numeric',timeZone:'UTC'}).format(Date.UTC(y,m-1,15));
+    const cells=[];for(let i=0;i<lead;i++)cells.push('<i></i>');
+    for(let d=1;d<=nd;d++){const k=ym+'-'+String(d).padStart(2,'0'),os=by[k]||[];
+      cells.push(`<button type="button" class="mc-d${k===todayD?' tdy':''}${k===sel?' sel':''}${os.length?' has':''}" data-k="${k}"><b>${d}</b><span>${os.slice(0,4).map(o=>{const s=stOf(o);return `<i class="${s}"${CALS[s][1]?' style="background:'+CALS[s][1]+'"':''}></i>`}).join('')}</span></button>`)}
+    const used=[...new Set(list.map(stOf))];
+    box.innerHTML=`<div class="mcal"><div class="mc-h"><button type="button" class="mc-nv" data-mv="-1" aria-label="prev">${LNG==='ar'?'›':'‹'}</button><b>${esc(title)}</b><button type="button" class="mc-nv" data-mv="1" aria-label="next">${LNG==='ar'?'‹':'›'}</button></div>
+      <div class="mc-w">${DORD.map(d=>`<span>${esc(new Intl.DateTimeFormat(LOC(),{weekday:'narrow',timeZone:'UTC'}).format(Date.UTC(2024,0,7+DCODE.indexOf(d))))}</span>`).join('')}</div>
+      <div class="mc-g">${cells.join('')}</div>
+      <div class="mc-leg">${used.map(s=>`<span><i class="${s}"${CALS[s][1]?' style="background:'+CALS[s][1]+'"':''}></i>${esc(CALS[s][0])}</span>`).join('')}<span class="muted">${esc(L3('الأوقات بتوقيتك','Heures de votre fuseau','Times in your time zone'))} (${esc(tzLbl(tz))})</span></div>
+      <div class="mc-day" id="mcDay"></div></div>`;
+    $$('[data-mv]',box).forEach(b=>b.onclick=()=>{const d=new Date(Date.UTC(y,m-1+ +b.dataset.mv,15));ym=d.toISOString().slice(0,7);sel=null;draw()});
+    $$('[data-k]',box).forEach(b=>b.onclick=()=>{sel=b.dataset.k;draw()});
+    const dl=$('#mcDay',box),os=sel?by[sel]||[]:[];
+    if(sel)dl.innerHTML=`<div class="small muted" style="margin:8px 2px 4px">${esc(new Intl.DateTimeFormat(LOC(),{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'}).format(Date.parse(sel+'T12:00:00Z')))}</div>`+(os.length?os.map((o,i)=>{const s=stOf(o),ot=opt.other&&!o.noT?opt.other(o):'';
+      return `<button type="button" class="fr" data-oi="${i}"><span class="ii" style="${CALS[s][1]?'color:'+CALS[s][1]:''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span><b>${esc(o.noT?L3('حصة','Cours','Lesson'):msT(o.ms,tz))}${opt.names?' · '+esc(o.st.name):''}</b><small>${esc([CALS[s][0],o.moved?L3('موعد مُغيَّر','Horaire modifié','Rescheduled'):'',ot].filter(Boolean).join(' · '))}</small></span><span class="cv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></span></button>`}).join(''):`<p class="small muted" style="padding:6px 2px">${esc(L3('لا حصص في هذا اليوم.','Pas de cours ce jour-là.','No lessons on this day.'))}</p>`);
+    $$('[data-oi]',dl).forEach(b=>b.onclick=()=>{if(opt.pick)opt.pick(os[+b.dataset.oi])});
+  };
+  draw();return{redraw:draw};
+}
+
+/* ---------- محرّر المواعيد: يوم + وقت لكل يوم ---------- */
+function slotRows(L){const m={};L.forEach(x=>{(m[x.d]=m[x.d]||[]).push(x.t)});
+  return `<div class="slots">${DORD.map(d=>`<div class="sl${m[d]?' on':''}"><label><input type="checkbox" data-sk="${d}" ${m[d]?'checked':''}>${esc(dLong(d))}</label><input type="time" data-tk="${d}" value="${esc(m[d]?m[d][0]:'')}" ${m[d]?'':'disabled'}></div>`).join('')}</div>`}
+function slotBind(box,onChange){let lastT=($$('[data-tk]',box).map(x=>x.value).find(Boolean))||'';
+  $$('[data-sk]',box).forEach(c=>c.onchange=()=>{const t=$(`[data-tk="${c.dataset.sk}"]`,box);t.disabled=!c.checked;c.closest('.sl').classList.toggle('on',c.checked);if(c.checked&&!t.value&&lastT)t.value=lastT;if(c.checked&&!t.value)t.focus();onChange&&onChange()});
+  $$('[data-tk]',box).forEach(t=>t.oninput=()=>{if(t.value)lastT=t.value;onChange&&onChange()})}
+const slotRead=box=>$$('[data-sk]',box).filter(c=>c.checked).map(c=>({d:c.dataset.sk,t:$(`[data-tk="${c.dataset.sk}"]`,box).value})).filter(x=>/^\d{2}:\d{2}$/.test(x.t));
+
+/* المعلم يُدخل المواعيد التي اتُّفق عليها في مجموعة واتساب، بتوقيته هو، فتصل لولي الأمر ليؤكّدها */
+function schedSheet(st,all,done){
+  const tzT=myTz(),tzS=zOf(st.tz),p=propOf(st),cur=p&&p.st==='wait'?slotsOf({slots:p.slots}):slotsOf(st),L=slotsConv(cur,tzS,tzT);
+  sheet('مواعيد '+st.name,`<p class="small muted" style="margin-top:0">اكتب الأيام والأوقات التي اتفقتم عليها في مجموعة واتساب. الأوقات <b>بتوقيتك (${esc(tzLbl(tzT))})</b>، ويراها ولي الأمر بتوقيت بلده.</p>
+    ${slotRows(L)}<div class="card small" id="spv" style="margin:10px 0"></div><p class="small" id="scl" style="margin:0 0 10px"></p>
+    <button class="btn b-teal" style="width:100%" id="ssv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> أرسل لولي الأمر ليؤكّد</button>
+    ${p&&p.st==='wait'?'<button class="btn b-ghost mt" style="width:100%" id="scx">إلغاء الاقتراح</button>':''}`,(b,cl)=>{
+    const prev=()=>{const A=slotRead(b),S=slotsConv(A,tzT,tzS);
+      $('#spv',b).innerHTML=A.length?(tzS!==tzT?`<div>عند الطالب (${esc(tzLbl(tzS))}): <b>${esc(slotsTxt(S))}</b></div>`:`<div><b>${esc(slotsTxt(S))}</b></div>`)+'<div class="muted" style="margin-top:4px">ولي الأمر يضغط «أوافق»، وتصل الإدارة نسخة.</div>':'<span class="muted">اختر يوماً واحداً على الأقل واكتب وقته.</span>';
+      const c=A.length?clashes({id:st.id,teacherId:st.teacherId||'me',slots:slotsStr(S),tz:tzS,dur:st.dur},all.map(x=>Object.assign({teacherId:st.teacherId||'me',status:'نشط'},x))):[];
+      $('#scl',b).innerHTML=c.map(x=>`<span class="due" style="white-space:normal;display:block;border-radius:10px;padding:6px 10px;margin-bottom:4px">تعارض مع حصة ${esc(x.s.name)} (${esc(dayHm(x.ms))})</span>`).join('')};
+    slotBind(b,prev);prev();
+    $('#ssv',b).onclick=async()=>{const A=slotRead(b);if(!A.length)return toast('اختر يوماً واحداً على الأقل واكتب وقته');
+      if($$('[data-sk]',b).some(c=>c.checked&&!$(`[data-tk="${c.dataset.sk}"]`,b).value))return toast('اكتب الوقت لكل يوم مختار');
+      try{await api('teacherSched',{data:{studentId:st.id,slots:slotsStr(slotsConv(A,tzT,tzS)),tz:tzT}});cl();toast('أُرسلت المواعيد لولي الأمر ✓');done&&done()}catch(e){toast('تعذّر الإرسال، حاول مرة أخرى')}};
+    const cx=$('#scx',b);if(cx)cx.onclick=async()=>{try{await api('teacherSchedCancel',{data:{studentId:st.id}});cl();toast('أُلغي الاقتراح');done&&done()}catch(e){toast('تعذّر')}};
+  });
+}
+/* تغيير موعد حصة واحدة (يحتاج موافقة ولي الأمر) */
+function moveSheet(o,done){
+  const tzT=myTz(),tzS=zOf(o.st.tz),p=partsIn(o.ms,tzT),v=p.date+'T'+p.t;
+  sheet('تغيير موعد حصة '+o.st.name,`<p class="small muted" style="margin-top:0">الحصة الأصلية: <b>${esc(dayHm(o.ms))}</b>. اختر الموعد الجديد بتوقيتك (${esc(tzLbl(tzT))}). تتغير هذه الحصة فقط، وتبقى المواعيد الأسبوعية كما هي.</p>
+    <div class="field"><label>الموعد الجديد</label><input type="datetime-local" id="mvT" value="${esc(v)}"></div><div class="card small" id="mvP" style="margin:0 0 12px"></div>
+    <button class="btn b-teal" style="width:100%" id="mvS"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> أرسل لولي الأمر ليؤكّد</button>`,(b,cl)=>{
+    const val=()=>{const m=String($('#mvT',b).value).match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);return m?zonedMs(+m[1],+m[2],+m[3],+m[4],+m[5],tzT):0};
+    const pv=()=>{const ms=val();$('#mvP',b).innerHTML=ms?`<div>بتوقيتك: <b>${esc(dayHm(ms))}</b></div>`+(tzS!==tzT?`<div class="muted">عند الطالب (${esc(tzLbl(tzS))}): ${esc(dLong(DCODE[partsIn(ms,tzS).wd])+' '+msT(ms,tzS))}</div>`:''):''};
+    $('#mvT',b).oninput=pv;pv();
+    $('#mvS',b).onclick=async()=>{const ms=val();if(!ms||ms<Date.now())return toast('اختر موعداً قادماً');if(Math.abs(ms-o.ms)<6e4)return toast('اختر موعداً مختلفاً عن الأصلي');
+      try{await api('teacherMove',{data:{studentId:o.st.id,from:o.date,fromT:o.t||'',to:new Date(ms).toISOString(),tz:tzT}});cl();toast('أُرسل طلب التغيير لولي الأمر ✓');done&&done()}catch(e){toast('تعذّر الإرسال')}};
+  });
+}
+/* نص إشعار المواعيد للإدارة */
+function schedNoteTxt(n,st){const [k,...r]=String(n.note||'').split(':'),v=r.join(':'),tz=zOf(st&&st.tz);
+  if(k==='ok')return 'وافق ولي الأمر على المواعيد: '+slotsTxt(slotsOf({slots:v}))+(st&&st.tz?' (بتوقيت '+tzName(st.tz)+')':'');
+  if(k==='no')return 'لم يوافق ولي الأمر على المواعيد المقترحة';
+  const m=v.match(/^(\d{4}-\d{2}-\d{2})(?:@(\d{2}:\d{2}))?>(.+)$/),to=m?Date.parse(m[3]):0;
+  if(k==='mvok')return 'وافق على تغيير حصة '+(m?day(m[1]):'')+(to?' إلى '+dayHm(to):'');
+  if(k==='mvno')return 'لم يوافق على تغيير حصة '+(m?day(m[1]):'');
+  return n.note||''}
 
 /* ================= TEACHER — صفحة المعلم ================= */
 async function teacher(tok){
@@ -905,7 +1085,7 @@ async function teacher(tok){
   const ck='hn_c_t_'+tok.slice(0,10),c=cacheGet(ck);
   const warm=!!app.querySelector('.shell');
   if(c&&!warm)drawTeacher(tok,c);else if(!warm)loading();
-  let d;try{d=await api('teacherHome')}catch(e){if(c)return toast('لا يوجد اتصال، تعرض آخر نسخة');return fail('الرابط غير صحيح أو تم إيقافه. تواصل مع إدارة الأكاديمية.')}
+  let d;try{d=await api('teacherHome',{tz:myTz()})}catch(e){if(c)return toast('لا يوجد اتصال، تعرض آخر نسخة');return fail('الرابط غير صحيح أو تم إيقافه. تواصل مع إدارة الأكاديمية.')}
   cacheSet(ck,d);remember('t='+tok,d.teacher.name,'t');if(warm||!c||JSON.stringify(c)!==JSON.stringify(d)){if(!document.querySelector('.sheet'))drawTeacher(tok,d)}
 }
 function drawTeacher(tok,d){
@@ -915,7 +1095,7 @@ function drawTeacher(tok,d){
   const absent=o=>mine.some(x=>x.studentId===o.st.id&&x.date===o.date&&/^absent/.test(x.status));
   const live=occs.find(o=>o.ms<=now+15*6e4&&now<o.ms+45*6e4&&!absent(o));
   const apol=occs.filter(o=>o.ms>now-12*36e5&&mine.some(x=>x.studentId===o.st.id&&x.date===o.date&&x.note===ABSENT_NOTE));
-  const missing=occs.filter(o=>o.ms+40*6e4<now&&!reported(mine,o)).reverse();
+  const missing=occs.filter(o=>o.ms+40*6e4<now&&counts(o)&&!reported(mine,o)).reverse();
   const next=occs.filter(o=>o.ms>now&&o!==live&&!absent(o)).slice(0,5);
   const unheard=(d.recitations||[]).filter(r=>!r.heard),heard=(d.recitations||[]).filter(r=>r.heard);
   const doneToday=mine.filter(x=>isToday(x.createdAt));
@@ -928,6 +1108,9 @@ function drawTeacher(tok,d){
   else if(next[0])N={lbl:'التالي',t:'حصتك القادمة: '+next[0].st.name,s:dayHm(next[0].ms)+' · '+inT(next[0].ms),a:V&&next[0].ms-now<36e5?join(next[0].st):room(next[0])&&next[0].ms-now<36e5?`<a class="btn b-teal" target="_blank" rel="noopener" href="${esc(room(next[0]))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> افتح الغرفة</a>`:`<button class="btn b-teal" data-st="${esc(next[0].st.id)}">تفاصيل الطالب</button>`};
   const todo=missing.slice(N&&N.lbl==='ينتظرك'&&!live&&missing[0]?1:0).map(o=>({ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>',u:1,t:'تقرير ناقص: '+o.st.name,s:dayHm(o.ms),attr:`data-lg="${esc(o.st.id)}" data-dt="${o.date}"`}))
     .concat(unheard.slice(N&&!live&&!missing[0]&&unheard[0]?1:0).map(r=>{const st=SX(r.studentId);return{ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg>',t:'تسجيل من '+(st?st.name:''),s:(r.surah?'سورة '+sName(+r.surah):'تلاوة')+(r.note?' · '+r.note:''),tm:ago(Date.parse(r.createdAt)),attr:`data-rc="${esc(r.id)}"`}}))
+    .concat(S.filter(s=>{const p=propOf(s);return p&&p.st==='no'}).map(s=>({ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',u:1,t:'لم يوافق ولي أمر '+s.name+' على المواعيد',s:'اتفقوا من جديد في مجموعة واتساب ثم أدخلها',attr:`data-sch="${esc(s.id)}"`})))
+    .concat(S.filter(s=>!hasSched(s)&&!propOf(s)).map(s=>({ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',u:1,t:'حدّد مواعيد '+s.name,s:'بعد الاتفاق مع ولي الأمر في مجموعة واتساب',attr:`data-sch="${esc(s.id)}"`})))
+    .concat(S.flatMap(s=>movesOf(s).filter(m=>m.st==='no'&&Date.parse(m.to)>now-864e5).map(m=>({ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',t:'لم يوافق ولي أمر '+s.name+' على تغيير الحصة',s:day(m.from)+' تبقى في موعدها',attr:`data-st="${esc(s.id)}"`}))))
     .concat(apol.map(o=>({ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',t:'اعتذار: '+o.st.name,s:dayHm(o.ms)+(mine.some(x=>x.studentId===o.st.id&&x.date===o.date&&x.status==='absent_no_notice')?' · اعتذار متأخر، تُحتسب لك':' · لا حصة، تُعوَّض لاحقاً'),attr:`data-st="${esc(o.st.id)}"`})));
   const frT=x=>`<button class="fr" ${x.attr}><span class="ii${x.u?' u':''}">${x.ic}</span><span><b>${esc(x.t)}</b><small>${esc(x.s||'')}</small></span><span class="tm">${x.tm||''}</span><span class="cv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></span></button>`;
   app.innerHTML=`<div class="shell solo"><div class="main">
@@ -939,8 +1122,9 @@ function drawTeacher(tok,d){
     <section class="blk"><div class="lbl">أنجزت اليوم</div><div class="dnum"><div><b>${doneToday.length}</b><span>تقرير</span></div><div><b>${d.month.sessions}</b><span>حصة هذا الشهر</span></div></div>${doneToday.slice(0,3).map(x=>`<div class="small muted" style="padding:3px 0">✓ ${esc((SX(x.studentId)||{}).name||'')}</div>`).join('')}</section>
   </div>
   ${todo.length?`<section class="blk mt"><div class="lbl">للمعالجة · ${todo.length}</div>${todo.map(frT).join('')}</section>`:''}
-  <section class="blk mt"><div class="lbl">طلابي · ${S.length}</div>${S.map(s=>frT({ic:esc(s.name.trim()[0]||'?'),t:s.name,s:[(x=>x?'القادمة: '+dayHm(x):'')(nextClasses(s.days,s.time,s.tz,1)[0]),s.cycle.total?'الحصص '+s.cycle.used+' من '+s.cycle.total:''].filter(Boolean).join(' · '),tm:s.practice14?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-6 1-9.5z"/></svg>'.replace('<svg','<svg style="width:13px;height:13px;vertical-align:-2px;color:#E08A1E"')+' '+s.practice14:'',attr:`data-st="${esc(s.id)}"`})).join('')||'<div class="empty">لا يوجد طلاب بعد. ستضيفهم الإدارة لك.</div>'}</section>
-  ${d.teacher.meet&&!V?`<details class="coll"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg> غرفة حصصي</summary><div class="in"><div class="small muted latin" style="direction:ltr;text-align:right;word-break:break-all">${esc(d.teacher.meet)}</div><p class="small muted mt">نفس الرابط لكل طلابك، يظهر لهم زر «ادخل الحصة». اقبل الطالب حين يطلب الدخول.</p><div class="row mt"><a class="btn b-teal b-sm" href="${esc(d.teacher.meet)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> افتح الغرفة</a><button class="btn b-ghost b-sm" id="meetEd">تغيير الرابط</button>${S.some(s=>s.days&&s.time)?'<button class="btn b-ghost b-sm" id="tics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 21a2 2 0 0 0 4 0"/></svg> مواعيدي في التقويم</button>':''}</div></div></details>`:''}
+  <section class="blk mt"><div class="lbl">طلابي · ${S.length}</div>${S.map(s=>frT({ic:esc(s.name.trim()[0]||'?'),t:s.name,s:[(x=>x?'القادمة: '+dayHm(x):'')(nextOf(s,1)[0]),(p=>p&&p.st==='wait'?'المواعيد بانتظار موافقة ولي الأمر':'')(propOf(s)),s.cycle.total?'الحصص '+s.cycle.used+' من '+s.cycle.total:''].filter(Boolean).join(' · '),tm:s.practice14?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-6 1-9.5z"/></svg>'.replace('<svg','<svg style="width:13px;height:13px;vertical-align:-2px;color:#E08A1E"')+' '+s.practice14:'',attr:`data-st="${esc(s.id)}"`})).join('')||'<div class="empty">لا يوجد طلاب بعد. ستضيفهم الإدارة لك.</div>'}</section>
+  ${S.length?`<details class="coll" id="tcal"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> تقويم الشهر</summary><div class="in" id="tcalB"></div></details>`:''}
+  ${d.teacher.meet&&!V?`<details class="coll"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg> غرفة حصصي</summary><div class="in"><div class="small muted latin" style="direction:ltr;text-align:right;word-break:break-all">${esc(d.teacher.meet)}</div><p class="small muted mt">نفس الرابط لكل طلابك، يظهر لهم زر «ادخل الحصة». اقبل الطالب حين يطلب الدخول.</p><div class="row mt"><a class="btn b-teal b-sm" href="${esc(d.teacher.meet)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> افتح الغرفة</a><button class="btn b-ghost b-sm" id="meetEd">تغيير الرابط</button>${S.some(hasSched)?'<button class="btn b-ghost b-sm" id="tics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 21a2 2 0 0 0 4 0"/></svg> مواعيدي في التقويم</button>':''}</div></div></details>`:''}
   <details class="coll"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg> أرباحي: ${esc(monthName(d.month.key))}</summary><div class="in"><div class="mny"><div class="stat"><div class="k">الحصص المحتسبة</div><div class="v">${d.month.sessions}</div></div><div class="stat"><div class="k">المستحق التقديري</div><div class="v">${money(d.month.amount)}</div><div class="s">يُراجع ويُدفع أول الشهر القادم</div></div></div>${(d.payHist||[]).filter(h=>h.key!==d.month.key).map(h=>`<div class="row small mt" style="justify-content:space-between"><span>${esc(monthName(h.key))} · ${h.sessions} حصة · <span class="latin">${money(h.amount)}</span></span>${h.paidAt?'<span class="chip c-ok">دُفع ✓</span>':'<span class="chip c-warn">لم يُدفع بعد</span>'}</div>`).join('')}</div></details>
   <details class="coll"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg> آخر ما سجّلته (${mine.length})</summary><div class="in"><div class="list">${mine.slice(0,20).map(x=>{const st=SX(x.studentId);const fresh=Date.now()-Date.parse(x.createdAt)<864e5;return repHTML(x,`<div class="row mt small muted">${st?esc(st.name):''}${fresh?` <button class="btn b-bad b-sm" data-del="${esc(x.id)}">حذف</button>`:''}</div>`)}).join('')||'<div class="empty">لا توجد تقارير بعد.</div>'}</div></div></details>
   ${heard.length?`<details class="coll"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg> تسجيلات سمعتها (${heard.length})</summary><div class="in"><div class="list">${heard.map(r=>{const st=SX(r.studentId);return `<div class="item"><div class="row"><b>${esc(st?st.name:'')}</b>${r.surah?`<span class="chip c-teal">سورة ${esc(sName(+r.surah))}</span>`:''}<span class="small muted">${esc(day(r.createdAt.slice(0,10)))}</span></div><audio controls preload="none" src="${esc(r.audioUrl)}"></audio>${r.feedback?`<div class="small muted mt">ملاحظتك: ${esc(r.feedback)}</div>`:''}</div>`}).join('')}</div></div></details>`:''}
@@ -951,24 +1135,38 @@ function drawTeacher(tok,d){
   $$('.shell [data-cls]').forEach(b=>b.onclick=()=>cls(b.dataset.cls));
   $$('[data-lg]').forEach(b=>b.onclick=()=>logOf(b.dataset.lg,b.dataset.dt));
   $$('[data-st]').forEach(b=>b.onclick=()=>tStudent(SX(b.dataset.st)));
+  $$('[data-sch]').forEach(b=>b.onclick=()=>{const s=SX(b.dataset.sch);if(s)schedSheet(s,S,re)});
+  const tc=$('#tcal');if(tc)tc.ontoggle=()=>{if(tc.open&&!tc.dataset.on){tc.dataset.on=1;monthCal($('#tcalB'),{names:1,ss:mine,studentOf:SX,list:(a,b)=>S.flatMap(s=>occ(s,a,b)),other:o=>zOf(o.st.tz)!==myTz()?'= '+msT(o.ms,o.st.tz)+' عند الطالب ('+tzLbl(o.st.tz)+')':'',pick:occAct})}};
+  function occAct(o){const past=o.ms<Date.now(),st=occState(o,mine);
+    sheet('حصة '+o.st.name,`<div class="kv"><span>الموعد</span><b>${esc(dayHm(o.ms))}</b>${zOf(o.st.tz)!==myTz()?`<span>عند الطالب</span><b>${esc(msT(o.ms,o.st.tz)+' ('+tzLbl(o.st.tz)+')')}</b>`:''}<span>الحالة</span><b>${esc(CALS[st][0])}</b></div>
+    ${o.pend?`<p class="small muted mt">طلبت تغييرها إلى ${esc(dayHm(Date.parse(o.pend.to)))}، بانتظار موافقة ولي الأمر.</p>`:''}
+    <div class="acts2">${past&&st!=='ok'?'<button class="btn b-teal w" id="oLg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> سجّل التقرير</button>':''}${!past&&!o.moved?`<button class="btn ${o.pend?'b-ghost':'b-teal'} w" id="oMv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ${o.pend?'غيّر الطلب':'غيّر موعد هذه الحصة'}</button>`:''}<button class="btn b-ghost w" id="oSt">تفاصيل الطالب</button></div>`,(b,cl)=>{
+      const lg=$('#oLg',b);if(lg)lg.onclick=()=>{cl();logOf(o.st.id,o.date)};
+      const mv=$('#oMv',b);if(mv)mv.onclick=()=>{cl();moveSheet(o,re)};
+      $('#oSt',b).onclick=()=>{cl();tStudent(o.st)}})}
+  function schedBox(s){const p=propOf(s),mv=movesOf(s).filter(m=>m.st==='wait'&&Date.parse(m.to)>Date.now()-36e5);
+    return `<div class="card small mt">${p&&p.st==='wait'?`<div><b>بانتظار موافقة ولي الأمر:</b> ${esc(slotsTxt(slotsConv(slotsOf({slots:p.slots}),zOf(s.tz),myTz())))} بتوقيتك</div>`:p&&p.st==='no'?'<div><b>لم يوافق ولي الأمر على المواعيد المقترحة.</b> اتفقوا من جديد في المجموعة.</div>':''}
+      ${mv.map(m=>`<div class="row" style="justify-content:space-between;margin-top:4px"><span>تغيير حصة ${esc(day(m.from))} إلى ${esc(dayHm(Date.parse(m.to)))} · بانتظار الموافقة</span><button class="lnk" data-mvx="${esc(m.id)}">إلغاء</button></div>`).join('')}
+      <button class="btn b-ghost b-sm mt" id="dSch" style="width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ${hasSched(s)||p?'غيّر المواعيد الأسبوعية':'حدّد المواعيد'}</button>
+      <p class="muted" style="margin:6px 0 0">لتغيير حصة واحدة فقط: افتح «تقويم الشهر» واضغط على الحصة.</p></div>`}
   $$('[data-rc]').forEach(b=>b.onclick=()=>recDrawer((d.recitations||[]).find(r=>r.id===b.dataset.rc)));
   const pk=$('#pickLog');if(pk)pk.onclick=()=>sheet('سجّل حصة لمن؟',`<div class="blk" style="padding:4px 12px">${S.map(s=>frT({ic:esc(s.name.trim()[0]),t:s.name,s:s.program||'',attr:`data-pl="${esc(s.id)}"`})).join('')}</div>`,(b,cl)=>$$('[data-pl]',b).forEach(x=>x.onclick=()=>{cl();logOf(x.dataset.pl)}));
   function tStudent(s){if(!s)return;const h=mine.filter(x=>x.studentId===s.id);
     sheet(s.name,`<div class="row" style="margin-bottom:10px">${s.age?`<span class="chip">${esc(s.age)} سنوات</span>`:''}<span class="chip c-teal">${esc(s.program||'')}</span>${s.riwaya?`<span class="chip">${esc(s.riwaya)}</span>`:''}</div>
-    <div class="kv">${[['الباقة',s.planName],['الحصص',s.cycle.total?s.cycle.used+' من '+s.cycle.total:''],['المواعيد',s.days&&s.time?schedLabel(s):''],['المراجعة في البيت',(s.practice14||0)+' من 14 يوماً'],['آخر موضع',s.last&&+s.last.surah?sName(+s.last.surah)+(s.last.toAyah?' حتى الآية '+s.last.toAyah:''):''],['المحفوظ سابقاً',s.memorized]].filter(x=>x[1]).map(([a,b])=>`<span>${a}</span><b>${esc(b)}</b>`).join('')}</div>
+    <div class="kv">${[['الباقة',s.planName],['الحصص',s.cycle.total?s.cycle.used+' من '+s.cycle.total:''],['المواعيد',hasSched(s)?schedLabel(s):'لم تُحدَّد بعد'],['المراجعة في البيت',(s.practice14||0)+' من 14 يوماً'],['آخر موضع',s.last&&+s.last.surah?sName(+s.last.surah)+(s.last.toAyah?' حتى الآية '+s.last.toAyah:''):''],['المحفوظ سابقاً',s.memorized]].filter(x=>x[1]).map(([a,b])=>`<span>${a}</span><b>${esc(b)}</b>`).join('')}</div>
     <div class="acts2">${V?join(s,'b-teal w'):''}<button class="btn ${V?'b-ghost':'b-teal'} w" id="dLog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> سجّل حصة</button>${!V&&s.meet?`<a class="btn b-ghost w" href="${esc(s.meet)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> افتح غرفة الحصة</a>`:''}</div>
-    <h2>السجل (${h.length})</h2><div class="list">${h.slice(0,10).map(x=>repHTML(x)).join('')||'<div class="empty">لا توجد حصص مسجلة.</div>'}</div>`,(b,cl)=>{$('#dLog',b).onclick=()=>{cl();logOf(s.id)};$$('[data-cls]',b).forEach(x=>x.onclick=()=>{cl();cls(x.dataset.cls)})})}
+    ${schedBox(s)}<h2>السجل (${h.length})</h2><div class="list">${h.slice(0,10).map(x=>repHTML(x)).join('')||'<div class="empty">لا توجد حصص مسجلة.</div>'}</div>`,(b,cl)=>{$('#dLog',b).onclick=()=>{cl();logOf(s.id)};$('#dSch',b).onclick=()=>{cl();schedSheet(s,S,re)};$$('[data-mvx]',b).forEach(x=>x.onclick=async()=>{try{await api('teacherSchedCancel',{data:{studentId:s.id,moveId:x.dataset.mvx}});cl();toast('أُلغي الطلب');re()}catch(e){toast('تعذّر')}});$$('[data-cls]',b).forEach(x=>x.onclick=()=>{cl();cls(x.dataset.cls)})})}
   function recDrawer(r){if(!r)return;const st=SX(r.studentId);
     sheet('تسجيل '+(st?st.name:''),`<div class="row">${r.surah?`<span class="chip c-teal">سورة ${esc(sName(+r.surah))}</span>`:''}<span class="small muted">${esc(day(r.createdAt.slice(0,10)))}</span></div>${r.note?`<div class="card small mt">${esc(r.note)}</div>`:''}<audio controls autoplay src="${esc(r.audioUrl)}"></audio>
     <div class="field mt"><label>ملاحظة قصيرة للطالب</label><input id="fb" placeholder="ما شاء الله، انتبه لمدّ…"></div><button class="btn b-teal" style="width:100%" id="hrd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> سمعتها</button>`,(b,cl)=>{$('#hrd',b).onclick=async()=>{try{await api('teacherHeard',{id:r.id,feedback:$('#fb',b).value});cl();toast('تم ✓ وصلت ملاحظتك للطالب');re()}catch(e){toast('تعذّر الحفظ')}}})}
   const saveMeet=async v=>{try{await api('teacherSetMeet',{meet:v});toast('تم الحفظ ✓');re()}catch(e){toast('الرابط غير صحيح، انسخه كاملاً يبدأ بـ https://')}};
   const ms=$('#meetSv');if(ms)ms.onclick=()=>{const v=$('#meetIn').value.trim();if(!/^https:\/\//.test(v))return toast('الصق الرابط كاملاً يبدأ بـ https://');saveMeet(v)};
   const me=$('#meetEd');if(me)me.onclick=()=>{const v=prompt('الصق رابط الغرفة الجديد:',d.teacher.meet||'');if(v!==null)saveMeet(v.trim())};
-  const ti=$('#tics');if(ti)ti.onclick=()=>remindSheet(S.filter(s=>s.days&&s.time).map(s=>Object.assign(classEvent(s,'حصة '+s.name),{label:'حصص '+s.name})),'horoufnour-my-classes.ics','حصصي — حروف من نور');
+  const ti=$('#tics');if(ti)ti.onclick=()=>remindSheet(S.filter(hasSched).flatMap(s=>{const E=classEvents(s,'حصة '+s.name);return E.map(e=>Object.assign(e,{label:'حصص '+s.name+(E.length>1?' · '+tLbl(e.start.slice(9,11)+':'+e.start.slice(11,13)):'')}))}),'horoufnour-my-classes.ics','حصصي — حروف من نور');
   $$('[data-del]').forEach(b=>b.onclick=async()=>{if(!await askConfirm('حذف هذا التقرير؟','يُحذف تقرير الحصة ولا يمكن استرجاعه.'))return;try{await api('deleteMySession',{id:b.dataset.del});toast('تم الحذف');re()}catch(e){toast('لا يمكن الحذف بعد 24 ساعة')}});
 }
 
-function schedLabel(s){const names=String(s.days||'').split(',').map(k=>(DAYS.find(d=>d[0]===k.trim())||[,''])[1]).filter(Boolean).join(' و');const nx=nextClasses(s.days,s.time,s.tz,1)[0];const loc=nx?new Intl.DateTimeFormat(LOC(),{hour:'2-digit',minute:'2-digit'}).format(new Date(nx)):s.time;return names+' '+s.time+(s.tz?' (بتوقيت '+tzName(s.tz)+')':'')+(nx?' = '+loc+' بتوقيتك':'')}
+function schedLabel(s){const L=slotsOf(s);if(!L.length)return '';const tz=zOf(s.tz),me=myTz();return slotsTxt(L)+(s.tz?' (بتوقيت '+tzLbl(s.tz)+')':'')+(tz!==me?' = '+slotsTxt(slotsConv(L,tz,me))+' بتوقيتك':'')}
 function sessionForm(st,action,done,extra={},date){
   const last=st.last||{};const ls=+last.surah||'';
   const opts=SUR.n.map((n,i)=>`<option value="${i+1}" ${ls===i+1?'selected':''}>${i+1}. ${esc(n)}</option>`).join('');
@@ -1042,7 +1240,7 @@ async function refresh(){try{DB=await api('dashboard');cacheSet('hn_c_a',DB);ren
 function feed(){
   const S=DB.settings||{},LH=+S.leadH||2,RH=+S.reportH||12,RL=S.renewLeft==null?1:+S.renewLeft,now=Date.now(),out=[];
   const act=DB.students.filter(s=>s.status==='نشط'||s.status==='تجريبي');
-  act.forEach(s=>occ(s,now-3*864e5,now-RH*36e5).forEach(o=>{if(o.date>=(s.startDate||'')&&!reported(DB.sessions,o)){const t=T(s.teacherId);out.push({k:'rep',pri:1,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>',u:1,at:o.ms,title:'تقرير ناقص: حصة '+s.name,sub:(t?t.name+' · ':'')+dayHm(o.ms),o,s,t})}}));
+  act.forEach(s=>occ(s,now-3*864e5,now-RH*36e5).forEach(o=>{if(counts(o)&&!reported(DB.sessions,o)){const t=T(s.teacherId);out.push({k:'rep',pri:1,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>',u:1,at:o.ms,title:'تقرير ناقص: حصة '+s.name,sub:(t?t.name+' · ':'')+dayHm(o.ms),o,s,t})}}));
   DB.leads.filter(l=>l.status==='جديد').forEach(l=>{const at=Date.parse(l.createdAt)||now,late=now-at>LH*36e5;out.push({k:'lead',pri:late?1:2,u:late,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/></svg>',at,title:(late?'ينتظر الرد: ':'طلب جديد: ')+l.name,sub:[l.who&&'لـ '+l.who,l.program,cName(isoByPhone(l.phone))].filter(Boolean).join(' · '),l})});
   act.filter(s=>!s.teacherId||!T(s.teacherId)).forEach(s=>out.push({k:'not',pri:2,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',at:now-3,title:'بلا معلم: '+s.name,sub:'اختر له معلماً لتبدأ الحصص',s}));
   DB.students.filter(s=>s.status==='تجريبي').forEach(s=>{const x=DB.sessions.find(v=>v.studentId===s.id&&v.status==='present');if(x)out.push({k:'trial',pri:2,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',at:Date.parse(x.createdAt)||now,title:'تمت التجربة: '+s.name,sub:'اعرض الباقات على العائلة',s})});
@@ -1053,8 +1251,14 @@ function feed(){
   if(!(DB.settings||{}).video)DB.teachers.filter(t=>t.status!=='متوقف'&&!t.meet&&act.some(s=>s.teacherId===t.id)).forEach(t=>out.push({k:'meet',pri:3,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>',at:now-4,title:'بلا رابط Meet: '+t.name,sub:'طلابه لا يرون زر «ادخل الحصة»',t}));
   (DB.notices||[]).forEach(n=>{const s=Sx(n.studentId);if(s)out.push({k:'paid',pri:1,u:1,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>',at:Date.parse(n.createdAt)||now,title:'دفعة تنتظر التأكيد: '+s.name,sub:money(+n.amount,n.currency)+(n.method?' · '+n.method:''),s,n})});
   DB.sessions.filter(x=>x.date>=DB.today&&x.note===ABSENT_NOTE).forEach(x=>{const s=Sx(x.studentId);if(s)out.push({k:'abs',pri:3,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',at:Date.parse(x.createdAt)||now,title:'اعتذار: '+s.name+' · '+day(x.date),sub:x.status==='absent_no_notice'?'اعتذار متأخر، تُحتسب الحصة':'اعتذار في الوقت، تُعوَّض الحصة',s})});
+  (DB.schedN||[]).forEach(n=>{const s=Sx(n.studentId);if(s)out.push({k:'sch',pri:3,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',at:Date.parse(n.createdAt)||now,title:(/^(no|mvno):/.test(n.note)?'لم يوافق: ':'المواعيد: ')+s.name,sub:schedNoteTxt(n,s),s,n})});
+  act.filter(s=>s.teacherId&&T(s.teacherId)&&!hasSched(s)&&!propOf(s)).forEach(s=>out.push({k:'nos',pri:3,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',at:now-5,title:'بلا مواعيد: '+s.name,sub:'ينتظر أن يُدخلها '+(T(s.teacherId).gender==='معلمة'?'المعلمة':'المعلم')+' بعد الاتفاق في المجموعة',s}));
+  act.forEach(s=>{const p=propOf(s);if(p&&p.st==='wait'&&now-Date.parse(p.at)>24*36e5)out.push({k:'swait',pri:2,ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',at:Date.parse(p.at),title:'مواعيد تنتظر موافقة ولي الأمر: '+s.name,sub:slotsTxt(slotsOf({slots:p.slots}))+' · منذ '+ago(Date.parse(p.at)),s})});
   return out.sort((a,b)=>a.pri-b.pri||a.at-b.at);
 }
+function aSchedBox(s){const p=propOf(s),mv=movesOf(s).filter(m=>m.st==='wait'&&Date.parse(m.to)>Date.now()-36e5);if(!(p&&p.st==='wait')&&!mv.length)return '';
+  return `<div class="card small mt">${p&&p.st==='wait'?`<div><b>مواعيد اقترحها المعلم:</b> ${esc(slotsTxt(slotsOf({slots:p.slots})))}${s.tz?' (بتوقيت '+esc(tzName(s.tz))+')':''} · بانتظار ولي الأمر</div><div class="row mt"><button class="btn b-teal b-sm" data-asd="|1">ثبّتها الآن</button><button class="btn b-ghost b-sm" data-asd="|0">ارفضها</button></div>`:''}
+  ${mv.map(m=>`<div class="mt"><b>تغيير حصة ${esc(day(m.from))}</b> إلى ${esc(dayHm(Date.parse(m.to)))} · بانتظار ولي الأمر</div><div class="row mt"><button class="btn b-teal b-sm" data-asd="${esc(m.id)}|1">ثبّته</button><button class="btn b-ghost b-sm" data-asd="${esc(m.id)}|0">ارفضه</button></div>`).join('')}</div>`}
 const repRemind=it=>`السلام عليكم ${it.t?it.t.name:''}، تذكير لطيف: تقرير حصة ${it.s.name} (${dayHm(it.o.ms)}) لم يُسجّل بعد. سجّله من صفحتك ليصل لولي الأمر:\n${it.t?tLink(it.t):''}\nجزاك الله خيراً.`;
 const renewMsg=s=>{const p=stPrice(s);return `السلام عليكم ${s.parentName||''}، جزاكم الله خيراً على متابعة ${s.name}. ${s.cycle&&s.cycle.left?'بقيت حصة واحدة في باقة هذا الشهر':'انتهت حصص باقة هذا الشهر'}، ويسعدنا تجديدها (${planLabel(s)}: ${money(dueOf(Object.assign({},s,{count:1})).now,p.c)}${dealSet(s).has('q')?' عن 3 أشهر':''}) لتستمر رحلته مع القرآن.`};
 function offerMsg(s){const r=prOf(isoOf(s.country)||'XX');const L=[`السلام عليكم ${s.parentName||''}، الحمد لله تمت الحصة التجريبية لـ ${s.name}، ونرجو أن تكون نالت إعجابكم.`,'','باقاتنا الشهرية:'];
@@ -1070,6 +1274,9 @@ function mainAct(it){
     case 'paid':return{l:'راجع وأكّد',fn:()=>paidDrawer(it)};
     case 'meet':return{l:'اطلب منه الرابط',href:waLink(it.t.phone,`السلام عليكم ${it.t.name}، أضف رابط غرفة حصصك الثابتة (Google Meet) من صفحتك مرة واحدة، فيظهر لطلابك زر «ادخل الحصة»:\n${tLink(it.t)}`)};
     case 'not':return{l:'اختر معلماً',fn:()=>studentForm(it.s)};
+    case 'sch':return{l:'تم الاطلاع',fn:async()=>{try{await api('noticeSeen',{id:it.n.id});refresh()}catch(e){toast('تعذّر')}}};
+    case 'nos':{const t=T(it.s.teacherId);return t&&t.phone?{l:'ذكّر المعلم',href:waLink(t.phone,`السلام عليكم ${t.name}، بعد اتفاقكم في مجموعة واتساب على مواعيد ${it.s.name}، أدخلها من صفحتك («حدّد مواعيد ${it.s.name}») ليؤكّدها ولي الأمر:\n${tLink(t)}`)}:{l:'أدخل المواعيد',fn:()=>studentForm(it.s)}}
+    case 'swait':return{l:'ذكّر ولي الأمر',href:waLink(it.s.phone,`السلام عليكم ${it.s.parentName||''}، أدخل المعلم مواعيد حصص ${it.s.name}. افتحوا صفحة المتابعة واضغطوا «أوافق ✓» لتثبيتها:\n${pLink(it.s)}`)};
     default:return{l:'افتح',fn:()=>openIt(it)};
   }
 }
@@ -1178,15 +1385,17 @@ function studentDrawer(list,i){
   const s=list[i];if(!s)return;const t=T(s.teacherId),pr=stPrice(s),RL=(DB.settings||{}).renewLeft==null?1:+DB.settings.renewLeft;
   const ss=DB.sessions.filter(x=>x.studentId===s.id),renew=s.status==='نشط'&&s.cycle.total&&s.cycle.left<=RL;
   sheet(s.name,`<div class="row" style="margin-bottom:10px"><span class="chip ${s.status==='نشط'?'c-ok':s.status==='تجريبي'?'c-teal':'c-warn'}">${esc(s.status)}</span>${renew?'<span class="due">تجديد</span>':''}<span class="small muted">الحصص ${s.cycle.used} من ${s.cycle.total||'—'}</span></div>
-  <div class="kv">${[['ولي الأمر',s.parentName],['البلد',cName(s.country)],['المعلم',t?t.name:'بلا معلم'],['البرنامج',[s.program,s.riwaya].filter(Boolean).join(' · ')],['الباقة',planLabel(s)+' · '+money(pr.v,pr.c)+(pr.c!=='USD'?' (≈ '+money(usdOf(pr.v,pr.c))+')':'')],['المدة والخصومات',dealTxt(s)],['المواعيد',s.days&&s.time?schedLabel(s):''],['آخر حصة',ss[0]?day(ss[0].date):''],['رمز الدخول',s.code]].filter(x=>x[1]).map(([a,b])=>`<span>${a}</span><b>${esc(b)}</b>`).join('')}<span>الهاتف</span><b class="latin" style="text-align:right">${esc(s.phone)}</b></div>
+  <div class="kv">${[['ولي الأمر',s.parentName],['البلد',cName(s.country)],['المعلم',t?t.name:'بلا معلم'],['البرنامج',[s.program,s.riwaya].filter(Boolean).join(' · ')],['الباقة',planLabel(s)+' · '+money(pr.v,pr.c)+(pr.c!=='USD'?' (≈ '+money(usdOf(pr.v,pr.c))+')':'')],['المدة والخصومات',dealTxt(s)],['المواعيد',hasSched(s)?schedLabel(s):''],['آخر حصة',ss[0]?day(ss[0].date):''],['رمز الدخول',s.code]].filter(x=>x[1]).map(([a,b])=>`<span>${a}</span><b>${esc(b)}</b>`).join('')}<span>الهاتف</span><b class="latin" style="text-align:right">${esc(s.phone)}</b></div>
   <div class="acts2">${s.status==='تجريبي'?`<a class="btn b-teal w" target="_blank" rel="noopener" href="${esc(waLink(s.phone,offerMsg(s)))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> اعرض الباقات</a>`:renew?`<a class="btn b-teal w" target="_blank" rel="noopener" href="${esc(waLink(s.phone,renewMsg(s)))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> تذكير التجديد</a>`:''}
   <a class="btn ${s.status==='تجريبي'||renew?'b-ghost':'b-teal'} w" target="_blank" rel="noopener" href="${esc(waLink(s.phone,welcomeMsg(s)))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> رسالة الترحيب والرابط</a>
   <button class="btn b-ghost" id="sPay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg> سجّل دفعة</button><button class="btn b-ghost" id="sLog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> سجّل حصة</button>
   <button class="btn b-ghost" id="sCp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> نسخ رابط المتابعة</button><button class="btn b-ghost" id="sEd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> تعديل</button>${(DB.settings||{}).video?'<button class="btn b-ghost w" id="sCls"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> ادخل غرفة حصته (متابعة)</button>':''}<button class="btn b-ghost w" id="sNt">رابط ورمز جديدان (يوقف القديم)</button></div>
+  ${aSchedBox(s)}
   ${ss.length?`<h2>آخر الحصص</h2><div class="list">${ss.slice(0,3).map(x=>repHTML(x)).join('')}</div>`:''}
   <button class="btn b-bad mt2" id="sDel" style="width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg> حذف الطالب</button>`,(box,cl)=>{
     $('#sPay',box).onclick=()=>{cl();payForm(s.id)};$('#sLog',box).onclick=()=>{cl();logFor(s)};$('#sEd',box).onclick=()=>{cl();studentForm(s)};
     $('#sCp',box).onclick=()=>copy(pLink(s),'نُسخ رابط ولي الأمر ✓');
+    $$('[data-asd]',box).forEach(b=>b.onclick=async()=>{const [mv,ok]=b.dataset.asd.split('|');try{await api('adminSched',{studentId:s.id,moveId:mv||'',ok:ok==='1'?1:0});cl();toast('تم ✓');refresh()}catch(e){toast('تعذّر')}});
     const sc=$('#sCls',box);if(sc)sc.onclick=()=>{cl();openClass('adminClass',{studentId:s.id},'حصة '+s.name)};
     $('#sNt',box).onclick=async()=>{if(!await askConfirm('رابط ورمز جديدان لـ «'+s.name+'»؟','يتوقف الرابط والرمز القديمان فوراً، ثم أرسل رسالة الترحيب من جديد للعائلة.','نعم، أنشئ الجديد'))return;try{await api('newToken',{kind:'parent',id:s.id});cl();toast('تم ✓ أرسل رسالة الترحيب من جديد');refresh()}catch(e){toast('تعذّر')}};
     $('#sDel',box).onclick=async()=>{if(!await askConfirm('حذف الطالب «'+s.name+'»؟','يختفي من القوائم ويتوقف رابط المتابعة الخاص به. حصصه ودفعاته السابقة تبقى في السجل المالي.'))return;try{await api('deleteStudent',{id:s.id});cl();toast('حُذف الطالب');refresh()}catch(e){toast('تعذّر الحذف')}};
@@ -1194,10 +1403,9 @@ function studentDrawer(list,i){
 }
 function welcomeMsg(st){
   const t=T(st.teacherId)||{},meet=st.meet||t.meet||'',P=DB.plans[st.plan];
-  const days=String(st.days||'').split(',').map(k=>(DAYS.find(d=>d[0]===k.trim())||[,''])[1]).filter(Boolean).join(' و');
   const L=['*أهلاً بكم في أكاديمية حروف من نور*','','السلام عليكم ورحمة الله، جزاكم الله خيراً على ثقتكم. هذه أهم المعلومات:','','*الحصص*'];
   if(t.name)L.push('• '+(t.gender==='معلمة'?'المعلمة':'المعلم')+': '+t.name);
-  if(days&&st.time)L.push('• المواعيد: '+days+' الساعة '+st.time+(st.tz?' بتوقيت '+tzName(st.tz):''));
+  if(hasSched(st))L.push('• المواعيد: '+slotsTxt(slotsOf(st))+(st.tz?' بتوقيت '+tzName(st.tz):''));
   if(P){const pr=stPrice(st);L.push('• الباقة: '+P.name+'، '+P.n+' حصص في 30 يوماً ('+money(pr.v,pr.c)+')')}
   L.push('','*صفحة '+st.name+' في تطبيق المتابعة*','فيها زر «ادخل الحصة»، وتقرير كل حصة، والمصحف والوِرد اليومي والأذكار:',pLink(st),'افتحوها ثم اختاروا «إضافة إلى الشاشة الرئيسية» لتبقى كتطبيق على الهاتف. الرابط خاص بعائلتكم.');
   if(st.code)L.push('','*رمز الدخول: '+st.code+'*','إن ضاع الرابط: ادخلوا من زر «دخول» في موقعنا، ثم «ولي أمر أو طالب»، واكتبوا رقم الواتساب هذا والرمز.');
@@ -1221,8 +1429,7 @@ function studentForm(s){
   <div class="field"><label>المدة والخصومات</label><div class="fchips" style="flex-wrap:wrap" id="deals">${DEALS.map(d=>`<button type="button" data-d="${d[0]}">${d[1]} <bdi dir="ltr">${d[2]}</bdi></button>`).join('')}</div><p class="small muted" id="sibH" style="margin:6px 0 0"></p></div>
   <div class="field" id="exF"><label>حصص إضافية <span class="muted" id="exH"></span></label><select name="extra">${[0,4,8,12].map(x=>`<option value="${x}" ${x===extraOf(s)?'selected':''}>${x?'+'+x+' حصص':'بدون'}</option>`).join('')}</select></div>
   <div class="card small" id="pBox" style="margin:0 0 14px"></div>
-  <div class="field"><label>أيام الحصص</label><div class="daypick">${DAYS.map(([k,l])=>`<label><input type="checkbox" name="day" value="${k}" ${String(s.days||'').split(',').includes(k)?'checked':''}>${l}</label>`).join('')}</div></div>
-  <div class="field"><label>وقت الحصة <span class="muted" id="tzL"></span></label><input type="time" name="time" value="${esc(s.time)}"></div>
+  <div class="field"><label>أيام الحصص ووقت كل يوم <span class="muted" id="tzL"></span></label>${slotRows(slotsOf(s))}<p class="small muted" style="margin:6px 0 0">عادةً يُدخلها المعلم بعد الاتفاق في مجموعة واتساب، ويؤكّدها ولي الأمر. تعديلك هنا يُطبَّق مباشرة.</p></div>
   <p class="small" id="clashH" style="margin:-4px 0 12px"></p>
   <details class="coll" id="adv"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg> خيارات إضافية</summary><div class="in">
   <div class="f2"><div class="field"><label>العمر</label><input name="age" inputmode="numeric" value="${esc(s.age)}"></div><div class="field"><label>الرواية</label><select name="riwaya">${['حفص','ورش','قالون'].map(x=>`<option ${x===s.riwaya?'selected':''}>${x}</option>`).join('')}</select></div></div>
@@ -1239,7 +1446,7 @@ function studentForm(s){
     const plans=()=>{const r=prOf(iso()),cur=f.plan.value||s.plan||'steady';f.plan.innerHTML=Object.entries(DB.plans).map(([k,v])=>`<option value="${k}" ${k===cur?'selected':''}>${v.name} — ${planN(k)} ${planN(k)<11?'حصص':'حصة'} × ${fixed45(k)?45:30} د · ${money(r[PLAN_IDX[k]],r[0])}</option>`).join('')+`<option value="custom" ${cur==='custom'?'selected':''}>باقة خاصة</option>`};
     const paint=()=>$$('#deals button',box).forEach(b=>{const lock=b.dataset.d==='d45'&&fix();b.classList.toggle('on',set.has(b.dataset.d)||lock);b.disabled=lock;b.style.opacity=lock?.6:'';if(b.dataset.d==='d45')b.lastElementChild.style.display=lock?'none':''});
     const tzNow=()=>f.tz.value||tzFor(iso());
-    const clash=()=>{const fd=new FormData(f),c=clashes({id:s.id,teacherId:f.teacherId.value,days:fd.getAll('day').join(','),time:f.time.value,tz:tzNow(),dur:set.has('d45')||fix()?'45':''},DB.students);
+    const clash=()=>{const c=clashes({id:s.id,teacherId:f.teacherId.value,slots:slotsStr(slotRead(box)),tz:tzNow(),dur:set.has('d45')||fix()?'45':''},DB.students);
       $('#clashH',box).innerHTML=c.map(x=>`<div class="due" style="white-space:normal;display:block;border-radius:10px;padding:6px 10px;margin-bottom:4px">تعارض: للمعلم حصة ${esc(x.s.name)} في الوقت نفسه (${esc(dayHm(x.ms))} بتوقيتك)</div>`).join(' ')};
     const calc=()=>{const custom=f.plan.value==='custom',n=custom?+f.sessions.value:planN(f.plan.value)+ex(),cur=f.currency.value,pv=+f.price.value||0,usd=usdOf(pv,cur);
       const d=dueOf({price:pv,currency:cur,deal:[...set].join(','),count:isNew?0:DB.payments.filter(x=>x.studentId===s.id).length,sessions:n});
@@ -1255,13 +1462,13 @@ function studentForm(s){
     f.phone.oninput=()=>{if(!f.country.value){const i=isoByPhone(f.phone.value);if(i){f.country.value=i;f.country.onchange()}}sib()};
     f.country.onchange=()=>{const r=prOf(iso());f.currency.value=r[0];const z=tzFor(iso());if(z&&(isNew||!f.tz.value))f.tz.value=z;if(MULTI.includes(iso())||!z)adv.open=true;dirty=false;plans();fill()};
     f.plan.onchange=()=>{dirty=false;fill()};f.currency.onchange=()=>{dirty=false;fill()};f.extra.onchange=()=>{dirty=false;fill()};
-    f.price.oninput=()=>{dirty=true;calc()};f.sessions.oninput=calc;f.teacherId.onchange=f.time.oninput=f.tz.onchange=calc;$$('input[name=day]',box).forEach(x=>x.onchange=calc);
+    f.price.oninput=()=>{dirty=true;calc()};f.sessions.oninput=calc;f.teacherId.onchange=f.tz.onchange=calc;slotBind(box,calc);
     if(!s.currency&&f.country.value)f.currency.value=prOf(iso())[0];
     if(isNew&&!f.tz.value&&f.country.value){const z=tzFor(iso());if(z)f.tz.value=z}
     plans();paint();
     dirty=+s.price>0&&(f.plan.value==='custom'||Math.abs(+s.price-dealPrice(base(),pset()))>.01);
     fill();sib();
-    f.onsubmit=async e=>{e.preventDefault();const fd=new FormData(f);const data=Object.fromEntries(fd);data.days=fd.getAll('day').join(',');delete data.day;if(s.id)data.id=s.id;if(s.leadId)data.leadId=s.leadId;
+    f.onsubmit=async e=>{e.preventDefault();const fd=new FormData(f);const data=Object.fromEntries(fd);if($$('[data-sk]',box).some(c=>c.checked&&!$(`[data-tk="${c.dataset.sk}"]`,box).value))return toast('اكتب الوقت لكل يوم مختار');data.slots=slotsStr(slotRead(box));if(s.id)data.id=s.id;if(s.leadId)data.leadId=s.leadId;
       if(!data.tz)data.tz=tzFor(iso());
       data.dur=set.has('d45')||fix()?'45':'';data.deal=[...set].filter(x=>x!=='d45').join(',');if(data.plan!=='custom')data.sessions=String(planN(data.plan)+ex());delete data.extra;
       data.priceUsd=String(r2(usdOf(data.price,data.currency))||'');
@@ -1289,7 +1496,7 @@ function teacherDrawer(list,i){
   <div class="kv"><span>الطلاب</span><b>${st.length}</b><span>حصص ${esc(monthName(m))}</span><b>${ss.length}</b><span>المستحق</span><b>${money(ss.reduce((a,b)=>a+ +b.payUsd,0))}</b>${t.meet?`<span>الغرفة</span><b class="latin" style="text-align:right;word-break:break-all">${esc(t.meet.replace('https://',''))}</b>`:''}<span>الهاتف</span><b class="latin" style="text-align:right">${esc(t.phone)}</b>${t.code?`<span>رمز الدخول</span><b class="latin" style="text-align:right;letter-spacing:2px">${esc(t.code)}</b>`:''}${t.notes?`<span>ملاحظات</span><b>${esc(t.notes)}</b>`:''}</div>
   <div class="acts2"><a class="btn b-teal w" target="_blank" rel="noopener" href="${esc(waLink(t.phone,`السلام عليكم ${t.name}، هذا رابط صفحتك في تطبيق حروف من نور. سجّل منه تقرير كل حصة بعد انتهائها:\n${tLink(t)}\n${t.code?`أو ادخل من زر «دخول» في موقعنا ← «معلم» برقمك هذا ورمز الدخول: *${t.code}*\n`:''}(الرابط والرمز خاصان بك، لا تشاركهما)`))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg> إرسال رابط صفحته</a>
   <button class="btn b-ghost" id="tCp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> نسخ الرابط</button><button class="btn b-ghost" id="tEd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> تعديل</button><button class="btn b-ghost w" id="tNt">رابط ورمز جديدان (يوقف القديم)</button></div>
-  ${st.length?`<h2>طلابه</h2><div class="blk" style="padding:4px 12px">${st.map(s=>`<button class="fr" data-st="${esc(s.id)}"><span class="ii">${esc(s.name.trim()[0])}</span><span><b>${esc(s.name)}</b><small>${esc(s.days&&s.time?schedLabel(s):'بلا مواعيد')}</small></span><span class="tm">${s.cycle.used}/${s.cycle.total||'—'}</span><span class="cv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></span></button>`).join('')}</div>`:''}
+  ${st.length?`<h2>طلابه</h2><div class="blk" style="padding:4px 12px">${st.map(s=>`<button class="fr" data-st="${esc(s.id)}"><span class="ii">${esc(s.name.trim()[0])}</span><span><b>${esc(s.name)}</b><small>${esc(hasSched(s)?schedLabel(s):'بلا مواعيد')}</small></span><span class="tm">${s.cycle.used}/${s.cycle.total||'—'}</span><span class="cv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></span></button>`).join('')}</div>`:''}
   <button class="btn b-bad mt2" id="tDel" style="width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg> حذف المعلم</button>`,(box,cl)=>{
     $('#tCp',box).onclick=()=>copy(tLink(t),'نُسخ رابط المعلم ✓');$('#tEd',box).onclick=()=>{cl();teacherForm(t)};
     $$('[data-st]',box).forEach(b=>b.onclick=()=>{cl();studentDrawer([Sx(b.dataset.st)],0)});
@@ -1310,13 +1517,15 @@ function teacherForm(t){
 /* ---------- الحصص ---------- */
 function aSessions(p){
   const v=AQ.sv||'week';
-  p.innerHTML=`<div class="ph"><h1>الحصص</h1></div><div class="fchips" style="margin-bottom:10px"><button data-sv="week" class="${v==='week'?'on':''}">جدول الأسبوع</button><button data-sv="log" class="${v==='log'?'on':''}">سجل الحصص</button></div><select class="search" id="ft"><option value="">كل المعلمين</option>${DB.teachers.map(t=>`<option value="${t.id}" ${AQ.sft===t.id?'selected':''}>${esc(t.name)}</option>`).join('')}</select><div id="sl"></div>`;
+  p.innerHTML=`<div class="ph"><h1>الحصص</h1></div><div class="fchips" style="margin-bottom:10px"><button data-sv="week" class="${v==='week'?'on':''}">جدول الأسبوع</button><button data-sv="month" class="${v==='month'?'on':''}">التقويم الشهري</button><button data-sv="log" class="${v==='log'?'on':''}">سجل الحصص</button></div><select class="search" id="ft"><option value="">كل المعلمين</option>${DB.teachers.map(t=>`<option value="${t.id}" ${AQ.sft===t.id?'selected':''}>${esc(t.name)}</option>`).join('')}</select><div id="sl"></div>`;
   const week=ft=>{const now=Date.now(),act=DB.students.filter(s=>(s.status==='نشط'||s.status==='تجريبي')&&(!ft||s.teacherId===ft));
     const all=act.flatMap(s=>occ(s,now-36e5,now+7*864e5)).sort((a,b)=>a.ms-b.ms),by={};
     all.forEach(o=>{const k=new Date(o.ms).toDateString();(by[k]=by[k]||[]).push(o)});
     return Object.values(by).map(list=>`<h2>${esc(dayName(list[0].ms))} <span class="small muted">· ${list.length} ${list.length>2&&list.length<11?'حصص':'حصة'}</span></h2><section class="blk" style="padding:4px 12px">${list.map(o=>{const t=T(o.st.teacherId),cl=o.st.teacherId&&all.some(b=>b!==o&&b.st.teacherId===o.st.teacherId&&o.ms<b.ms+lessonMin(b.st)*6e4&&b.ms<o.ms+lessonMin(o.st)*6e4),ab=DB.sessions.some(x=>x.studentId===o.st.id&&x.date===o.date&&/^absent/.test(x.status));
       return `<button class="fr" data-st="${esc(o.st.id)}"><span class="ii${cl?' u':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span><b>${esc(hm(o.ms))} · ${esc(o.st.name)}</b><small>${esc(t?t.name:'بلا معلم')} · ${lessonMin(o.st)} دقيقة${o.st.status==='تجريبي'?' · تجريبية':''}</small></span><span class="tm">${cl?'<span class="due">تعارض</span>':''}${ab?'<span class="chip c-warn">اعتذار</span>':''}</span><span class="cv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></span></button>`}).join('')}</section>`).join('')||'<div class="empty">لا حصص مجدولة في الأيام السبعة القادمة. أضف أيام الحصص ووقتها في بطاقة كل طالب.</div>'};
   const draw=()=>{const ft=$('#ft').value;AQ.sft=ft;
+    if(v==='month'){const act=DB.students.filter(s=>(s.status==='نشط'||s.status==='تجريبي')&&(!ft||s.teacherId===ft));$('#sl').innerHTML='<div id="amc"></div>';
+      monthCal($('#amc'),{names:1,ss:DB.sessions.filter(x=>act.some(s=>s.id===x.studentId)),studentOf:Sx,list:(a,b)=>act.flatMap(s=>occ(s,a,b)),other:o=>{const t=T(o.st.teacherId);return[t?t.name:'بلا معلم',zOf(o.st.tz)!==myTz()?'الطالب '+msT(o.ms,o.st.tz)+' '+tzName(o.st.tz):''].filter(Boolean).join(' · ')},pick:o=>studentDrawer([o.st],0)});return}
     if(v==='week'){$('#sl').innerHTML=`<p class="small muted" style="margin:8px 2px">الأوقات بتوقيت جهازك.</p>`+week(ft);$$('[data-st]',p).forEach(b=>b.onclick=()=>studentDrawer([Sx(b.dataset.st)],0));return}
     $('#sl').innerHTML=`<div class="list">${DB.sessions.filter(s=>!ft||s.teacherId===ft).slice(0,150).map(s=>repHTML(s,`<div class="row mt small muted">${esc((Sx(s.studentId)||{}).name||'')} · ${esc((T(s.teacherId)||{}).name||'')} · <span class="latin">${money(+s.payUsd)}</span> <button class="btn b-bad b-sm" data-del="${esc(s.id)}">حذف</button></div>`)).join('')||'<div class="empty">لا توجد حصص بعد.</div>'}</div>`;
     $$('[data-del]',p).forEach(b=>b.onclick=async()=>{if(!await askConfirm('حذف هذه الحصة نهائياً؟','تُحذف من سجل الطالب ومن حساب أجر المعلم.'))return;try{await api('deleteSession',{id:b.dataset.del});toast('حُذفت');refresh()}catch(e){toast('تعذّر')}})};
