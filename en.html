@@ -1007,7 +1007,7 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
       <div class="grp-buy">
         <div class="price"><span class="v" id="grpV">12</span><span class="c" id="grpC">$</span></div>
         <div class="grp-per">per student / month</div>
-        <a class="btn" id="grpGo" href="https://wa.me/201156684979?text=Assalamu%20alaykum%2C%20I%27d%20like%20to%20book%20a%20free%20trial%20lesson%20at%20Horouf%20Min%20Nour" target="_blank" rel="noopener">Join a group circle</a>
+        <a class="btn" id="grpGo" href="#book" data-plan="Group circle">Pick a circle</a>
         <span hidden id="grpT">Assalamu alaykum, I would like to join a group circle at Horouf Min Nour academy.</span>
       </div>
     </div>
@@ -1108,7 +1108,12 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
             <label class="bk-l">Teacher</label>
             <div class="opts o3 sm" data-name="teacher"><button type="button" data-v="معلّمة">Female teacher</button><button type="button" data-v="معلّم">Male teacher</button><button type="button" data-v="لا يهم" class="on">No preference</button></div>
           </div>
-          <div class="field bk-sub"><label for="fplan">Plan you're considering <small class="muted">(optional)</small></label><select id="fplan" name="plan"><option>Not decided yet</option><option>Start</option><option>Advance</option><option>Hafiz</option></select></div>
+          <div class="field bk-sub"><label for="fplan">Plan you're considering <small class="muted">(optional)</small></label><select id="fplan" name="plan"><option>Not decided yet</option><option>Start</option><option>Advance</option><option>Hafiz</option><option>Group circle</option></select></div>
+          <div class="bk-sub" id="gBox" hidden>
+            <label class="bk-l">Pick a circle <small class="muted">(6 students with one teacher · times in your time zone)</small></label>
+            <div class="opts cards sm" data-name="grp" id="gList"></div>
+            <p class="fnote" id="gNote"></p>
+          </div>
         </div>
 
         <div class="bk-page" data-step="3">
@@ -1408,6 +1413,7 @@ $$('.opts',bk).forEach(g=>g.addEventListener('click',e=>{const b=e.target.closes
     if(!kid)setTimeout(()=>bkGo(1),220)}
   if(g.dataset.name==='age')setTimeout(()=>bkGo(1),220);
   if(g.dataset.name==='program'&&bkStep===1)setTimeout(()=>bkGo(2),260);
+  if(g.dataset.name==='teacher'&&typeof gRender==='function')gRender();
 }));
 function bkValid(i){
   if(i===0&&!pick('who').length){const g=$('.opts[data-name="who"]',bk);g.classList.remove('bad');void g.offsetWidth;g.classList.add('bad');return false}
@@ -1426,7 +1432,27 @@ function bkGo(i){
 $('#bkNext').onclick=()=>bkGo(bkStep+1);
 $('#bkPrev').onclick=()=>bkGo(bkStep-1);
 let chosenPlan='';
-$$('[data-plan]').forEach(a=>a.addEventListener('click',()=>{chosenPlan=a.dataset.plan;const s=$('#fplan');if(s)s.value=chosenPlan}));
+/* الحلقة الجماعية: نعرض الحلقات المفتوحة بأوقاتها بتوقيت الزائر، أو قائمة الانتظار */
+const gEl=$('#fplan'),GI=4;let GR=null;
+const myZ=(()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){return 'UTC'}})();
+function tzOff(z,ms){const p=new Intl.DateTimeFormat('en-US',{timeZone:z,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).formatToParts(new Date(ms)),g=t=>+p.find(x=>x.type===t).value;return Date.UTC(g('year'),g('month')-1,g('day'),g('hour')%24,g('minute'))-ms}
+function slotAt(code,z){const [d,hm]=code.split('@'),[h,m]=hm.split(':').map(Number),now=Date.now();
+  for(let k=0;k<8;k++){const ms=now+k*864e5,p=new Intl.DateTimeFormat('en-US',{timeZone:z,weekday:'short',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(ms)),g=t=>p.find(x=>x.type===t).value;
+    if(g('weekday').slice(0,2).toUpperCase()===d){let u=Date.UTC(+g('year'),+g('month')-1,+g('day'),h,m);u-=tzOff(z,u);return new Date(u)}}return null}
+function slotsLocal(g){const L=LG==='ar'?'ar-u-nu-latn':LG,fd=new Intl.DateTimeFormat(L,{weekday:'long'}),ft=new Intl.DateTimeFormat(L,{hour:'numeric',minute:'2-digit'});
+  const xs=String(g.slots||'').split(',').filter(Boolean).map(c=>{try{return slotAt(c,g.tz||'UTC')}catch(e){return null}}).filter(Boolean).sort((a,b)=>((a.getDay()+1)%7)-((b.getDay()+1)%7));
+  const byT={};xs.forEach(x=>{const t=ft.format(x);(byT[t]=byT[t]||[]).push(fd.format(x))});
+  return Object.entries(byT).map(([t,ds])=>ds.join(LG==='ar'?' و':', ')+' · '+t).join(' — ')}
+let gSel='';
+function gRender(){const box=$('#gBox'),on=gEl.selectedIndex===GI;box.hidden=!on;if(!on)return;
+  const L=$('#gList');if(GR===null){L.innerHTML='<p class="fnote">Loading circles…</p>';
+    fetch(HN_API,{method:'POST',body:JSON.stringify({action:'groupsOpen'})}).then(r=>r.json()).then(j=>{GR=(j&&j.groups)||[];gRender()}).catch(()=>{GR=[];gRender()});return}
+  const wt=pick('teacher')[0];const G=GR.filter(g=>!wt||wt==='لا يهم'||!g.gender||(wt==='معلّمة')===(g.gender==='معلمة'));
+  L.innerHTML=G.map(g=>`<button type="button" data-v="${g.id}"${gSel===g.id?' class="on"':''}><b>${g.name.replace(/[<>&]/g,'')}</b><small>${[g.audience,slotsLocal(g)].filter(Boolean).join(' · ').replace(/[<>&]/g,'')}</small><small>${g.left===1?'1 seat left':g.left+' seats left'}</small></button>`).join('')+`<button type="button" data-v="wait"${gSel==='wait'?' class="on"':''}><b>None of these times work</b><small>Put me on the waiting list and tell me when a suitable circle opens</small></button>`;
+  $('#gNote').textContent=G.length?'We confirm your seat after we get to know the student’s level.':'No circle is open right now. Choose the waiting list and we will tell you as soon as one fits your time.'}
+$('#gList').addEventListener('click',e=>{const b=e.target.closest('button');if(b)gSel=b.dataset.v});
+gEl.addEventListener('change',gRender);
+$$('[data-plan]').forEach(a=>a.addEventListener('click',()=>{chosenPlan=a.dataset.plan;const s=$('#fplan');if(s){s.value=chosenPlan;gRender()}}));
 bk.addEventListener('submit',e=>{
   e.preventDefault();if(bkSent)return;
   if(bkStep!==3)return bkGo(bkStep+1);
@@ -1436,10 +1462,10 @@ bk.addEventListener('submit',e=>{
   if(!ph.ok){$('.tel-n',bkTel).focus();return}
   bkSent=true;const btn=$('#bkSend');btn.disabled=true;
   const country=ccOf(fc.value)[1],who=pick('who')[0]||'',age=pick('age')[0]||'',program=pick('program')[0]||'',riwaya=pick('riwaya')[0]||'',times=[...pick('days'),...pick('time')].join(', '),teacher=pick('teacher')[0]||'';
-  const pi=f.plan.selectedIndex,PP=prOf(pcIso),pAmt=pi>0?(bill==='q'?niceP(PP[pi]*.9):PP[pi]):0;
-  const plan=pi>0?f.plan.value+' — '+fmtP(pAmt)+' '+(CUR[PP[0]]||CUR.USD)[1]+' '+(bill==='q'?'every 3 months (per month)':'per month'):'';
+  const pi=f.plan.selectedIndex,PP=prOf(pcIso),isG=pi===GI,pAmt=isG?groupP(pcIso):pi>0?(bill==='q'?niceP(PP[pi]*.9):PP[pi]):0;
+  const plan=pi>0?f.plan.value+' — '+fmtP(pAmt)+' '+(CUR[PP[0]]||CUR.USD)[1]+' '+(bill==='q'&&!isG?'every 3 months (per month)':'per month')+(isG?(gSel&&gSel!=='wait'&&GR?' · '+((GR.find(g=>g.id===gSel)||{}).name||'')+' ('+slotsLocal(GR.find(g=>g.id===gSel)||{})+')':' · قائمة الانتظار'):''):'';
   const msg=f.msg.value.trim(),timeTxt=(times||'any time')+' · '+country;
-  hnPost('lead',{name,phone,who,age,program,riwaya,time:timeTxt,teacher,plan,msg:(LG!=='ar'?'[لغة الموقع: '+LG.toUpperCase()+'] ':'')+msg,hp:f.website?f.website.value:''});
+  hnPost('lead',{name,phone,who,age,program,riwaya,time:timeTxt,teacher,plan,groupId:isG?(gSel||'wait'):'',msg:(LG!=='ar'?'[لغة الموقع: '+LG.toUpperCase()+'] ':'')+msg,hp:f.website?f.website.value:''});
   const row=(l,v)=>v?'• '+l+': '+v:'';
   const lines=['*Free trial lesson request | Horouf Min Nour*','','Assalamu alaykum wa rahmatullahi wa barakatuh,','I sent a trial lesson request from the website, here are my details:','',
     row('Name',name),row('WhatsApp',phone),row('Country',country),row('For',lab('who')[0]),row('Age',age),row('Program',lab('program')[0]),row('Reading',lab('riwaya')[0]),row('Times',[...lab('days'),...lab('time')].join(', ')),row('Teacher',lab('teacher')[0]),row('Plan',plan),msg?'• Note: '+msg:'','','Thank you, jazakum Allahu khayran.'].filter((x,i,a)=>x!==''||(i>0&&a[i-1]!==''));
@@ -1529,7 +1555,7 @@ if(C){
   $$('#pricing .plan').forEach((p,i)=>{const a=$('a.btn',p);a&&a.addEventListener('click',()=>{const ex=EX[i+1]||0,t=$('#fmsg');if(ex&&t){t.value=a.dataset.plan+' · '+L('extra')+' +'+ex;const dt=t.closest('details');if(dt)dt.open=true}})});
   /* غير المقتدرين: رسالة واتساب جاهزة */
   const ag=$('#aidGo'),at=$('#aidT');if(ag&&at)ag.href='https://wa.me/'+WA+'?text='+encodeURIComponent(at.textContent);
-  const gg=$('#grpGo'),gt=$('#grpT');if(gg&&gt)gg.href='https://wa.me/'+WA+'?text='+encodeURIComponent(gt.textContent);
+
   $('#cGo').addEventListener('click',()=>{const pb=$('#cPlan .on');chosenPlan=pb.dataset.plan;const sl=$('#fplan');if(sl)sl.value=chosenPlan;
     const t=$('#fmsg');if(t){const lines=$$('#cLines .rl').map(r=>r.children[0].textContent+': '+r.children[1].textContent);
       lines.unshift(pb.firstChild.textContent+' · '+$('#cDur .on').firstChild.textContent+' · '+$('#cBill .on').firstChild.textContent);
