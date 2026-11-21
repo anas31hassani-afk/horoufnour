@@ -1232,7 +1232,7 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
         </div>
 
         <div class="wz-page" data-t="التوفّر والتجهيزات">
-          <h3>وقتك وتجهيزاتك</h3><p class="hint">نحدّد عدد الطلاب حسب الساعات التي تختارها.</p>
+          <h3>وقتك وطبيعة مشاركتك</h3><p class="hint">نحدّد عدد الطلاب حسب الساعات التي تختارها.</p>
           <div class="frow">
             <div class="field"><label for="t_hours">الساعات المتاحة أسبوعياً</label><select id="t_hours" name="t_hours" required>
               <option value="">اختر…</option><option>أقل من 5 ساعات</option><option>من 5 إلى 10 ساعات</option><option>من 10 إلى 20 ساعة</option><option>أكثر من 20 ساعة</option></select></div>
@@ -1250,7 +1250,10 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
             <label><input type="checkbox" name="gear" value="حاسوب أو لوحة"><span>حاسوب أو لوحة</span></label>
             <label><input type="checkbox" name="gear" value="سماعة بميكروفون"><span>سماعة بميكروفون</span></label>
             <label><input type="checkbox" name="gear" value="مكان هادئ"><span>مكان هادئ</span></label>
-            <label><input type="checkbox" name="gear" value="خبرة بزووم أو ميت"><span>أستخدم زووم / ميت</span></label></div></div>
+            <label><input type="checkbox" name="gear" value="يستخدم Google Meet"><span>أستخدم Google Meet</span></label></div></div>
+          <div class="field"><label>طبيعة مشاركتك <small class="muted">· التطوّع اختياري، ونرحّب بالمعلّم بأجر وبالمتطوّع</small></label><div class="chk" data-req="t_vol">
+            <label><input type="radio" name="t_vol" value="بأجر"><span>معلّم بأجر</span></label>
+            <label><input type="radio" name="t_vol" value="متطوّع احتساباً (بلا أجر)"><span>متطوّع احتساباً، بلا أجر</span></label></div></div>
           <div class="field"><label for="t_why">لماذا تريد الانضمام إلى حروف من نور؟</label><textarea id="t_why" name="t_why" rows="3" placeholder="جملتان أو ثلاث تكفي"></textarea></div>
         </div>
 
@@ -1785,7 +1788,7 @@ $('#recFile').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>16*1
 /* summary + send */
 const SEC=[['المعلومات الشخصية',[['الصفة','gender'],['الاسم','t_name'],['الواتساب','t_phone'],['البلد والمدينة','t_country'],['العمر','t_age'],['البريد','t_mail']]],
  ['المؤهلات',[['مقدار الحفظ','t_hifz'],['الروايات','riwaya'],['الإجازة','ijaza'],['الشيخ / الجهة','t_sheikh'],['سنوات الخبرة','t_exp'],['التدريس أونلاين','t_online'],['يُدرّس','aud'],['اللغات','lang']]],
- ['التوفّر والتجهيزات',[['الساعات أسبوعياً','t_hours'],['المنطقة الزمنية','t_tz'],['الأوقات المتاحة','slots'],['التجهيزات','gear']]],
+ ['التوفّر والتجهيزات',[['طبيعة المشاركة','t_vol'],['الساعات أسبوعياً','t_hours'],['المنطقة الزمنية','t_tz'],['الأوقات المتاحة','slots'],['التجهيزات','gear']]],
  ['سبب الانضمام',[['','t_why']]]];
 const Q=SEC.flatMap(([,f])=>f).map(([l,n])=>[l||'سبب الانضمام',n]);
 function answers(){return Q.map(([l,n])=>[l,val(n)]).filter(([,v])=>v)}
