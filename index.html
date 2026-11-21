@@ -373,6 +373,7 @@ html.lenis,html.lenis body{height:auto}
 .chk{display:flex;flex-wrap:wrap;gap:10px}
 .chk label{cursor:pointer;font-weight:500}
 .chk input{display:none}
+.chk.days{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.chk.days span{display:flex;justify-content:center;padding:11px 2px;font-size:14px}.chk.days span::before{display:none}
 .chk span{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:14px;background:var(--cream);border:1.5px solid transparent;font-size:15.5px;transition:.2s}
 .chk span::before{content:"";width:16px;height:16px;border-radius:5px;border:1.5px solid rgba(21,94,90,.4);transition:.2s;flex:none}
 .chk input[type=radio]+span::before{border-radius:50%}
@@ -1236,15 +1237,23 @@ html[dir=rtl] .ask{padding:10px 28px 10px 10px}
           <div class="frow">
             <div class="field"><label for="t_hours">الساعات المتاحة أسبوعياً</label><select id="t_hours" name="t_hours" required>
               <option value="">اختر…</option><option>أقل من 5 ساعات</option><option>من 5 إلى 10 ساعات</option><option>من 10 إلى 20 ساعة</option><option>أكثر من 20 ساعة</option></select></div>
-            <div class="field"><label for="t_tz">منطقتك الزمنية</label><select id="t_tz" name="t_tz">
-              <option>GMT</option><option>GMT+1</option><option>GMT+2</option><option>GMT+3</option><option>GMT+4</option><option>GMT+5 أو أكثر</option><option>GMT-1 أو أقل</option></select></div>
+            <div class="field"><label for="t_tz">توقيتك <small class="muted">· من جهازك، وغيّره إن لزم</small></label><select id="t_tz" name="t_tz"></select></div>
           </div>
-          <div class="field"><label>الأوقات المناسبة لك</label><div class="chk" data-req="slots">
-            <label><input type="checkbox" name="slots" value="صباحاً"><span>صباحاً</span></label>
-            <label><input type="checkbox" name="slots" value="ظهراً"><span>ظهراً</span></label>
-            <label><input type="checkbox" name="slots" value="مساءً"><span>مساءً</span></label>
-            <label><input type="checkbox" name="slots" value="ليلاً"><span>ليلاً</span></label>
-            <label><input type="checkbox" name="slots" value="نهاية الأسبوع"><span>نهاية الأسبوع</span></label></div></div>
+          <div class="field"><label>الأيام المتاحة</label><div class="chk days" data-req="t_days">
+            <label><input type="checkbox" name="t_days" value="السبت"><span>السبت</span></label>
+            <label><input type="checkbox" name="t_days" value="الأحد"><span>الأحد</span></label>
+            <label><input type="checkbox" name="t_days" value="الإثنين"><span>الإثنين</span></label>
+            <label><input type="checkbox" name="t_days" value="الثلاثاء"><span>الثلاثاء</span></label>
+            <label><input type="checkbox" name="t_days" value="الأربعاء"><span>الأربعاء</span></label>
+            <label><input type="checkbox" name="t_days" value="الخميس"><span>الخميس</span></label>
+            <label><input type="checkbox" name="t_days" value="الجمعة"><span>الجمعة</span></label>
+          </div></div>
+          <div class="field"><label>الفترات المتاحة <small class="muted">· بتوقيتك</small></label><div class="chk" data-req="slots">
+            <label><input type="checkbox" name="slots" value="صباحاً (من 6 إلى 12)"><span>صباحاً <small class="muted">من 6 إلى 12</small></span></label>
+            <label><input type="checkbox" name="slots" value="بعد الظهر (من 12 إلى 4)"><span>بعد الظهر <small class="muted">من 12 إلى 4</small></span></label>
+            <label><input type="checkbox" name="slots" value="مساءً (من 4 إلى 8)"><span>مساءً <small class="muted">من 4 إلى 8</small></span></label>
+            <label><input type="checkbox" name="slots" value="ليلاً (من 8 إلى 12)"><span>ليلاً <small class="muted">من 8 إلى 12</small></span></label>
+          </div></div>
           <div class="field"><label>التجهيزات المتوفّرة لديك</label><div class="chk">
             <label><input type="checkbox" name="gear" value="إنترنت مستقر"><span>إنترنت مستقر</span></label>
             <label><input type="checkbox" name="gear" value="حاسوب أو لوحة"><span>حاسوب أو لوحة</span></label>
@@ -1785,10 +1794,17 @@ recBtn.onclick=async()=>{
 $('#recFile').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>16*1024*1024){$('#recMsg').textContent='الملف كبير جداً (الحد 16 ميغابايت).';return}
   $('#recFileName').textContent=f.name;setAudio(f,'تم رفع الملف ✓')};
 
+/* توقيت المعلم: يُعرف من جهازه (مثل نموذج الحجز) ويمكن تغييره */
+(()=>{const sel=$('#t_tz');if(!sel)return;
+ const Z=[['Africa/Casablanca','المغرب'],['Africa/Algiers','الجزائر'],['Africa/Tunis','تونس'],['Africa/Tripoli','ليبيا'],['Africa/Cairo','مصر'],['Africa/Khartoum','السودان'],['Africa/Nouakchott','موريتانيا'],['Asia/Riyadh','السعودية'],['Asia/Dubai','الإمارات وعُمان'],['Asia/Qatar','قطر والبحرين'],['Asia/Kuwait','الكويت'],['Asia/Amman','الأردن'],['Asia/Gaza','فلسطين'],['Asia/Beirut','لبنان'],['Asia/Damascus','سوريا'],['Asia/Baghdad','العراق'],['Asia/Aden','اليمن'],['Europe/Istanbul','تركيا'],['Europe/London','بريطانيا'],['Europe/Paris','فرنسا وأوروبا الغربية'],['America/New_York','أمريكا (الشرق)'],['America/Chicago','أمريكا (الوسط)'],['America/Los_Angeles','أمريكا (الغرب)'],['America/Toronto','كندا (الشرق)'],['Asia/Karachi','باكستان'],['Asia/Kuala_Lumpur','ماليزيا'],['Asia/Jakarta','إندونيسيا'],['Australia/Sydney','أستراليا (الشرق)']];
+ const off=z=>{try{const m=Math.round(tzOff(z,Date.now())/900000)*15;const h=Math.trunc(m/60),mm=Math.abs(m%60);return 'GMT'+(m>=0?'+':'-')+Math.abs(h)+(mm?':'+String(mm).padStart(2,'0'):'')}catch(e){return ''}};
+ if(!Z.some(([z])=>z===myZ)&&myZ&&myZ!=='UTC')Z.unshift([myZ,'توقيت جهازك ('+myZ.split('/').pop().replace(/_/g,' ')+')']);
+ sel.innerHTML=Z.map(([z,n])=>{const t=n+' · '+off(z);return `<option value="${t}"${z===myZ?' selected':''}>${t}</option>`}).join('');
+})();
 /* summary + send */
 const SEC=[['المعلومات الشخصية',[['الصفة','gender'],['الاسم','t_name'],['الواتساب','t_phone'],['البلد والمدينة','t_country'],['العمر','t_age'],['البريد','t_mail']]],
  ['المؤهلات',[['مقدار الحفظ','t_hifz'],['الروايات','riwaya'],['الإجازة','ijaza'],['الشيخ / الجهة','t_sheikh'],['سنوات الخبرة','t_exp'],['التدريس أونلاين','t_online'],['يُدرّس','aud'],['اللغات','lang']]],
- ['التوفّر والتجهيزات',[['طبيعة المشاركة','t_vol'],['الساعات أسبوعياً','t_hours'],['المنطقة الزمنية','t_tz'],['الأوقات المتاحة','slots'],['التجهيزات','gear']]],
+ ['التوفّر والتجهيزات',[['طبيعة المشاركة','t_vol'],['الساعات أسبوعياً','t_hours'],['التوقيت','t_tz'],['الأيام المتاحة','t_days'],['الفترات المتاحة (بتوقيته)','slots'],['التجهيزات','gear']]],
  ['سبب الانضمام',[['','t_why']]]];
 const Q=SEC.flatMap(([,f])=>f).map(([l,n])=>[l||'سبب الانضمام',n]);
 function answers(){return Q.map(([l,n])=>[l,val(n)]).filter(([,v])=>v)}
