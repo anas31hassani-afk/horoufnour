@@ -1148,7 +1148,7 @@ html[dir=ltr] .links a,html[dir=ltr] .nav .btn,html[dir=ltr] .brand b{white-spac
     <form id="bookForm" class="bk rv" novalidate>
       <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip-path:inset(50%);pointer-events:none;inset-inline-start:0;top:0">
       <div id="formBody">
-        <div class="bk-top"><div class="bk-bar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><span class="bk-n" id="bkN">1 / 4</span></div>
+        <div class="bk-top"><div class="bk-bar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><span class="bk-n" id="bkN">1 / 3</span></div>
 
         <div class="bk-page on" data-step="0">
           <h3 class="bk-q">¿Para quién son las clases?</h3>
@@ -1484,6 +1484,7 @@ function phonePicker(w){
     else{hint.textContent='';hint.className='tel-hint'}return s};
   inp.addEventListener('input',()=>{const n0=toAsc(inp.value);if(n0!==inp.value)inp.value=n0;const v=inp.value.trim();
     if(/^(\+|00)/.test(v)){const dg=v.replace(/\D/g,'').replace(/^00/,'');const m=CC.filter(c=>c[2]&&dg.startsWith(c[2])).sort((a,b)=>b[2].length-a[2].length)[0];if(m&&m[0]!==sel.value&&!(m[2]==='1'&&ccOf(sel.value)[2]==='1')){sel.value=m[0];w.manual=true}}
+    else{/* رقم دولي بلا «+» (مثل 4474… أو 2126…) أطول من رقم الدولة المختارة: نتعرّف على الدولة تلقائياً */const dg=v.replace(/\D/g,''),c0=ccOf(sel.value);if(c0[2]&&dg.length>c0[4]&&!dg.startsWith(c0[2])){const m=CC.filter(c=>c[2]&&dg.startsWith(c[2])&&dg.length-c[2].length>=c[3]&&dg.length-c[2].length<=c[4]).sort((x,y)=>y[2].length-x[2].length)[0];if(m){sel.value=m[0];w.manual=true}}}
     w.closest('.field')&&w.closest('.field').classList.remove('bad');paint(false)});
   inp.addEventListener('blur',()=>paint(true));
   sel.addEventListener('change',()=>{w.manual=true;paint(!!inp.value)});
@@ -1497,7 +1498,7 @@ $$('[data-phone]').forEach(phonePicker);
 /* ---------- booking wizard ---------- */
 const HN_API='https://script.google.com/macros/s/AKfycbwmrTi4-rMKQkpn8iN4Q-C7CGLztpgK6UGMtxQMFU8tpcMlnRXdcC9CQw_94zi59JUgwA/exec';
 function hnPost(action,data){if(!HN_API||HN_API.indexOf('http')!==0)return;const body=JSON.stringify({action,data});try{if(navigator.sendBeacon&&navigator.sendBeacon(HN_API,new Blob([body],{type:'text/plain;charset=utf-8'})))return}catch(e){}try{fetch(HN_API,{method:'POST',mode:'no-cors',keepalive:true,body})}catch(e){}}
-const bk=$('#bookForm'),bkPages=$$('.bk-page',bk),bkBars=$$('.bk-bar i',bk);let bkStep=0,bkSent=false;
+const bk=$('#bookForm'),bkPages=$$('.bk-page',bk),bkBars=$$('.bk-bar i',bk);let bkStep=0,bkSent=false;if(bkBars[2])bkBars[2].style.display='none';
 const fc=$('#fcountry');fc.innerHTML=ccOpts(guessCC,0);
 const bkTel=$('[data-phone]',bk);
 const pcs=$('#pcountry');
@@ -1522,11 +1523,14 @@ function bkValid(i){
   if(i===0&&!pick('who').length){const g=$('.opts[data-name="who"]',bk);g.classList.remove('bad');void g.offsetWidth;g.classList.add('bad');return false}
   if(i===1&&!pick('program').length){const g=$('.opts[data-name="program"]',bk);g.classList.remove('bad');void g.offsetWidth;g.classList.add('bad');return false}
   return true}
+/* الحجز المختصر: خطوة «متى يناسبك» تُتخطّى (الأوقات تُرتَّب في مجموعة الواتساب)، إلا لمن اختار الحلقة الجماعية */
+const bkNeedT=()=>!!(gEl&&gEl.selectedIndex===GI);
 function bkGo(i){
   if(i>bkStep&&!bkValid(bkStep))return;
+  if(i===2&&!bkNeedT())i=i>bkStep?3:1;
   bkStep=Math.max(0,Math.min(3,i));
   bkPages.forEach((p,k)=>p.classList.toggle('on',k===bkStep));bkBars.forEach((b,k)=>b.classList.toggle('on',k<=bkStep));
-  $('#bkN').textContent=(bkStep+1)+' / 4';$('#bkPrev').style.visibility=bkStep?'visible':'hidden';
+  {const nt=bkNeedT(),v=nt||bkStep<2?bkStep:bkStep-1;$('#bkN').textContent=(v+1)+' / '+(nt?4:3);if(bkBars[2])bkBars[2].style.display=nt?'':'none'}$('#bkPrev').style.visibility=bkStep?'visible':'hidden';
   bk.classList.toggle('last',bkStep===3);
   if(bkStep===3){$('#bkPrev').style.visibility='visible';bk.querySelector('.bk-foot').style.display='flex';$('#bkNext').style.display='none'}else{$('#bkNext').style.display='';bk.querySelector('.bk-foot').style.display=''}
   const r=bk.getBoundingClientRect();if(r.top<70||r.top>innerHeight*.5)scrollTo({top:r.top+scrollY-90,behavior:reduce?'auto':'smooth'});
@@ -1564,6 +1568,7 @@ bk.addEventListener('submit',e=>{
   if(!name){f.name.focus();return}
   if(!ph.ok){$('.tel-n',bkTel).focus();return}
   bkSent=true;const btn=$('#bkSend');btn.disabled=true;
+  if(!bkNeedT()){const ti=$('.tel-cc',bkTel);if(ti&&ti.value&&CC.some(c=>c[0]===ti.value))fc.value=ti.value}
   const country=ccOf(fc.value)[1],who=pick('who')[0]||'',age=pick('age')[0]||'',program=pick('program')[0]||'',riwaya=pick('riwaya')[0]||'',times=[...pick('days'),...pick('time')].join(', '),teacher=pick('teacher')[0]||'',src=pick('src')[0]||'';
   const pi=f.plan.selectedIndex,PP=prOf(pcIso),isG=pi===GI,pAmt=isG?groupP(pcIso):pi>0?(bill==='q'?niceP(PP[pi]*.9):PP[pi]):0;
   const plan=pi>0?f.plan.value+' — '+fmtP(pAmt)+' '+(CUR[PP[0]]||CUR.USD)[1]+' '+(bill==='q'&&!isG?'cada 3 meses (al mes)':'al mes')+(isG?(gSel&&gSel!=='wait'&&GR?' · '+((GR.find(g=>g.id===gSel)||{}).name||'')+' ('+slotsLocal(GR.find(g=>g.id===gSel)||{})+')':' · قائمة الانتظار'):''):'';
