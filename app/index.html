@@ -444,7 +444,10 @@ const day=d=>{try{return fmtD.format(new Date(d+'T12:00:00'))}catch(e){return d}
 const monthName=m=>{try{return fmtM.format(new Date(m+'-15T12:00:00'))}catch(e){return m}};
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const sName=n=>n?SUR.n[n-1]:'';
-const digits=p=>String(p||'').replace(/\D/g,'');
+const digits=p=>toAsc(String(p||'')).replace(/\D/g,'');
+/* الأرقام العربية (٠١٢…) والفارسية (۰۱۲…) تُحوَّل إلى 0-9 في خانات الهاتف والرموز والأعداد، وإلا رُفض الرقم أو رمز الدخول */
+const toAsc=v=>String(v).replace(/[\u0660-\u0669]/g,c=>c.charCodeAt(0)-1632).replace(/[\u06F0-\u06F9]/g,c=>c.charCodeAt(0)-1776);
+document.addEventListener('input',e=>{const t=e.target;if(!t||!t.matches||!t.matches('input[type=tel],input[inputmode=numeric],input[inputmode=tel],input[name=phone],input[name=code]'))return;const n=toAsc(t.value);if(n!==t.value)t.value=n},true);
 const waLink=(phone,text)=>'https://wa.me/'+digits(phone)+'?text='+encodeURIComponent(text);
 const ST={present:['حضر','c-ok'],absent_notice:['غاب بعذر','c-warn'],absent_no_notice:['غاب دون إشعار','c-bad'],teacher_cancel:['ألغاها المعلم','c-teal']};
 const PROGRAMS=['التأسيس والقاعدة النورانية','تحفيظ الأطفال','تحفيظ الكبار','التجويد وتصحيح التلاوة','المراجعة والتثبيت','التهيئة للإجازة'];

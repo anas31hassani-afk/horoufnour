@@ -1468,18 +1468,21 @@ const niceP=v=>v>=1000?Math.round(v/50)*50:v>=100?Math.round(v/5)*5:v>=20?Math.r
 const fmtP=v=>Number.isInteger(v)?v.toLocaleString('en-US'):v.toFixed(1).replace(/\.0$/,'');
 
 const ccOpts=(sel,dial)=>CC.map(([iso,n,d])=>`<option value="${iso}" ${iso===sel?'selected':''}>${dial?(d?'+'+d+' ':'')+n:n}</option>`).join('');
+/* الأرقام العربية ٠١٢ والفارسية ۰۱۲ تُحوَّل إلى 0-9 (لوحة المفاتيح العربية تكتبها هكذا) */
+const toAsc=v=>String(v).replace(/[\u0660-\u0669]/g,c=>c.charCodeAt(0)-1632).replace(/[\u06F0-\u06F9]/g,c=>c.charCodeAt(0)-1776);
 function phonePicker(w){
   const sel=$('.tel-cc',w),inp=$('.tel-n',w),hint=w.parentElement.querySelector('.tel-hint');
   sel.innerHTML=ccOpts(guessCC,1);w.manual=false;
-  const state=()=>{const c=ccOf(sel.value);let d=inp.value.replace(/\D/g,'');
-    if(c[2]&&d.startsWith('00'+c[2]))d=d.slice(2+c[2].length);else if(c[2]&&inp.value.trim().startsWith('+')&&d.startsWith(c[2]))d=d.slice(c[2].length);
+  const state=()=>{const c=ccOf(sel.value),raw=toAsc(inp.value);let d=raw.replace(/\D/g,'');
+    if(c[2]&&d.startsWith('00'+c[2]))d=d.slice(2+c[2].length);else if(c[2]&&raw.trim().startsWith('+')&&d.startsWith(c[2]))d=d.slice(c[2].length);
+    else if(c[2]&&d.length>c[4]&&d.startsWith(c[2])){const r=d.slice(c[2].length).replace(/^0+/,'');if(r.length>=c[3]&&r.length<=c[4])d=r}
     d=d.replace(/^0+/,'');return {c,d,ok:d.length>=c[3]&&d.length<=c[4]}};
   const paint=final=>{const s=state();if(!hint)return s;
     if(!s.d){hint.textContent='';hint.className='tel-hint';return s}
     if(s.ok){hint.textContent='✓ Valid number: '+(s.c[2]?'+'+s.c[2]+' ':'')+s.d;hint.className='tel-hint ok'}
     else if(final||s.d.length>s.c[4]){hint.textContent=s.d.length<s.c[3]?'Number too short — '+s.c[1]+': '+(s.c[3]===s.c[4]?s.c[3]:s.c[3]+'–'+s.c[4])+' digits without the leading 0':'Number longer than usual — '+s.c[1]+', please check it';hint.className='tel-hint bad'}
     else{hint.textContent='';hint.className='tel-hint'}return s};
-  inp.addEventListener('input',()=>{const v=inp.value.trim();
+  inp.addEventListener('input',()=>{const n0=toAsc(inp.value);if(n0!==inp.value)inp.value=n0;const v=inp.value.trim();
     if(/^(\+|00)/.test(v)){const dg=v.replace(/\D/g,'').replace(/^00/,'');const m=CC.filter(c=>c[2]&&dg.startsWith(c[2])).sort((a,b)=>b[2].length-a[2].length)[0];if(m&&m[0]!==sel.value&&!(m[2]==='1'&&ccOf(sel.value)[2]==='1')){sel.value=m[0];w.manual=true}}
     w.closest('.field')&&w.closest('.field').classList.remove('bad');paint(false)});
   inp.addEventListener('blur',()=>paint(true));
